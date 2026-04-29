@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WRK+ · Agency Performance · April 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --cream:   #F5F0E8;
+  --cream2:  #EDE8DE;
+  --cream3:  #E4DDD0;
+  --ink:     #1C1A17;
+  --ink2:    #2E2B26;
+  --muted:   #7A7268;
+  --faint:   #C8C0B4;
+  --sage:    #3D6B4F;
+  --sage-l:  #5A8F6B;
+  --sage-bg: #EBF2ED;
+  --rust:    #B84A2E;
+  --rust-bg: #F5EAE6;
+  --amber:   #A06820;
+  --blue:    #2A5A9A;
+  --blue-bg: #E6EDF5;
+  --border:  rgba(28,26,23,0.1);
+  --border2: rgba(28,26,23,0.2);
+  --ff-big:  'Bebas Neue', sans-serif;
+  --ff-head: 'Instrument Serif', serif;
+  --ff-mono: 'IBM Plex Mono', monospace;
+  --ff-body: 'IBM Plex Sans', sans-serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Subtle paper texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── SPLASH SCREEN ─── */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: #1C1A17;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+#splash.hide {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+}
+
+.splash-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  animation: splashIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes splashIn {
+  from { opacity:0; transform: translateY(20px) scale(0.96); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+
+.splash-mark {
+  width: 90px;
+  height: 90px;
+  background: transparent;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: none;
+  filter: drop-shadow(0 16px 40px rgba(0, 0, 255, 0.25));
+}
+
+.splash-mark svg {
+  width: 80px;
+  height: 80px;
+}
+
+.splash-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 6px;
+  color: #F5F0E8;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.splash-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.3);
+  margin-top: 6px;
+}
+
+.splash-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(245,240,232,0.12);
+  margin: 24px auto 20px;
+}
+
+.splash-client {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: rgba(245,240,232,0.45);
+  letter-spacing: .3px;
+}
+
+.splash-loader {
+  margin-top: 48px;
+  width: 120px;
+  height: 2px;
+  background: rgba(245,240,232,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.splash-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #0000CC, #4444FF);
+  border-radius: 2px;
+  animation: loadBar 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+
+@keyframes loadBar {
+  0%   { width: 0%; }
+  40%  { width: 45%; }
+  70%  { width: 72%; }
+  90%  { width: 88%; }
+  100% { width: 100%; }
+}
+
+/* page hidden until splash done */
+#app { opacity: 0; transition: opacity 0.6s ease; }
+#app.visible { opacity: 1; }
+
+/* ─── MASTHEAD ─── */
+.masthead {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.masthead-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 60px 36px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.masthead-bg-text {
+  position: absolute;
+  right: -20px; top: -30px;
+  font-family: var(--ff-big);
+  font-size: 280px;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -5px;
+}
+
+.masthead-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sage-l);
+  margin-bottom: 10px;
+}
+
+.masthead-title {
+  font-family: var(--ff-head);
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--cream);
+  letter-spacing: -0.5px;
+}
+
+.masthead-title em {
+  font-style: italic;
+  color: rgba(245,240,232,0.55);
+}
+
+.masthead-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.mm-item strong {
+  display: block;
+  font-family: var(--ff-big);
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.mm-item span {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.35);
+}
+
+.masthead-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(61,107,79,0.25);
+  border: 1px solid rgba(90,143,107,0.3);
+  color: var(--sage-l);
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--sage-l);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+.date-tag {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: rgba(245,240,232,0.4);
+  letter-spacing: .5px;
+}
+
+/* ─── STICKY NAV ─── */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--ink2);
+  border-bottom: 2px solid var(--ink);
+  padding: 0 60px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.nav-bar a {
+  padding: 12px 20px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.35);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: all .2s;
+}
+
+.nav-bar a:hover { color: rgba(245,240,232,.7); }
+.nav-bar a.active { color: var(--cream); border-color: var(--sage-l); }
+
+/* ─── CONTENT ─── */
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px 100px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── CHART SECTION ─── */
+.chart-section {
+  padding: 60px 0 0;
+  animation: riseIn .6s ease both;
+}
+
+@keyframes riseIn {
+  from { opacity:0; transform: translateY(24px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.chart-section:nth-child(1) { animation-delay: .05s; }
+.chart-section:nth-child(2) { animation-delay: .1s; }
+.chart-section:nth-child(3) { animation-delay: .15s; }
+.chart-section:nth-child(4) { animation-delay: .2s; }
+.chart-section:nth-child(5) { animation-delay: .25s; }
+.chart-section:nth-child(6) { animation-delay: .3s; }
+
+/* Section header — big typographic divider */
+.s-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  margin-bottom: 28px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 12px;
+}
+
+.s-num {
+  font-family: var(--ff-big);
+  font-size: 72px;
+  color: var(--faint);
+  line-height: 1;
+  margin-right: 16px;
+  letter-spacing: -2px;
+}
+
+.s-text { flex: 1; }
+
+.s-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.s-title {
+  font-family: var(--ff-head);
+  font-size: 28px;
+  font-style: italic;
+  color: var(--ink);
+  letter-spacing: -.3px;
+  line-height: 1.1;
+}
+
+.s-count {
+  font-family: var(--ff-big);
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  align-self: flex-end;
+  padding-bottom: 4px;
+}
+
+/* ─── CARD ─── */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 28px 32px;
+  position: relative;
+}
+
+.card + .card { margin-top: 12px; }
+
+/* Note box */
+.note {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--cream2);
+  border-left: 3px solid var(--ink);
+  font-size: 12.5px;
+  color: var(--ink2);
+  line-height: 1.65;
+}
+
+.note b { color: var(--ink); }
+.note.sage { border-color: var(--sage); background: var(--sage-bg); color: #2A4A35; }
+.note.rust { border-color: var(--rust); background: var(--rust-bg); color: #7A2A1A; }
+.note.blue { border-color: var(--blue); background: var(--blue-bg); color: #1A3A6A; }
+
+/* ─── CHART 1 — LEADS BY PLATFORM ─── */
+.platform-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Giant number hero */
+.big-stat {
+  text-align: center;
+  position: relative;
+}
+
+.big-num {
+  font-family: var(--ff-big);
+  font-size: 120px;
+  line-height: 1;
+  letter-spacing: -3px;
+  color: var(--ink);
+  display: block;
+}
+
+.big-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.platform-rows { display: flex; flex-direction: column; gap: 0; }
+
+.pl-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 60px 50px;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+
+.pl-row:last-child { border-bottom: none; }
+.pl-row:hover { background: var(--cream); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 4px; }
+
+.pl-name {
+  font-family: var(--ff-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pl-icon {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.pl-track {
+  height: 6px;
+  background: var(--cream3);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.pl-fill { height: 100%; border-radius: 1px; transition: width 1.3s cubic-bezier(.16,1,.3,1); }
+
+.pl-pct {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+}
+
+.pl-n {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* donut */
+.donut-wrap { position: relative; width: 220px; height: 220px; margin: 0 auto; }
+.donut-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.dc-num {
+  font-family: var(--ff-big);
+  font-size: 38px;
+  color: var(--ink);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.dc-lbl {
+  font-family: var(--ff-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ─── CHART 2 — CREATIVE ─── */
+.creative-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cr-card {
+  background: var(--cream2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+}
+
+.cr-rank {
+  font-family: var(--ff-big);
+  font-size: 64px;
+  color: var(--faint);
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 8px;
+}
+
+.cr-card.first .cr-rank { color: rgba(61,107,79,.25); }
+
+.cr-name {
+  font-family: var(--ff-head);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink2);
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.cr-stats { display: flex; flex-direction: column; gap: 5px; }
+.cr-stat { display: flex; justify-content: space-between; font-size: 11px; }
+.cr-stat-l { color: var(--muted); font-family: var(--ff-mono); }
+.cr-stat-v { font-family: var(--ff-mono); font-weight: 600; color: var(--ink); }
+
+.pending-overlay {
+  position: absolute; inset: 0;
+  background: rgba(245,240,232,0.9);
+  backdrop-filter: blur(3px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 4px;
+}
+
+.po-icon { font-size: 28px; opacity: .5; }
+.po-text {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── CHART 3 — SERVICES ─── */
+.service-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
+}
+
+.sv-list { display: flex; flex-direction: column; gap: 0; }
+
+.sv-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 64px 50px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sv-row:last-child { border-bottom: none; }
+
+.sv-row.hero { padding: 20px 0; }
+
+.sv-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.sv-track { height: 5px; background: var(--cream3); border-radius: 1px; overflow: hidden; }
+.sv-fill { height: 100%; border-radius: 1px; transition: width 1.3s cubic-bezier(.16,1,.3,1); }
+
+.sv-pct {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.sv-n {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* Service hero stat */
+.service-hero {
+  text-align: center;
+  padding: 24px;
+  background: var(--ink);
+  border-radius: 4px;
+  position: sticky;
+  top: 80px;
+}
+
+.sh-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(245,240,232,.4);
+  margin-bottom: 8px;
+}
+
+.sh-big {
+  font-family: var(--ff-big);
+  font-size: 80px;
+  color: var(--cream);
+  line-height: 1;
+  letter-spacing: -2px;
+  display: block;
+}
+
+.sh-name {
+  font-family: var(--ff-head);
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(245,240,232,.6);
+  margin-top: 4px;
+}
+
+.sh-note {
+  margin-top: 16px;
+  font-size: 11px;
+  color: rgba(245,240,232,.35);
+  line-height: 1.5;
+  font-family: var(--ff-mono);
+}
+
+/* ─── CHART 4 — BRANCHES ─── */
+.branch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.br-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s;
+  cursor: default;
+}
+
+.br-card:hover { transform: translateY(-3px); border-color: var(--border2); }
+
+.br-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.br-green::after  { background: var(--sage); }
+.br-med::after    { background: var(--muted); }
+.br-amber::after  { background: var(--amber); }
+.br-red::after    { background: var(--rust); }
+
+.br-rank {
+  font-family: var(--ff-big);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+
+.br-card.critical .br-rank { color: var(--rust); }
+
+.br-name {
+  font-family: var(--ff-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1px;
+}
+
+.br-zone {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 10px;
+  font-family: var(--ff-mono);
+}
+
+.br-pct {
+  font-family: var(--ff-big);
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -1px;
+  margin-bottom: 3px;
+}
+
+.br-green .br-pct  { color: var(--sage); }
+.br-med .br-pct    { color: var(--ink2); }
+.br-amber .br-pct  { color: var(--amber); }
+.br-red .br-pct    { color: var(--rust); }
+
+.br-n {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-family: var(--ff-mono);
+}
+
+.br-bar { height: 3px; background: var(--cream3); border-radius: 1px; overflow: hidden; }
+.br-fill { height: 100%; border-radius: 1px; transition: width 1.3s cubic-bezier(.16,1,.3,1); }
+
+.br-green .br-fill  { background: var(--sage); }
+.br-med .br-fill    { background: var(--muted); }
+.br-amber .br-fill  { background: var(--amber); }
+.br-red .br-fill    { background: var(--rust); }
+
+/* ─── CHART 5 — DISCOVERY ─── */
+.discovery-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 40px;
+  align-items: center;
+}
+
+.disc-list { display: flex; flex-direction: column; gap: 0; }
+
+.disc-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 54px 44px;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.disc-row:last-child { border-bottom: none; }
+
+.disc-name { font-size: 12px; font-weight: 500; color: var(--ink2); display: flex; align-items: center; gap: 6px; }
+.disc-track { height: 5px; background: var(--cream3); border-radius: 1px; overflow: hidden; }
+.disc-fill { height: 100%; border-radius: 1px; }
+.disc-pct { font-family: var(--ff-mono); font-size: 12px; font-weight: 600; color: var(--ink); text-align: right; }
+.disc-n { font-family: var(--ff-mono); font-size: 10px; color: var(--muted); text-align: right; }
+
+/* ─── CHART 6 — DAILY ─── */
+.daily-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.dk {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border);
+  background: var(--cream2);
+}
+.dk:last-child { border-right: none; }
+
+.dk-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.dk-val {
+  font-family: var(--ff-big);
+  font-size: 42px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: var(--ink);
+}
+
+.dk-val.sage { color: var(--sage); }
+.dk-val.amber { color: var(--amber); }
+
+.chart-box { position: relative; width: 100%; height: 240px; }
+
+/* FOOTER */
+.footer {
+  background: var(--ink);
+  color: rgba(245,240,232,.3);
+  text-align: center;
+  padding: 24px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-top: 80px;
+}
+
+.footer strong { color: var(--sage-l); }
+
+/* SEPARATOR LINE between charts */
+.sep {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+@media (max-width: 960px) {
+  .masthead-inner { grid-template-columns: 1fr; padding: 28px 20px; }
+  .page { padding: 0 20px 60px; }
+  .nav-bar { padding: 0 20px; }
+  .platform-layout, .service-layout, .discovery-layout { grid-template-columns: 1fr; }
+  .branch-grid, .creative-grid { grid-template-columns: 1fr 1fr; }
+  .big-num { font-size: 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── SPLASH SCREEN ─── -->
+<div id="splash">
+  <div class="splash-logo">
+    <div class="splash-mark">
+      <!-- The Blues Agency — Blue Triangle Logo -->
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <polygon
+          points="50,12 92,82 8,82"
+          fill="#0000FF"
+          filter="url(#glow)"
+        />
+      </svg>
+    </div>
+    <div class="splash-name">The Blues</div>
+    <div class="splash-sub">Agency</div>
+    <div class="splash-divider"></div>
+    <div class="splash-client">WRK+ · Agency Performance</div>
+    <div class="splash-loader"><div class="splash-progress"></div></div>
+  </div>
+</div>
+
+<!-- ─── MAIN APP ─── -->
+<div id="app">
+
+<!-- ─── MASTHEAD ─── -->
+<header class="masthead">
+  <div class="masthead-bg-text">WRK+</div>
+  <div class="masthead-inner">
+    <div>
+      <div class="masthead-eyebrow">WRK+ Group · Marketing Department · Agency Performance</div>
+      <h1 class="masthead-title">April 1–22, 2026<br><em>Verified from Source Data</em></h1>
+      <div class="masthead-meta">
+        <div class="mm-item"><strong>706</strong><span>Total Leads</span></div>
+        <div class="mm-item"><strong>22</strong><span>Days Period</span></div>
+        <div class="mm-item"><strong>18</strong><span>Deals Closed</span></div>
+        <div class="mm-item"><strong>2.5%</strong><span>Close Rate</span></div>
+        <div class="mm-item"><strong>3</strong><span>Data Sources</span></div>
+      </div>
+    </div>
+    <div class="masthead-badge">
+      <div class="live-pill"><div class="live-dot"></div> Live</div>
+      <div class="date-tag">MQR · TGC · App</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <a href="#c1" class="active">01 · Leads by Platform</a>
+  <a href="#c2">02 · Best Creative</a>
+  <a href="#c3">03 · Top Services</a>
+  <a href="#c4">04 · Branches</a>
+  <a href="#c5">05 · Discovery</a>
+  <a href="#c6">06 · Daily Volume</a>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- ══════════════════════════════
+       01 — LEADS BY PLATFORM
+  ══════════════════════════════════ -->
+  <div class="chart-section" id="c1">
+    <div class="s-header">
+      <div class="s-num">01</div>
+      <div class="s-text">
+        <div class="s-label">Lead Sources</div>
+        <div class="s-title">Where are your leads coming from?</div>
+      </div>
+      <div class="s-count">706 LEADS</div>
+    </div>
+
+    <div class="card">
+      <div class="platform-layout">
+        <div>
+          <div class="donut-wrap">
+            <canvas id="donutChart"></canvas>
+            <div class="donut-center">
+              <div class="dc-num">706</div>
+              <div class="dc-lbl">Total</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="platform-rows">
+          <div class="pl-row">
+            <div class="pl-name">
+              <div class="pl-icon" style="background:#DDEAF5;">📘</div>
+              Meta Ads Form
+            </div>
+            <div class="pl-track"><div class="pl-fill" style="width:63.3%;background:#2A5A9A;"></div></div>
+            <div class="pl-pct" style="color:#2A5A9A;">63.3%</div>
+            <div class="pl-n">447</div>
+          </div>
+          <div class="pl-row">
+            <div class="pl-name">
+              <div class="pl-icon" style="background:#EBF2ED;">🌐</div>
+              Website (MQR+TGC)
+            </div>
+            <div class="pl-track"><div class="pl-fill" style="width:21.2%;background:var(--sage);"></div></div>
+            <div class="pl-pct" style="color:var(--sage);">21.2%</div>
+            <div class="pl-n">150</div>
+          </div>
+          <div class="pl-row">
+            <div class="pl-name">
+              <div class="pl-icon" style="background:#F5EAE6;">💬</div>
+              Direct DMs
+            </div>
+            <div class="pl-track"><div class="pl-fill" style="width:10.8%;background:var(--amber);"></div></div>
+            <div class="pl-pct" style="color:var(--amber);">10.8%</div>
+            <div class="pl-n">76</div>
+          </div>
+          <div class="pl-row">
+            <div class="pl-name">
+              <div class="pl-icon" style="background:#F0ECF5;">📱</div>
+              App — Become Member
+            </div>
+            <div class="pl-track"><div class="pl-fill" style="width:4.5%;background:#7A5A9A;"></div></div>
+            <div class="pl-pct" style="color:#7A5A9A;">4.5%</div>
+            <div class="pl-n">32</div>
+          </div>
+          <div class="pl-row" style="background:var(--rust-bg);margin:8px -32px 0;padding:13px 32px;border-radius:0;">
+            <div class="pl-name" style="color:var(--rust);font-weight:600;">
+              <div class="pl-icon" style="background:rgba(184,74,46,.1);">⚡</div>
+              Potential Leads (Qualified)
+            </div>
+            <div class="pl-track"><div class="pl-fill" style="width:37.1%;background:var(--rust);"></div></div>
+            <div class="pl-pct" style="color:var(--rust);">37.1%</div>
+            <div class="pl-n" style="color:var(--rust);">262</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>Meta Ads dominates at 63.3%</b> — your biggest engine by far. The <b>App channel (32 leads)</b> is completely unactioned — no agent, no follow-up, pure ad spend waste. <b>262 potential/qualified leads</b> sit in your pipeline right now.
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ══════════════════════════════
+       02 — BEST CREATIVE
+  ══════════════════════════════════ -->
+  <div class="chart-section" id="c2">
+    <div class="s-header">
+      <div class="s-num">02</div>
+      <div class="s-text">
+        <div class="s-label">Creative Performance</div>
+        <div class="s-title">Best performing creatives this week</div>
+      </div>
+      <div class="s-count">ADS MANAGER</div>
+    </div>
+
+    <div class="creative-grid">
+      <div class="cr-card first">
+        <div class="cr-rank">01</div>
+        <div class="cr-name">Office Tour Video<br>— New Cairo Branch</div>
+        <div class="cr-stats">
+          <div class="cr-stat"><span class="cr-stat-l">CTR</span><span class="cr-stat-v">—</span></div>
+          <div class="cr-stat"><span class="cr-stat-l">CPL</span><span class="cr-stat-v">—</span></div>
+          <div class="cr-stat"><span class="cr-stat-l">Leads</span><span class="cr-stat-v">—</span></div>
+        </div>
+        <div class="pending-overlay">
+          <div class="po-icon">🔌</div>
+          <div class="po-text">Awaiting API Access</div>
+        </div>
+      </div>
+      <div class="cr-card">
+        <div class="cr-rank">02</div>
+        <div class="cr-name">Coworking Space<br>Carousel Ad</div>
+        <div class="cr-stats">
+          <div class="cr-stat"><span class="cr-stat-l">CTR</span><span class="cr-stat-v">—</span></div>
+          <div class="cr-stat"><span class="cr-stat-l">CPL</span><span class="cr-stat-v">—</span></div>
+          <div class="cr-stat"><span class="cr-stat-l">Leads</span><span class="cr-stat-v">—</span></div>
+        </div>
+        <div class="pending-overlay">
+          <div class="po-icon">🔌</div>
+          <div class="po-text">Awaiting API Access</div>
+        </div>
+      </div>
+      <div class="cr-card">
+        <div class="cr-rank">03</div>
+        <div class="cr-name">Membership Offer<br>Static Image</div>
+        <div class="cr-stats">
+          <div class="cr-stat"><span class="cr-stat-l">CTR</span><span class="cr-stat-v">—</span></div>
+          <div class="cr-stat"><span class="cr-stat-l">CPL</span><span class="cr-stat-v">—</span></div>
+          <div class="cr-stat"><span class="cr-stat-l">Leads</span><span class="cr-stat-v">—</span></div>
+        </div>
+        <div class="pending-overlay">
+          <div class="po-icon">🔌</div>
+          <div class="po-text">Awaiting API Access</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note blue" style="margin-top:12px;">
+      Once <b>Ads Manager access</b> is connected, this section automatically pulls your top 3 creatives ranked by <b>CTR, CPL, and lead volume</b> — refreshed every week. Scale the winner, cut the rest.
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ══════════════════════════════
+       03 — SERVICES
+  ══════════════════════════════════ -->
+  <div class="chart-section" id="c3">
+    <div class="s-header">
+      <div class="s-num">03</div>
+      <div class="s-text">
+        <div class="s-label">Product Interest</div>
+        <div class="s-title">Most requested services from leads</div>
+      </div>
+      <div class="s-count">657 MQR</div>
+    </div>
+
+    <div class="card">
+      <div class="service-layout">
+        <div class="sv-list">
+          <div class="sv-row hero">
+            <div class="sv-name" style="font-size:15px;font-weight:700;">🏢 Private Offices</div>
+            <div class="sv-track"><div class="sv-fill" style="width:45.8%;background:var(--sage);"></div></div>
+            <div class="sv-pct" style="color:var(--sage);font-size:15px;">45.8%</div>
+            <div class="sv-n" style="font-size:13px;">301</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-name">❓ Other / Unspecified</div>
+            <div class="sv-track"><div class="sv-fill" style="width:17.5%;background:var(--muted);"></div></div>
+            <div class="sv-pct">17.5%</div>
+            <div class="sv-n">115</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-name">🤝 Meeting Rooms</div>
+            <div class="sv-track"><div class="sv-fill" style="width:11.6%;background:var(--blue);"></div></div>
+            <div class="sv-pct" style="color:var(--blue);">11.6%</div>
+            <div class="sv-n">76</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-name">🎯 Workshops & Events</div>
+            <div class="sv-track"><div class="sv-fill" style="width:11.0%;background:var(--amber);"></div></div>
+            <div class="sv-pct" style="color:var(--amber);">11.0%</div>
+            <div class="sv-n">72</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-name">💳 Memberships</div>
+            <div class="sv-track"><div class="sv-fill" style="width:9.7%;background:#7A5A9A;"></div></div>
+            <div class="sv-pct" style="color:#7A5A9A;">9.7%</div>
+            <div class="sv-n">64</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-name">🏛 Corporate</div>
+            <div class="sv-track"><div class="sv-fill" style="width:3.0%;background:var(--faint);"></div></div>
+            <div class="sv-pct">3.0%</div>
+            <div class="sv-n">20</div>
+          </div>
+          <div class="sv-row">
+            <div class="sv-name">📮 Virtual Office</div>
+            <div class="sv-track"><div class="sv-fill" style="width:1.4%;background:var(--faint);"></div></div>
+            <div class="sv-pct">1.4%</div>
+            <div class="sv-n">9</div>
+          </div>
+        </div>
+
+        <div class="service-hero">
+          <div class="sh-label">Top Service</div>
+          <span class="sh-big">45.8%</span>
+          <div class="sh-name">Private Offices</div>
+          <div class="sh-note">Lead every campaign<br>brief with private office<br>messaging next period</div>
+        </div>
+      </div>
+
+      <div class="note sage">
+        <b>Focus recommendation:</b> Private Offices (45.8%) + Workshops & Events (11%) together = <b>56.8% of all demand</b>. Next period campaigns should double down on these two services. Meeting Rooms excluded from leasing strategy per directive.
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ══════════════════════════════
+       04 — BRANCHES
+  ══════════════════════════════════ -->
+  <div class="chart-section" id="c4">
+    <div class="s-header">
+      <div class="s-num">04</div>
+      <div class="s-text">
+        <div class="s-label">Branch Demand</div>
+        <div class="s-title">Which branches attract the most leads?</div>
+      </div>
+      <div class="s-count">657 MQR</div>
+    </div>
+
+    <div class="branch-grid">
+      <div class="br-card br-green">
+        <div class="br-rank">#01 · TOP</div>
+        <div class="br-name">CBP</div>
+        <div class="br-zone">New Cairo · MQR East</div>
+        <div class="br-pct">28.8%</div>
+        <div class="br-n">189 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:100%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#02</div>
+        <div class="br-name">Multiple Locations</div>
+        <div class="br-zone">Various</div>
+        <div class="br-pct">11.7%</div>
+        <div class="br-n">77 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:40.6%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#03</div>
+        <div class="br-name">Maadi Eco</div>
+        <div class="br-zone">Maadi · MQR West</div>
+        <div class="br-pct">8.4%</div>
+        <div class="br-n">55 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:29.2%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#04</div>
+        <div class="br-name">Park 15</div>
+        <div class="br-zone">Al Rehab · MQR East</div>
+        <div class="br-pct">8.2%</div>
+        <div class="br-n">54 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:28.5%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#05</div>
+        <div class="br-name">Rabwa</div>
+        <div class="br-zone">Zayed · MQR West</div>
+        <div class="br-pct">7.9%</div>
+        <div class="br-n">52 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:27.4%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#06</div>
+        <div class="br-name">Melanite</div>
+        <div class="br-zone">October · MQR West</div>
+        <div class="br-pct">7.3%</div>
+        <div class="br-n">48 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:25.3%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#07</div>
+        <div class="br-name">TGC Downtown</div>
+        <div class="br-zone">Downtown Cairo</div>
+        <div class="br-pct">7.2%</div>
+        <div class="br-n">47 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:25%"></div></div>
+      </div>
+      <div class="br-card br-amber">
+        <div class="br-rank">#08</div>
+        <div class="br-name">Eden</div>
+        <div class="br-zone">Zayed · MQR West</div>
+        <div class="br-pct">5.3%</div>
+        <div class="br-n">35 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:18.4%"></div></div>
+      </div>
+      <div class="br-card br-red critical">
+        <div class="br-rank">#09 · ⚠ CRITICAL</div>
+        <div class="br-name">Gateway</div>
+        <div class="br-zone">Al Rehab · MQR East</div>
+        <div class="br-pct">3.8%</div>
+        <div class="br-n">25 leads · 81.3% occupied</div>
+        <div class="br-bar"><div class="br-fill" style="width:13.2%"></div></div>
+      </div>
+      <div class="br-card br-red critical">
+        <div class="br-rank">#10 · ⚠ CRITICAL</div>
+        <div class="br-name">Nile City</div>
+        <div class="br-zone">Corniche · MQR West</div>
+        <div class="br-pct">3.7%</div>
+        <div class="br-n">24 leads · 42.3% occupied</div>
+        <div class="br-bar"><div class="br-fill" style="width:12.8%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#11</div>
+        <div class="br-name">Madinaty East</div>
+        <div class="br-zone">Madinaty</div>
+        <div class="br-pct">2.4%</div>
+        <div class="br-n">16 leads</div>
+        <div class="br-bar"><div class="br-fill" style="width:8.3%"></div></div>
+      </div>
+      <div class="br-card br-med">
+        <div class="br-rank">#12</div>
+        <div class="br-name">Others</div>
+        <div class="br-zone">Platz · Enawalks · More</div>
+        <div class="br-pct">3.8%</div>
+        <div class="br-n">25 leads combined</div>
+        <div class="br-bar"><div class="br-fill" style="width:13.2%"></div></div>
+      </div>
+    </div>
+
+    <div class="note rust" style="margin-top:12px;">
+      ⚠ <b>Should we focus on specific areas?</b> — Gateway + Nile City together generate only <b>7.5% of demand</b> while being the two most underoccupied branches. Dedicated geo-targeted campaigns for both locations must launch immediately — not next week.
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ══════════════════════════════
+       05 — DISCOVERY
+  ══════════════════════════════════ -->
+  <div class="chart-section" id="c5">
+    <div class="s-header">
+      <div class="s-num">05</div>
+      <div class="s-text">
+        <div class="s-label">Discovery Channels</div>
+        <div class="s-title">How your audience finds WRK+</div>
+      </div>
+      <div class="s-count">674 MQR+TGC</div>
+    </div>
+
+    <div class="card">
+      <div class="discovery-layout">
+        <div class="disc-list">
+          <div class="disc-row">
+            <span class="disc-name">📘 Facebook</span>
+            <div class="disc-track"><div class="disc-fill" style="width:71.4%;background:var(--blue);"></div></div>
+            <span class="disc-pct" style="color:var(--blue);">71.4%</span>
+            <span class="disc-n">488</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">📷 Instagram</span>
+            <div class="disc-track"><div class="disc-fill" style="width:9.7%;background:#BC5C46;"></div></div>
+            <span class="disc-pct">9.7%</span>
+            <span class="disc-n">66</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">🤝 A Friend</span>
+            <div class="disc-track"><div class="disc-fill" style="width:5.7%;background:var(--sage);"></div></div>
+            <span class="disc-pct">5.7%</span>
+            <span class="disc-n">39</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">🔍 Google</span>
+            <div class="disc-track"><div class="disc-fill" style="width:4.5%;background:var(--amber);"></div></div>
+            <span class="disc-pct">4.5%</span>
+            <span class="disc-n">31</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">🌐 Other</span>
+            <div class="disc-track"><div class="disc-fill" style="width:4.2%;background:var(--faint);"></div></div>
+            <span class="disc-pct">4.2%</span>
+            <span class="disc-n">29</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">🎵 TikTok</span>
+            <div class="disc-track"><div class="disc-fill" style="width:0.7%;background:var(--ink2);"></div></div>
+            <span class="disc-pct">0.7%</span>
+            <span class="disc-n">5</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">📧 Newsletter</span>
+            <div class="disc-track"><div class="disc-fill" style="width:0.6%;background:var(--faint);"></div></div>
+            <span class="disc-pct">0.6%</span>
+            <span class="disc-n">4</span>
+          </div>
+          <div class="disc-row">
+            <span class="disc-name">💼 LinkedIn</span>
+            <div class="disc-track"><div class="disc-fill" style="width:0.3%;background:var(--blue);"></div></div>
+            <span class="disc-pct">0.3%</span>
+            <span class="disc-n">2</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="donut-wrap" style="width:220px;height:220px;">
+            <canvas id="discChart"></canvas>
+            <div class="donut-center">
+              <div class="dc-num" style="font-size:30px;">71.4%</div>
+              <div class="dc-lbl">Facebook</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>Facebook at 71.4%</b> dominates but skews older. <b>Instagram (9.7%)</b> is your brand quality channel — target 18–20% by Q2 end. Increase Reels + paid IG placements this week. <b>TikTok (0.7%)</b> is completely untapped upside.
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- ══════════════════════════════
+       06 — DAILY VOLUME
+  ══════════════════════════════════ -->
+  <div class="chart-section" id="c6">
+    <div class="s-header">
+      <div class="s-num">06</div>
+      <div class="s-text">
+        <div class="s-label">Daily Lead Flow</div>
+        <div class="s-title">Day-by-day volume — April 1–22</div>
+      </div>
+      <div class="s-count">MQR ONLY</div>
+    </div>
+
+    <div class="daily-kpis">
+      <div class="dk">
+        <div class="dk-label">Total MQR Leads</div>
+        <div class="dk-val sage">657</div>
+      </div>
+      <div class="dk">
+        <div class="dk-label">Daily Average</div>
+        <div class="dk-val">31.3</div>
+      </div>
+      <div class="dk">
+        <div class="dk-label">Peak Day</div>
+        <div class="dk-val amber">57</div>
+      </div>
+      <div class="dk">
+        <div class="dk-label">Peak Date</div>
+        <div class="dk-val" style="font-size:28px;">Apr 14</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chart-box">
+        <canvas id="dailyChart"></canvas>
+      </div>
+      <div class="note sage" style="margin-top:20px;">
+        <b>Best 3 days: Apr 13–15 → 140 leads.</b> Second peak: Apr 19–20 → 94 leads. Slowest: Apr 4 — only 5 leads. Use these patterns to guide future campaign scheduling and daily budget pacing strategy.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+</div><!-- /app -->
+
+<footer class="footer">
+  <strong>WRK+ Group</strong> &nbsp;·&nbsp; Commercial Director &nbsp;·&nbsp; Agency Performance Dashboard &nbsp;·&nbsp; April 1–22, 2026 &nbsp;·&nbsp; Confidential<br>
+  <span style="opacity:.5;font-size:9px;margin-top:4px;display:block;">Data from: MQR Leads Sheet · TGC Leads Sheet · TGC+MQR App Sheet · Availability v7 · All figures computed from source — no estimates</span>
+</footer>
+
+<script>
+// ─── CHART.JS DEFAULTS ───
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.color = '#7A7268';
+
+// Tooltip shared config
+const ttConfig = {
+  backgroundColor: '#1C1A17',
+  borderColor: 'rgba(28,26,23,0.3)',
+  borderWidth: 1,
+  titleColor: '#F5F0E8',
+  bodyColor: '#9A8F84',
+  padding: 12,
+  cornerRadius: 4,
+};
+
+// ─── DONUT 1 ───
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Meta Ads', 'Website', 'DMs', 'App'],
+    datasets: [{
+      data: [447, 150, 76, 32],
+      backgroundColor: ['#2A5A9A','#3D6B4F','#A06820','#7A5A9A'],
+      borderColor: '#FFFFFF',
+      borderWidth: 4,
+      hoverOffset: 10,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    cutout: '70%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { ...ttConfig, callbacks: { label: c => ` ${c.label}: ${c.raw} (${((c.raw/706)*100).toFixed(1)}%)` } }
+    },
+    animation: { animateRotate: true, duration: 1400, easing: 'easeOutQuart' }
+  }
+});
+
+// ─── DONUT 2 ───
+new Chart(document.getElementById('discChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Facebook','Instagram','Friend','Google','Other','TikTok','Newsletter','LinkedIn'],
+    datasets: [{
+      data: [488,66,39,31,29,5,4,2],
+      backgroundColor: ['#2A5A9A','#BC5C46','#3D6B4F','#A06820','#7A7268','#3A3830','#5A5248','#2A4A7A'],
+      borderColor: '#FFFFFF',
+      borderWidth: 4,
+      hoverOffset: 10,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    cutout: '70%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { ...ttConfig, callbacks: { label: c => ` ${c.label}: ${c.raw} (${((c.raw/664)*100).toFixed(1)}%)` } }
+    },
+    animation: { duration: 1400, easing: 'easeOutQuart' }
+  }
+});
+
+// ─── BAR CHART ───
+const days = Array.from({length:22},(_,i)=>i+1);
+const vals = [7,31,13,5,36,28,35,25,31,28,30,31,44,57,39,26,42,29,44,50,26,18];
+const peak = Math.max(...vals);
+
+new Chart(document.getElementById('dailyChart'), {
+  type: 'bar',
+  data: {
+    labels: days.map(d=>`${d}`),
+    datasets: [{
+      data: vals,
+      backgroundColor: vals.map(v =>
+        v === peak   ? '#3D6B4F' :
+        v >= 40      ? '#A06820' :
+        v >= 30      ? 'rgba(42,90,154,0.5)' :
+                       'rgba(28,26,23,0.1)'
+      ),
+      hoverBackgroundColor: vals.map(v =>
+        v === peak ? '#5A8F6B' : v >= 40 ? '#C8963E' : 'rgba(42,90,154,0.7)'
+      ),
+      borderRadius: 3,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { ...ttConfig, callbacks: {
+        label: c => ` ${c.raw} leads`,
+        title: c => `April ${c[0].label}${c[0].raw===peak?' ★ Peak':''}`
+      }}
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        border: { color: '#E4DDD0' },
+        ticks: { color:'#C8C0B4', font:{size:10} }
+      },
+      y: {
+        grid: { color:'rgba(28,26,23,0.05)', drawBorder:false },
+        border: { display: false },
+        ticks: { color:'#C8C0B4', font:{size:10}, stepSize:10 },
+        beginAtZero: true
+      }
+    },
+    animation: {
+      duration: 900, easing:'easeOutQuart',
+      delay: ctx => ctx.dataIndex * 28
+    }
+  }
+});
+
+// ─── ACTIVE NAV LINK ───
+const sections = document.querySelectorAll('[id^="c"]');
+const links = document.querySelectorAll('.nav-bar a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => obs.observe(s));
+
+// ─── SPLASH DISMISS ───
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    const app    = document.getElementById('app');
+    splash.classList.add('hide');
+    app.classList.add('visible');
+    setTimeout(() => splash.remove(), 800);
+  }, 2200);
+});
+
+</script>
+</body>
+</html>
