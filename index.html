@@ -1820,24 +1820,32 @@ async function getLongToken() {
       LIVE_TOKEN = data.access_token;
       return true;
     }
-    console.warn('Token error:', data);
-    return false;
+    console.warn('Token exchange failed, using token directly:', data);
   } catch(e) {
-    console.error('Token fetch failed:', e);
-    return false;
+    console.warn('Token exchange error, using token directly:', e.message);
   }
+  // Fallback: use token as-is (works if already long-lived or same-app token)
+  LIVE_TOKEN = SHORT_TOKEN;
+  return true;
 }
 
-// ─── Fetch Ads Data ───
+// ─── Fetch Ads Data (with pagination) ───
 async function fetchAdsData() {
   if (!LIVE_TOKEN) return null;
   try {
-    const resp = await fetch(
-      `https://graph.facebook.com/v25.0/${MQR_ACCOUNT_ID}/ads?` +
-      `fields=id,name,status,adset{name},insights.date_preset(last_30d){impressions,clicks,ctr,spend,actions,cost_per_action_type}&` +
-      `limit=100&access_token=${LIVE_TOKEN}`
-    );
-    return await resp.json();
+    const fields = `id,name,status,adset{name},insights.date_preset(last_30d){impressions,clicks,ctr,spend,actions,cost_per_action_type}`;
+    let url = `https://graph.facebook.com/v25.0/${MQR_ACCOUNT_ID}/ads?fields=${fields}&limit=100&access_token=${LIVE_TOKEN}`;
+    let allData = [];
+    let pages = 0;
+    while (url && pages < 5) {
+      const resp = await fetch(url);
+      const json = await resp.json();
+      if (json.error) return json;
+      if (json.data) allData = allData.concat(json.data);
+      url = json.paging?.next || null;
+      pages++;
+    }
+    return { data: allData };
   } catch(e) {
     console.error('Ads fetch failed:', e);
     return null;
@@ -1857,17 +1865,19 @@ function processAdsData(rawData) {
     const ctr      = parseFloat(ins?.ctr || '0');
     const spend    = parseFloat(ins?.spend || '0');
     const adset    = ad.adset?.name || '';
-    const isArabic = adset.toLowerCase().includes('arabic') || adset.includes('arab');
-    const isEnglish= adset.toLowerCase().includes('english');
+    const adL      = adset.toLowerCase();
+    // Arabic: named "arabic", "arab", or "reels"/"reel" (Egypt market = Arabic by default)
+    const isArabic = adL.includes('arabic') || adL.includes('arab') || adL.includes('reel') || adL.includes('broad') && !adL.includes('english');
+    const isEnglish= adL.includes('english');
     return { id: ad.id, name: ad.name, adset, leads, clicks, impr, cpl, ctr, spend, isArabic, isEnglish, status: ad.status };
   });
 
   // Sort by leads
   const topAds = ads.filter(a => a.leads > 0).sort((a, b) => b.leads - a.leads);
 
-  // Arabic vs English split
-  const arabic  = ads.filter(a => a.isArabic);
+  // Arabic vs English split (English takes priority if both match)
   const english = ads.filter(a => a.isEnglish);
+  const arabic  = ads.filter(a => a.isArabic && !a.isEnglish);
 
   const arLeads = arabic.reduce((s, a) => s + a.leads, 0);
   const enLeads = english.reduce((s, a) => s + a.leads, 0);
