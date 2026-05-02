@@ -1164,29 +1164,29 @@ tfoot td.r { text-align:right; }
   <!-- KPI STRIP -->
   <div class="kpi-strip">
     <div class="kpi-cell hi">
-      <div class="kpi-label">Total Leads</div>
-      <div class="kpi-val">981</div>
-      <div class="kpi-sub">Apr 1–29 · All channels</div>
+      <div class="kpi-label">Total MQR Leads</div>
+      <div class="kpi-val" id="kpi-total-val">1,810</div>
+      <div class="kpi-sub" id="kpi-total-sub">All time · All channels</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Meta Leads</div>
-      <div class="kpi-val">676</div>
-      <div class="kpi-sub">69% of total · £143 CPL</div>
+      <div class="kpi-val" id="kpi-meta-val">690</div>
+      <div class="kpi-sub" id="kpi-meta-sub">38.1% of total</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Google Leads</div>
-      <div class="kpi-val good">198</div>
-      <div class="kpi-sub">20% · £301 CPL · better quality</div>
+      <div class="kpi-label">Website Leads</div>
+      <div class="kpi-val good" id="kpi-website-val">937</div>
+      <div class="kpi-sub" id="kpi-website-sub">51.8% of total</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Blended CPL</div>
-      <div class="kpi-val warn">£159</div>
-      <div class="kpi-sub">All channels combined</div>
+      <div class="kpi-label">Deal Closed</div>
+      <div class="kpi-val warn" id="kpi-closed-val">114</div>
+      <div class="kpi-sub" id="kpi-closed-sub">6.3% close rate</div>
     </div>
     <div class="kpi-cell red">
-      <div class="kpi-label">Unassigned TGC</div>
-      <div class="kpi-val">34%</div>
-      <div class="kpi-sub">34 of 101 TGC leads unworked</div>
+      <div class="kpi-label">TGC Total</div>
+      <div class="kpi-val" id="kpi-tgc-val">4,676</div>
+      <div class="kpi-sub" id="kpi-tgc-sub">Meta: 2,692 · Web: 1,535</div>
     </div>
   </div>
 
@@ -1240,23 +1240,23 @@ tfoot td.r { text-align:right; }
   <div class="quality-grid" style="margin-bottom:12px;">
     <div class="q-cell relevant">
       <div class="q-label">Relevant Leads</div>
-      <div class="q-num">383</div>
-      <div class="q-pct">39.0% of total</div>
+      <div class="q-num" id="q-relevant-num">798</div>
+      <div class="q-pct" id="q-relevant-pct">44.1% of total</div>
     </div>
     <div class="q-cell potential">
-      <div class="q-label">Potential / Relevant</div>
-      <div class="q-num">107</div>
-      <div class="q-pct">10.9% · warm pipeline</div>
+      <div class="q-label">General / No Action</div>
+      <div class="q-num" id="q-potential-num">50</div>
+      <div class="q-pct" id="q-potential-pct">2.8% · pending</div>
     </div>
     <div class="q-cell unreachable">
-      <div class="q-label">Unreachable</div>
-      <div class="q-num">148</div>
-      <div class="q-pct">15.1% · still in outreach</div>
+      <div class="q-label">No Answer / Unreachable</div>
+      <div class="q-num" id="q-unreachable-num">173</div>
+      <div class="q-pct" id="q-unreachable-pct">9.6% · still in outreach</div>
     </div>
     <div class="q-cell irrelevant">
       <div class="q-label">Irrelevant / Lost</div>
-      <div class="q-num">343</div>
-      <div class="q-pct">35.0% disqualified</div>
+      <div class="q-num" id="q-irrelevant-num">440</div>
+      <div class="q-pct" id="q-irrelevant-pct">24.3% disqualified</div>
     </div>
   </div>
 
@@ -1267,8 +1267,8 @@ tfoot td.r { text-align:right; }
         <div class="card-tag">Drop-off at each stage</div>
       </div>
       <div class="funnel" id="mqr-funnel"></div>
-      <div class="insight bad">
-        <b>383 relevant → only 33 closed (8.6%).</b> The critical leak: "In Discussions" (211) → "Tour/Quote" (23). We lose 89% before they ever step into a space. Sales motion problem, not a lead problem.
+      <div class="insight bad" id="funnel-insight">
+        <b>798 relevant → only 114 closed (14.3%).</b> Critical bottleneck: "In Discussions" (365) → "Tour/Quote" (39). Only 10.7% convert to next stage. Sales motion problem, not a lead problem.
       </div>
     </div>
     <div class="card">
@@ -1752,9 +1752,10 @@ tfoot td.r { text-align:right; }
       </div>
       <div class="chart-wrap short"><canvas id="tgc-source"></canvas></div>
       <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;">
-        <div style="text-align:center;"><div style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--red)">77</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">META FORM</div></div>
-        <div style="text-align:center;"><div style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--green)">17</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">WEBSITE</div></div>
-        <div style="text-align:center;"><div style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--blue)">7</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">DMS</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-meta" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--red)">2,692</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">META FORM</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-website" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--green)">1,535</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">WEBSITE</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-dm" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--blue)">381</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">DMS</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-li" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--amber)">68</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">LINKEDIN</div></div>
       </div>
     </div>
   </div>
@@ -1798,8 +1799,8 @@ tfoot td.r { text-align:right; }
 // ══════════════════════════════════════════
 // META ADS API — LIVE DATA
 // ══════════════════════════════════════════
-const META_APP_ID     = '4270620163158621';
-const META_APP_SECRET = 'a63f4a39f772a9d09451d750e2c13270';
+const META_APP_ID     = '1340453324644178';
+const META_APP_SECRET = '29fd7aec4cfb9c363456cae782831c85';
 const MQR_ACCOUNT_ID  = 'act_248133879022877';
 const SHORT_TOKEN     = 'EAA8sGz3Lsl0BRUNG9pWJf12ZBuVLZAL6clAxyI5fZBtAjeW74IxcWuZAGlT0XXkzGXndiQ8snBkynwSIwveBjAZAvTo8eKgbXqQOReFGJxHMZCjDQZBREzGWyF1Mk7SNl0S62h97AdForzu7z8PCxhYWhZBGmIH2scOvtny4ak1JrgnYHbyas85JNd5x4ZBb1vwbAGAObfXOhHIOOys6MUEcDyT7scQcZAVtEL9QGaHv9HpBp1SAtjvWYXUodnnrZCo7wwVhj53D2ZCZCQ6z4Xh7H724GRwZDZD';
 
@@ -2066,11 +2067,48 @@ async function loadLiveData() {
     return;
   }
 
-  // Update sections
+  // Update best creative section
   updateCreativeSection(processed);
 
+  // Update Arabic vs English comparison using Meta API data
+  // Close rate comes from sheet data (if loaded), CPL from Meta
+  const sheetClosed   = sheetData?.rows || [];
+  const getCloseRate  = (isArabic) => {
+    if (!sheetClosed.length) return 0;
+    const H = sheetData.headers;
+    const srcCol   = H.find(h => h && h.toLowerCase().includes('lead source'));
+    const stageCol = H.find(h => h && h.toLowerCase().includes('deal stage'));
+    if (!srcCol || !stageCol) return 0;
+    // Arabic leads tend to come via Meta Form; English via Website — approximate split
+    const closed = sheetClosed.filter(r =>
+      (r[stageCol]||'').trim() === 'Deal Closed'
+    ).length;
+    return closed / Math.max(sheetClosed.length, 1);
+  };
+
+  const arLeads = processed.arLeads || 0;
+  const enLeads = processed.enLeads || 0;
+  const totalApiLeads = arLeads + enLeads || 1;
+  const arCloseRate = arLeads > 0 ? getCloseRate(true) : 0;
+  const enCloseRate = enLeads > 0 ? getCloseRate(false) : 0;
+
+  updateLangComparison(
+    {
+      leads: arLeads, spend: processed.arSpend, cpl: processed.arCpl,
+      closed: Math.round((sheetData?.rows?.length || 0) * (arLeads / totalApiLeads) * arCloseRate),
+      closeRate: arCloseRate, relevantRate: arLeads / totalApiLeads,
+      topAdsets: processed.topArabic.map(a => ({ name: a.adset || a.name, leads: a.leads }))
+    },
+    {
+      leads: enLeads, spend: processed.enSpend, cpl: processed.enCpl,
+      closed: Math.round((sheetData?.rows?.length || 0) * (enLeads / totalApiLeads) * enCloseRate),
+      closeRate: enCloseRate, relevantRate: enLeads / totalApiLeads,
+      topAdsets: processed.topEnglish.map(a => ({ name: a.adset || a.name, leads: a.leads }))
+    }
+  );
+
   apiDataLoaded = true;
-  showApiStatus('success', `Meta API ✓ · ${processed.topAds.length} ads loaded · Live data`);
+  showApiStatus('success', `Meta API ✓ · ${processed.topAds.length} ads · AR:${arLeads} EN:${enLeads} leads`);
 }
 
 // ─── TAB SWITCHING ───
@@ -2244,13 +2282,13 @@ function initCharts() {
   // Contact Status
   const contactEl = document.getElementById('mqr-contact');
   if (contactEl) {
-    new Chart(contactEl, {
+    window._contactChart = new Chart(contactEl, {
       type: 'doughnut',
       data: {
-        labels: ['Replied (718)', 'No Answer x1 (148)', 'Irrelevant (65)', 'Never Contacted (57)', 'Unreachable (final)'],
+        labels: ['Replied (735)', 'Attempts (152)', 'Unreachable (88)', 'Not Contacted yet'],
         datasets: [{
-          data: [718, 148, 65, 57, 43],
-          backgroundColor: ['#2A7D5F', '#C47B1A', '#E84B35', '#7A8695', '#C4BDB3'],
+          data: [735, 152, 88, 835],
+          backgroundColor: ['#2A7D5F', '#C47B1A', '#E84B35', '#C4BDB3'],
           borderColor: '#fff',
           borderWidth: 3,
           hoverOffset: 8
@@ -2294,13 +2332,13 @@ function initCharts() {
   // TGC Source
   const tgcSrcEl = document.getElementById('tgc-source');
   if (tgcSrcEl) {
-    new Chart(tgcSrcEl, {
+    window._tgcSourceChart = new Chart(tgcSrcEl, {
       type: 'doughnut',
       data: {
-        labels: ['Meta Form (77)', 'Website (17)', 'DMs (7)'],
+        labels: ['Meta Form (2,692)', 'Website (1,535)', 'DMs (381)', 'LinkedIn (68)'],
         datasets: [{
-          data: [77, 17, 7],
-          backgroundColor: ['#E84B35', '#2A7D5F', '#2563A8'],
+          data: [2692, 1535, 381, 68],
+          backgroundColor: ['#E84B35', '#2A7D5F', '#2563A8', '#C47B1A'],
           borderColor: '#fff',
           borderWidth: 3,
           hoverOffset: 8
@@ -2322,26 +2360,92 @@ function initCharts() {
 // ══════════════════════════════════════════
 // GOOGLE SHEETS INTEGRATION — LEADS DATA
 // ══════════════════════════════════════════
-const SHEET_ID = '1ZWfVOj7qg23CVAdJm5ARwsbElH_XNP_1gxqRxP8tiY4';
-const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/1ZWfVOj7qg23CVAdJm5ARwsbElH_XNP_1gxqRxP8tiY4/export?format=csv&gid=0`;
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1ZWfVOj7qg23CVAdJm5ARwsbElH_XNP_1gxqRxP8tiY4/edit';
+const SHEET_ID      = '1ZWfVOj7qg23CVAdJm5ARwsbElH_XNP_1gxqRxP8tiY4';
+const SHEET_BASE    = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
+const SHEET_CSV_URL = `${SHEET_BASE}/export?format=csv&gid=0`;       // MQR tab
+const SHEET_TGC_URL = `${SHEET_BASE}/export?format=csv&gid=1`;       // TGC tab (update gid if needed)
+const SHEET_URL     = `${SHEET_BASE}/edit`;
 
 let sheetData = null;
 let sheetLoaded = false;
 
 async function loadSheetData() {
   try {
-    showApiStatus('loading', 'Google Sheets · Loading leads data...');
+    showApiStatus('loading', 'Google Sheets · Loading MQR leads...');
     const resp = await fetch(SHEET_CSV_URL);
-    if (!resp.ok) throw new Error('Sheet not public or not found');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const csv = await resp.text();
     sheetData = parseCSV(csv);
     sheetLoaded = true;
     updateDashboardFromSheet(sheetData);
-    showApiStatus('success', `Google Sheets ✓ · ${sheetData.rows.length} leads loaded`);
+    showApiStatus('success', `Sheets ✓ · MQR: ${sheetData.rows.length.toLocaleString()} leads`);
+    loadTGCSheetData();
   } catch(e) {
-    console.warn('Sheet load failed:', e.message);
-    showApiStatus('error', 'Google Sheets · Make sheet public to load live leads');
+    console.warn('MQR sheet load failed:', e.message);
+    showApiStatus('error', 'Google Sheets · Make the sheet public (File → Share → Anyone with link)');
+  }
+}
+
+async function loadTGCSheetData() {
+  try {
+    const resp = await fetch(SHEET_TGC_URL);
+    if (!resp.ok) return;
+    const csv = await resp.text();
+    const data = parseCSV(csv);
+    if (!data.rows.length) return;
+    updateTGCFromSheet(data);
+    console.log('TGC sheet loaded:', data.rows.length, 'rows');
+  } catch(e) {
+    console.warn('TGC sheet load failed:', e.message);
+  }
+}
+
+function updateTGCFromSheet(data) {
+  const rows = data.rows;
+  const H    = data.headers;
+  const col  = (kws) => H.find(h => h && kws.some(k => h.toLowerCase().includes(k.toLowerCase())));
+  const countBy = (c) => {
+    if (!c) return {};
+    const m = {};
+    rows.forEach(r => { const v = (r[c]||'').trim(); if (v) m[v] = (m[v]||0)+1; });
+    return m;
+  };
+
+  const total   = rows.length;
+  const src     = countBy(col(['lead source','source']));
+  const metaL   = (src['Meta Ads Form']||0)+(src['Meta Form']||0)+(src['Meta from']||0);
+  const webL    = Object.keys(src).filter(k=>k.toLowerCase().startsWith('website')).reduce((s,k)=>s+src[k],0);
+  const dmL     = (src['DM Form']||0)+(src['DMs']||0)+(src['DM']||0);
+  const liL     = src['LinkedIn']||0;
+
+  const setText = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  setText('kpi-tgc-val', total.toLocaleString());
+  setText('kpi-tgc-sub', `Meta: ${metaL.toLocaleString()} · Web: ${webL.toLocaleString()}`);
+  setText('tgc-stat-meta', metaL.toLocaleString());
+  setText('tgc-stat-website', webL.toLocaleString());
+  setText('tgc-stat-dm', dmL.toLocaleString());
+  setText('tgc-stat-li', liL.toLocaleString());
+
+  if (window._tgcSourceChart && metaL > 0) {
+    window._tgcSourceChart.data.labels = [
+      `Meta Form (${metaL.toLocaleString()})`,
+      `Website (${webL.toLocaleString()})`,
+      `DMs (${dmL.toLocaleString()})`,
+      `LinkedIn (${liL})`
+    ];
+    window._tgcSourceChart.data.datasets[0].data = [metaL, webL, dmL, liL];
+    window._tgcSourceChart.update();
+  }
+
+  // TGC quality bars
+  const qualCol = col(['lead quality','quality','if relevant']);
+  if (qualCol) {
+    const qual = countBy(qualCol);
+    const qualItems = Object.entries(qual)
+      .filter(([k]) => k.length < 40)
+      .map(([l,v]) => ({l:l.trim(),v}))
+      .sort((a,b) => b.v-a.v).slice(0,7);
+    if (qualItems.length) buildBar('tgc-quality', qualItems, 'blue');
   }
 }
 
@@ -2362,38 +2466,118 @@ function parseCSV(text) {
 function updateDashboardFromSheet(data) {
   if (!data || !data.rows.length) return;
   const rows = data.rows;
-  
-  // Try to detect key columns (case-insensitive)
-  const find = (keywords) => data.headers.find(h => keywords.some(k => h.toLowerCase().includes(k.toLowerCase())));
-  
-  const statusCol  = find(['status', 'state', 'Status', 'State']);
-  const sourceCol  = find(['source', 'channel', 'platform', 'Source']);
-  const dateCol    = find(['date', 'created', 'Date', 'Created']);
-  const productCol = find(['product', 'service', 'Product', 'Service']);
-  const branchCol  = find(['branch', 'location', 'Branch', 'Location']);
+  const H = data.headers;
 
-  // Count by status
-  const statusCounts = {};
-  rows.forEach(r => {
-    const s = r[statusCol] || 'Unknown';
-    statusCounts[s] = (statusCounts[s] || 0) + 1;
-  });
+  // Column detection by header name
+  const col = (kws) => H.find(h => h && kws.some(k => h.toLowerCase().includes(k.toLowerCase())));
+  const sourceCol   = col(['lead source', 'source']);
+  const statusCol   = col(['contact status']);
+  const qualityCol  = col(['lead quality']);
+  const stageCol    = col(['deal stage']);
+  const productCol  = col(['product inquiry', 'product']);
+  const locationCol = col(['location']);
 
-  // Update KPI strip if we have total lead count
-  const totalLeadsEl = document.querySelector('#panel-mqr .kpi-cell.hi .kpi-val');
-  if (totalLeadsEl && rows.length > 0) {
-    // Don't override — just add a live badge
-    const kpiCell = totalLeadsEl.closest('.kpi-cell');
-    if (kpiCell && !kpiCell.querySelector('.live-sheet-badge')) {
-      const badge = document.createElement('div');
-      badge.className = 'live-sheet-badge';
-      badge.style.cssText = 'font-family:var(--ff-mono);font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.5);margin-top:4px;';
-      badge.textContent = `Sheet: ${rows.length} rows`;
-      kpiCell.appendChild(badge);
+  const countBy = (c) => {
+    if (!c) return {};
+    const m = {};
+    rows.forEach(r => { const v = (r[c] || '').trim(); if (v) m[v] = (m[v] || 0) + 1; });
+    return m;
+  };
+
+  const pct  = (n, d) => d > 0 ? ((n / d) * 100).toFixed(1) + '%' : '—';
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const total = rows.length;
+
+  // ── Sources ──
+  const src = countBy(sourceCol);
+  const metaLeads = (src['Meta Form'] || 0) + (src['Meta from'] || 0) + (src['Meta Ads Form'] || 0);
+  const webLeads  = Object.keys(src).filter(k => k.toLowerCase().startsWith('website')).reduce((s, k) => s + src[k], 0);
+  const dmLeads   = (src['DMs'] || 0) + (src['DM'] || 0) + (src['DM Form'] || 0);
+
+  setText('kpi-total-val', total.toLocaleString());
+  setText('kpi-total-sub', 'Live from sheet · All channels');
+  setText('kpi-meta-val', metaLeads.toLocaleString());
+  setText('kpi-meta-sub', pct(metaLeads, total) + ' of total');
+  setText('kpi-website-val', webLeads.toLocaleString());
+  setText('kpi-website-sub', pct(webLeads, total) + ' of total');
+
+  // ── Lead Quality ──
+  const qual = countBy(qualityCol);
+  const relevant   = (qual['Relevant'] || 0) + (qual['Revelant'] || 0);
+  const irrelevant = (qual['Irrelevant'] || 0) + (qual['Not Interested'] || 0);
+  const noAnswer   = Object.keys(qual).filter(k => k.toLowerCase().includes('no answer') || k.toLowerCase().includes('unreachable')).reduce((s, k) => s + qual[k], 0);
+  const pending    = (qual['No Action Yet'] || 0) + (qual['General Inquiry'] || 0);
+
+  setText('q-relevant-num',   relevant.toLocaleString());
+  setText('q-relevant-pct',   pct(relevant, total) + ' of total');
+  setText('q-potential-num',  pending.toLocaleString());
+  setText('q-potential-pct',  pct(pending, total) + ' · pending');
+  setText('q-unreachable-num', noAnswer.toLocaleString());
+  setText('q-unreachable-pct', pct(noAnswer, total) + ' · outreach');
+  setText('q-irrelevant-num', irrelevant.toLocaleString());
+  setText('q-irrelevant-pct', pct(irrelevant, total) + ' disqualified');
+
+  // ── Contact Status ──
+  const stat = countBy(statusCol);
+  const replied     = stat['Replied'] || 0;
+  const unreachable = stat['Unreachable'] || 0;
+  const attempts    = (stat['Attempt 1'] || 0) + (stat['Attempt 2'] || 0) + (stat['Attempt 3'] || 0);
+  const notContacted = Math.max(0, total - replied - unreachable - attempts);
+
+  if (window._contactChart) {
+    window._contactChart.data.labels = [
+      `Replied (${replied})`,
+      `Attempts (${attempts})`,
+      `Unreachable (${unreachable})`,
+      `Not Contacted (${notContacted})`
+    ];
+    window._contactChart.data.datasets[0].data = [replied, attempts, unreachable, notContacted];
+    window._contactChart.update();
+    const contactInsight = document.querySelector('#mqr-contact')?.closest('.card')?.querySelector('.insight');
+    if (contactInsight && replied > 0) {
+      const contacted = replied + attempts + unreachable;
+      contactInsight.className = 'insight good';
+      contactInsight.innerHTML = `<b>${pct(contacted, total)} contacted, ${pct(replied, total)} replied.</b> ${attempts.toLocaleString()} leads in active follow-up — tightening SLA here could surface more relevant prospects.`;
     }
   }
 
-  // Add sheet link to topbar
+  // ── Deal Stage ──
+  const stage = countBy(stageCol);
+  const closed       = stage['Deal Closed'] || 0;
+  const inDiscussion = stage['In Discussions'] || 0;
+  const tourQuote    = (stage['Tour & Meeting'] || 0) + (stage['Quotation Sent'] || 0);
+
+  setText('kpi-closed-val', closed.toLocaleString());
+  setText('kpi-closed-sub', pct(closed, relevant) + ' close rate (of relevant)');
+
+  // ── Funnel (rebuild with live data) ──
+  const contacted = replied + attempts + unreachable;
+  buildFunnels({ total, contacted, replied, relevant, inDiscussion, tourQuote, closed });
+
+  const funnelInsight = document.querySelector('#mqr-funnel + .insight');
+  if (funnelInsight && closed > 0 && relevant > 0) {
+    const closeRate = ((closed / relevant) * 100).toFixed(1);
+    const leak = inDiscussion > 0 ? ((tourQuote / inDiscussion) * 100).toFixed(0) : 0;
+    funnelInsight.className = 'insight bad';
+    funnelInsight.innerHTML = `<b>${relevant.toLocaleString()} relevant → only ${closed} closed (${closeRate}%).</b> Critical bottleneck: "In Discussions" (${inDiscussion.toLocaleString()}) → "Tour/Quote" (${tourQuote}). Only ${leak}% convert to next stage. Sales motion problem, not a lead problem.`;
+  }
+
+  // ── Location bars (live) ──
+  const loc = countBy(locationCol);
+  const locItems = Object.entries(loc)
+    .map(([k, v]) => ({ l: k.trim(), v }))
+    .sort((a, b) => b.v - a.v).slice(0, 10);
+  if (locItems.length) buildBar('mqr-loc', locItems);
+
+  // ── Product bars (live) ──
+  const prod = countBy(productCol);
+  const prodItems = Object.entries(prod)
+    .filter(([k]) => k.length < 45)
+    .map(([k, v]) => ({ l: k.trim(), v }))
+    .sort((a, b) => b.v - a.v).slice(0, 7);
+  if (prodItems.length) buildBar('mqr-prod', prodItems, 'red');
+
+  // ── Topbar sheet link ──
   const tbRight = document.querySelector('.tb-right');
   if (tbRight && !document.getElementById('sheet-link')) {
     const link = document.createElement('a');
@@ -2401,11 +2585,11 @@ function updateDashboardFromSheet(data) {
     link.href = SHEET_URL;
     link.target = '_blank';
     link.style.cssText = 'font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;color:var(--muted);border:1px solid var(--border);padding:4px 10px;text-decoration:none;display:flex;align-items:center;gap:5px;';
-    link.innerHTML = '📊 Open Sheet';
+    link.innerHTML = '📊 ' + total.toLocaleString() + ' leads live';
     tbRight.appendChild(link);
   }
 
-  console.log('Sheet loaded:', rows.length, 'rows, columns:', data.headers.join(', '));
+  console.log('Sheet → dashboard updated:', total, 'rows | cols:', H.join(', '));
 }
 
 // ─── LANG COMPARISON CHART ───
@@ -2553,26 +2737,26 @@ function buildBar(containerId, items, color = '') {
 
 function buildAllBars() {
   buildBar('mqr-loc', [
-    {l:'Cairo Business Park', v:254},
-    {l:'Multiple Locations', v:110},
-    {l:'Maadi Eco Building', v:91},
-    {l:'Downtown TGC', v:83},
-    {l:'Melanite Mall (October)', v:78},
-    {l:'AlRehab Park 15', v:75},
-    {l:'Zayed AlRabwa', v:69},
-    {l:'Madinaty East Hub', v:49},
-    {l:'Zayed Eden Mall', v:47},
-    {l:'AlRehab Gateway', v:41},
+    {l:'Cairo Business Park', v:403},
+    {l:'Multiple Locations', v:201},
+    {l:'Maadi - Eco Building', v:168},
+    {l:'Downtown - The GrEEK Campus', v:157},
+    {l:'October - Melanite Mall', v:143},
+    {l:'AlRehab Park 15', v:137},
+    {l:'AlRehab Gateway Mall', v:118},
+    {l:'Zayed - AlRabwa', v:112},
+    {l:'Zayed - Eden Mall', v:84},
+    {l:'Madinaty East Hub', v:76},
   ]);
 
   buildBar('mqr-prod', [
-    {l:'Offices', v:434},
-    {l:'Other / Unspecified', v:170},
-    {l:'Meeting Rooms', v:115},
-    {l:'Memberships', v:113},
-    {l:'Workshop Rooms & Events', v:105},
-    {l:'Corporate Inquiries', v:26},
-    {l:'Virtual Office', v:13},
+    {l:'Offices', v:738},
+    {l:'Other', v:294},
+    {l:'Meeting Rooms', v:252},
+    {l:'Memberships', v:220},
+    {l:'Workshop Rooms & Events', v:206},
+    {l:'Corporate Inquiries', v:49},
+    {l:'Virtual Office', v:15},
   ], 'red');
 
   buildBar('mqr-closed-loc', [
@@ -2594,7 +2778,7 @@ function buildAllBars() {
     {l:'Corporate', v:1},
   ], 'amber');
 
-  // TGC bars
+  // TGC bars — from sheet
   buildBar('tgc-prod', [
     {l:'Workshop Rooms & Events', v:57},
     {l:'Offices', v:27},
@@ -2608,12 +2792,13 @@ function buildAllBars() {
   ]);
 
   buildBar('tgc-quality', [
-    {l:'No Answer (1 trial)', v:30},
-    {l:'Relevant', v:26},
-    {l:'Unassigned', v:17},
-    {l:'No Action Yet', v:13},
-    {l:'Irrelevant', v:11},
-    {l:'No Answer (2 trials)', v:3},
+    {l:'Relevant', v:1511},
+    {l:'Irrelevant', v:1504},
+    {l:'No Answer (1 trial)', v:703},
+    {l:'Unreachable', v:357},
+    {l:'No Answer (2 trials)', v:215},
+    {l:'No Answer (3 trials)', v:81},
+    {l:'No Action Yet', v:41},
   ], 'blue');
 
   // AR/EN bars (estimated split)
@@ -2633,29 +2818,34 @@ function buildAllBars() {
 }
 
 // ─── FUNNEL ───
-function buildFunnels() {
+function buildFunnels(data) {
+  const d = data || {
+    total: 1810, contacted: 975, replied: 735, relevant: 798,
+    inDiscussion: 365, tourQuote: 39, closed: 114
+  };
   const funnelData = [
-    { name: 'Total Leads', val: 981, pct: 'baseline' },
-    { name: 'Contacted', val: 924, pct: '94.2%' },
-    { name: 'Replied', val: 718, pct: '73.2%' },
-    { name: 'Marked Relevant', val: 383, pct: '39.0%' },
-    { name: 'In Discussions', val: 211, pct: '21.5%' },
-    { name: 'Tour or Quotation', val: 23, pct: '2.3%' },
-    { name: 'Deal Closed ✓', val: 33, pct: '3.4%' }
+    { name: 'Total Leads',      val: d.total,        pct: 'baseline' },
+    { name: 'Contacted',        val: d.contacted,    pct: ((d.contacted/d.total)*100).toFixed(1)+'%' },
+    { name: 'Replied',          val: d.replied,      pct: ((d.replied/d.total)*100).toFixed(1)+'%' },
+    { name: 'Marked Relevant',  val: d.relevant,     pct: ((d.relevant/d.total)*100).toFixed(1)+'%' },
+    { name: 'In Discussions',   val: d.inDiscussion, pct: ((d.inDiscussion/d.total)*100).toFixed(1)+'%' },
+    { name: 'Tour or Quotation',val: d.tourQuote,    pct: ((d.tourQuote/d.total)*100).toFixed(1)+'%' },
+    { name: 'Deal Closed ✓',    val: d.closed,       pct: ((d.closed/d.total)*100).toFixed(1)+'%' }
   ];
 
   const el = document.getElementById('mqr-funnel');
   if (!el) return;
+  el.innerHTML = '';
 
+  const colors = ['#1B2A3B','#2563A8','#2563A8','#C47B1A','#C47B1A','#E84B35','#2A7D5F'];
   funnelData.forEach((item, i) => {
-    const pct = (item.val / 981 * 100).toFixed(1);
-    const colors = ['#1B2A3B', '#2563A8', '#2563A8', '#C47B1A', '#C47B1A', '#E84B35', '#2A7D5F'];
+    const w = (item.val / d.total * 100).toFixed(1);
     const row = document.createElement('div');
     row.className = 'funnel-row';
     row.innerHTML = `
       <div class="funnel-name">${item.name}</div>
-      <div class="funnel-track"><div class="funnel-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
-      <div class="funnel-stat">${item.val}<span>${item.pct}</span></div>
+      <div class="funnel-track"><div class="funnel-fill" style="width:${w}%;background:${colors[i]}"></div></div>
+      <div class="funnel-stat">${item.val.toLocaleString()}<span>${item.pct}</span></div>
     `;
     el.appendChild(row);
   });
