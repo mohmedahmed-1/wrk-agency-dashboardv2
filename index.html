@@ -3026,7 +3026,7 @@ function updateLangComparison(arData, enData) {
       const cplDiffPct   = ((expensiveCpl - cheaperCpl) / expensiveCpl * 100).toFixed(0);
       const winnerLeads  = arWins ? arData.leads : enData.leads;
       const loserLeads   = arWins ? enData.leads : arData.leads;
-      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>£${Math.round(cheaperCpl)} CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at £${Math.round(expensiveCpl)} CPL (${cplDiffPct}% cheaper). Scale <b>${cheaperLang}</b> creatives — they're outperforming on every metric.`;
+      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>£${Math.round(cheaperCpl)} CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at £${Math.round(expensiveCpl)} CPL (${cplDiffPct}% cheaper). However, for the next period we will be <b>scaling English creatives</b> to develop and grow that audience.`;
     }
   }
 }
