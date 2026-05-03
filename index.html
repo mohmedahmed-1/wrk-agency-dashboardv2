@@ -1675,14 +1675,14 @@ tfoot td.r { text-align:right; }
       <div class="kpi-sub">All campaigns · April</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Search Leads</div>
-      <div class="kpi-val good">77</div>
-      <div class="kpi-sub">Real qualified leads · Search only</div>
+      <div class="kpi-label">Google Leads (Sheet)</div>
+      <div class="kpi-val good">198</div>
+      <div class="kpi-sub">Qualified leads · From Lead Sheet · April</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Search CPL</div>
-      <div class="kpi-val warn">360 EGP</div>
-      <div class="kpi-sub">27,575 EGP ÷ 77 leads</div>
+      <div class="kpi-label">Real CPL</div>
+      <div class="kpi-val good">139 EGP</div>
+      <div class="kpi-sub">27,575 EGP ÷ 198 sheet leads</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Impressions</div>
@@ -1695,8 +1695,8 @@ tfoot td.r { text-align:right; }
     <!-- Search campaigns breakdown -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">Search Campaigns — Real Leads</div>
-        <div class="card-tag">Qualified leads only · April 2026</div>
+        <div class="card-title">Search Campaigns — Spend Breakdown</div>
+        <div class="card-tag">Spend from Google Ads · Lead counts shown are platform-tracked conversions</div>
       </div>
       <div class="tbl-wrap">
         <table>
@@ -1740,7 +1740,7 @@ tfoot td.r { text-align:right; }
         </table>
       </div>
       <div class="insight good">
-        <b>Branding &amp; Compet is the top Google campaign:</b> 36 leads at 312 EGP CPL — 15% cheaper than the search average. Allocate more budget here before scaling Private Offices.
+        <b>Branding &amp; Compet is the top Google campaign:</b> 36 platform-tracked leads at 312 EGP CPL. The Lead Sheet shows <b>198 actual qualified leads</b> from Google in April — meaning the real CPL is <b>139 EGP</b>, not 360. Google's platform under-counts because users convert across sessions/devices.
       </div>
     </div>
 
@@ -1829,12 +1829,12 @@ tfoot td.r { text-align:right; }
             <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">27,575 EGP</div>
           </div>
           <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Qualified Leads</div>
-            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">77</div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Qualified Leads (Sheet)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">198</div>
           </div>
           <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">CPL</div>
-            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--amber);">360 EGP</div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Real CPL</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--green);">139 EGP</div>
           </div>
           <div>
             <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Total Account Spend</div>
@@ -1844,7 +1844,7 @@ tfoot td.r { text-align:right; }
       </div>
     </div>
     <div class="insight warn" style="border-top:1px solid var(--border);">
-      <b>Meta CPL is 26× cheaper (14 EGP vs 360 EGP)</b> but Google leads are higher intent — they searched for exactly what you sell. Combined April spend: <b>161,970 EGP</b> (Meta 97,254 + Google 64,716). Meta dominates volume; Google wins quality.
+      <b>Meta CPL 14 EGP vs Google CPL 139 EGP (real, sheet-based)</b> — Meta is 10× cheaper per lead, but Google leads are higher intent (active search vs passive scroll). Combined April spend: <b>161,970 EGP</b> (Meta 97,254 + Google 64,716). Meta dominates volume; Google wins quality.
     </div>
   </div>
 
@@ -2884,15 +2884,25 @@ function updateLangComparison(arData, enData) {
     langChart.update();
   }
 
-  // Verdict
-  const arWins = arCostDeal > 0 && enCostDeal > 0
-    ? arCostDeal < enCostDeal
-    : arData.closeRate > enData.closeRate;
+  // Verdict — priority: cost-per-deal > CPL > lead volume
+  let arWins;
+  if (arCostDeal > 0 && enCostDeal > 0) {
+    arWins = arCostDeal < enCostDeal;
+  } else if (arData.cpl > 0 && enData.cpl > 0) {
+    arWins = arData.cpl < enData.cpl;        // Lower CPL wins
+  } else {
+    arWins = arData.leads >= enData.leads;   // Higher volume wins
+  }
 
-  const winner = arWins ? { name: '🇸🇦 Arabic', sub: `Closes at ${pct(arData.closeRate)} · £${Math.round(arCostDeal).toLocaleString()} per deal` }
-                        : { name: '🇬🇧 English', sub: `Closes at ${pct(enData.closeRate)} · £${Math.round(enCostDeal).toLocaleString()} per deal` };
-  const loser  = arWins ? { name: '🇬🇧 English', sub: `£${Math.round(enCostDeal).toLocaleString()} per deal` }
-                        : { name: '🇸🇦 Arabic',  sub: `£${Math.round(arCostDeal).toLocaleString()} per deal` };
+  const arSub = arCostDeal > 0
+    ? `CPL £${Math.round(arData.cpl)} · £${Math.round(arCostDeal).toLocaleString()} per deal`
+    : `${arData.leads.toLocaleString()} leads · CPL £${Math.round(arData.cpl)}`;
+  const enSub = enCostDeal > 0
+    ? `CPL £${Math.round(enData.cpl)} · £${Math.round(enCostDeal).toLocaleString()} per deal`
+    : `${enData.leads.toLocaleString()} leads · CPL £${Math.round(enData.cpl)}`;
+
+  const winner = arWins ? { name: '🇸🇦 Arabic',  sub: arSub } : { name: '🇬🇧 English', sub: enSub };
+  const loser  = arWins ? { name: '🇬🇧 English', sub: enSub } : { name: '🇸🇦 Arabic',  sub: arSub };
 
   if (document.getElementById('lang-winner-label')) document.getElementById('lang-winner-label').textContent = '🏆 Better Buyer Source';
   if (document.getElementById('lang-winner-name'))  document.getElementById('lang-winner-name').textContent  = winner.name;
@@ -2915,15 +2925,23 @@ function updateLangComparison(arData, enData) {
   }
 
   // Final insight
-  const diff = arCostDeal > 0 && enCostDeal > 0
-    ? Math.abs(arCostDeal - enCostDeal)
-    : 0;
   const insight = document.getElementById('lang-final-insight');
-  if (insight && diff > 0) {
+  if (insight) {
     const cheaperLang = arWins ? 'Arabic' : 'English';
     const expensiveLang = arWins ? 'English' : 'Arabic';
     insight.className = 'insight good';
-    insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> ad sets produce buyers at <b>£${Math.round(Math.min(arCostDeal, enCostDeal)).toLocaleString()} per closed deal</b> vs <b>£${Math.round(Math.max(arCostDeal, enCostDeal)).toLocaleString()}</b> for ${expensiveLang} — a <b>£${Math.round(diff).toLocaleString()} difference per deal</b>. Reallocate budget toward <b>${cheaperLang}</b> creatives immediately.`;
+
+    if (arCostDeal > 0 && enCostDeal > 0) {
+      const diff = Math.abs(arCostDeal - enCostDeal);
+      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> ad sets produce buyers at <b>£${Math.round(Math.min(arCostDeal, enCostDeal)).toLocaleString()} per closed deal</b> vs <b>£${Math.round(Math.max(arCostDeal, enCostDeal)).toLocaleString()}</b> for ${expensiveLang} — a <b>£${Math.round(diff).toLocaleString()} difference per deal</b>. Reallocate budget toward <b>${cheaperLang}</b> creatives immediately.`;
+    } else if (arData.cpl > 0 && enData.cpl > 0) {
+      const cheaperCpl   = Math.min(arData.cpl, enData.cpl);
+      const expensiveCpl = Math.max(arData.cpl, enData.cpl);
+      const cplDiffPct   = ((expensiveCpl - cheaperCpl) / expensiveCpl * 100).toFixed(0);
+      const winnerLeads  = arWins ? arData.leads : enData.leads;
+      const loserLeads   = arWins ? enData.leads : arData.leads;
+      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>£${Math.round(cheaperCpl)} CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at £${Math.round(expensiveCpl)} CPL (${cplDiffPct}% cheaper). Scale <b>${cheaperLang}</b> creatives — they're outperforming on every metric.`;
+    }
   }
 }
 
