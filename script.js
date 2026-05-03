@@ -754,6 +754,7 @@ function initCharts() {
   chartsBuilt = true;
 
   initLangComparisonChart();
+  initPlatformCharts();
 
   // MQR Daily Stacked
   const dailyEl = document.getElementById("mqr-daily");
@@ -1724,6 +1725,107 @@ function updateLangComparison(arData, enData) {
       const loserLeads = arWins ? enData.leads : arData.leads;
       insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>${Math.round(cheaperCpl)} EGP CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at ${Math.round(expensiveCpl)} EGP CPL (${cplDiffPct}% cheaper). However, for the next period we will be <b>scaling English creatives</b> to develop and grow that audience.`;
     }
+  }
+}
+
+// ── Lead Quality by Platform Charts ──
+function initPlatformCharts() {
+  const COLORS = {
+    meta:    '#4f86f7',
+    website: '#34c38f',
+    dms:     '#f7b731',
+  };
+  const LABELS = ['Meta', 'Website', 'DMs'];
+  const BG = [COLORS.meta, COLORS.website, COLORS.dms];
+
+  function makePlatformDonut(canvasId, data, total) {
+    const el = document.getElementById(canvasId);
+    if (!el) return;
+    new Chart(el, {
+      type: 'doughnut',
+      data: {
+        labels: LABELS,
+        datasets: [{
+          data: data,
+          backgroundColor: BG,
+          borderWidth: 2,
+          borderColor: '#1a2332',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.label}: ${ctx.raw} (${((ctx.raw/total)*100).toFixed(1)}%)`
+            }
+          }
+        }
+      }
+    });
+  }
+
+  makePlatformDonut('plat-closed-chart',   [10, 16, 7],   33);
+  makePlatformDonut('plat-relevant-chart', [181, 103, 103], 387);
+  makePlatformDonut('plat-general-chart',  [24, 8, 14],   46);
+
+  // Overview grouped bar
+  const overviewEl = document.getElementById('plat-overview-chart');
+  if (overviewEl) {
+    new Chart(overviewEl, {
+      type: 'bar',
+      data: {
+        labels: ['Meta Form', 'Website / Google', 'DMs & Other'],
+        datasets: [
+          {
+            label: 'Total Leads',
+            data: [545, 200, 239],
+            backgroundColor: [COLORS.meta, COLORS.website, COLORS.dms],
+            borderRadius: 6,
+            order: 1,
+          },
+          {
+            label: 'Relevant',
+            data: [181, 103, 103],
+            backgroundColor: ['#3a6fd8', '#27a375', '#d4960e'],
+            borderRadius: 6,
+            order: 2,
+          },
+          {
+            label: 'Deal Closed',
+            data: [10, 16, 7],
+            backgroundColor: ['#1a4aa8', '#145c41', '#a07000'],
+            borderRadius: 6,
+            order: 3,
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: { color: '#cdd6f4', font: { size: 11 }, boxWidth: 12 }
+          },
+          tooltip: { mode: 'index', intersect: false }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#8b9cc8', font: { size: 11 } },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          },
+          y: {
+            ticks: { color: '#8b9cc8', font: { size: 11 } },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          }
+        }
+      }
+    });
   }
 }
 

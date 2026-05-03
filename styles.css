@@ -621,6 +621,13 @@ body::after {
 .insight.bad b {
   color: var(--red);
 }
+.insight.neutral {
+  border-color: var(--amber);
+  background: rgba(247,183,49,.08);
+}
+.insight.neutral b {
+  color: var(--amber);
+}
 
 /* ─── KPI STRIP ─── */
 .kpi-strip {
