@@ -1723,7 +1723,7 @@ function updateLangComparison(arData, enData) {
       ).toFixed(0);
       const winnerLeads = arWins ? arData.leads : enData.leads;
       const loserLeads = arWins ? enData.leads : arData.leads;
-      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>${Math.round(cheaperCpl)} EGP CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at ${Math.round(expensiveCpl)} EGP CPL (${cplDiffPct}% cheaper). However, for the next period we will be <b>scaling English creatives</b> to develop and grow that audience.`;
+      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>${Math.round(cheaperCpl)} EGP CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at ${Math.round(expensiveCpl)} EGP CPL (${cplDiffPct}% cheaper). However, for the next period we will be <b>scaling English creatives</b> to develop and grow that audience — as the English-speaking segment is strategically prioritised based on management direction, given that it drives <b>higher-profit clients</b> and represents the audience profile we are building long-term.`;
     }
   }
 }
