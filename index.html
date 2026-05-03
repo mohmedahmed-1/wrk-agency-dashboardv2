@@ -1992,7 +1992,7 @@ tfoot td.r { text-align:right; }
 const META_APP_ID     = '1340453324644178';
 const META_APP_SECRET = '29fd7aec4cfb9c363456cae782831c85';
 const MQR_ACCOUNT_ID  = 'act_248133879022877';
-const SHORT_TOKEN     = 'EAA8sGz3Lsl0BRasdVJkUQnCEIDyFbcqBmNuOInt2ZCq4CtsuGZB6UupDBIYP0ZANyXzIeQz5h0J8WIakhwUAZC3DaAohREOZAUTNSHaX0xweo5uezXW1bYco9extqNcXuZBIggf3m7JGVp6TJYqPuRE92yXVWzpVOzqraQeQfWI6jUJj07MGar5ijF1ZCAAA4ZBkOmavstNMqeL9qtsAHaYqYkroZCCWtbVNLHgZDZD';
+const SHORT_TOKEN     = 'EAA8sGz3Lsl0BRfDdnZAbAtcVZAAxCTFzGZBeMZBLLLU0qQEA2yGPdFzYI8Bd4ImLkWm7IUAqX6ZAN2SThTmEK37o6GsUW1QjbXXBdWSSE62mCS3I3eX2TUnBqQveRRo8ZB5ZB00OaD9O20DSm0V1BYJRWEZBbEZB4Nx5dgNZC8UAvT4jatDDyCu1SLPZAAbHlxm'; // Long-lived · expires ~60 days from 3 May 2026
 
 let LIVE_TOKEN = null;
 let apiDataLoaded = false;
@@ -2023,9 +2023,8 @@ async function getLongToken() {
 async function fetchAdsData() {
   if (!LIVE_TOKEN) return null;
   try {
-    const timeRange = encodeURIComponent('{"since":"2026-04-01","until":"2026-04-30"}');
-    const fields = `id,name,status,adset{name},insights.time_range(${timeRange}){impressions,clicks,ctr,spend,actions,cost_per_action_type}`;
-    let url = `https://graph.facebook.com/v25.0/${MQR_ACCOUNT_ID}/ads?fields=${fields}&limit=100&access_token=${LIVE_TOKEN}`;
+    const fieldsRaw = `id,name,status,adset{name},insights.time_range({"since":"2026-04-01","until":"2026-04-30"}){impressions,clicks,ctr,spend,actions,cost_per_action_type}`;
+    let url = `https://graph.facebook.com/v25.0/${MQR_ACCOUNT_ID}/ads?fields=${encodeURIComponent(fieldsRaw)}&limit=100&access_token=${LIVE_TOKEN}`;
     let allData = [];
     let pages = 0;
     while (url && pages < 5) {
