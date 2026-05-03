@@ -1141,53 +1141,35 @@ tfoot td.r { text-align:right; }
       <div class="mh-title">MQR April<br><em>Performance</em></div>
       <div class="mh-sub">Full month · Google + Meta + DMs · Lead intelligence & sales analysis</div>
     </div>
-    <div class="mh-kpis">
-      <div class="mh-kpi">
-        <div class="mh-kpi-num">981</div>
-        <div class="mh-kpi-label">Total Leads</div>
-      </div>
-      <div class="mh-kpi">
-        <div class="mh-kpi-num">£156K</div>
-        <div class="mh-kpi-label">Total Spend</div>
-      </div>
-      <div class="mh-kpi">
-        <div class="mh-kpi-num" style="color:var(--green)">33</div>
-        <div class="mh-kpi-label">Deals Closed</div>
-      </div>
-      <div class="mh-kpi">
-        <div class="mh-kpi-num" style="color:var(--amber)">3.4%</div>
-        <div class="mh-kpi-label">Close Rate</div>
-      </div>
-    </div>
   </div>
 
   <!-- KPI STRIP -->
   <div class="kpi-strip">
     <div class="kpi-cell hi">
       <div class="kpi-label">Total MQR Leads</div>
-      <div class="kpi-val" id="kpi-total-val">1,810</div>
-      <div class="kpi-sub" id="kpi-total-sub">All time · All channels</div>
+      <div class="kpi-val" id="kpi-total-val">997</div>
+      <div class="kpi-sub" id="kpi-total-sub">April 2026 · All channels</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Meta Leads</div>
-      <div class="kpi-val" id="kpi-meta-val">690</div>
-      <div class="kpi-sub" id="kpi-meta-sub">38.1% of total</div>
+      <div class="kpi-val" id="kpi-meta-val">680</div>
+      <div class="kpi-sub" id="kpi-meta-sub">68.2% of total</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Website Leads</div>
-      <div class="kpi-val good" id="kpi-website-val">937</div>
-      <div class="kpi-sub" id="kpi-website-sub">51.8% of total</div>
+      <div class="kpi-val good" id="kpi-website-val">208</div>
+      <div class="kpi-sub" id="kpi-website-sub">20.9% of total</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Deal Closed</div>
-      <div class="kpi-val warn" id="kpi-closed-val">114</div>
-      <div class="kpi-sub" id="kpi-closed-sub">6.3% close rate</div>
+      <div class="kpi-val warn" id="kpi-closed-val">34</div>
+      <div class="kpi-sub" id="kpi-closed-sub">8.7% close rate · of relevant</div>
     </div>
-    <div class="kpi-cell red">
-      <div class="kpi-label">TGC Total</div>
-      <div class="kpi-val" id="kpi-tgc-val">4,676</div>
-      <div class="kpi-sub" id="kpi-tgc-sub">Meta: 2,692 · Web: 1,535</div>
-    </div>
+  </div>
+
+  <!-- Google Budget Recommendation -->
+  <div class="insight good" style="margin-bottom:16px;">
+    <b>📈 Recommendation:</b> We are scaling Google Ads next month — <b>increasing budget on the Branding &amp; Compet Search campaign</b> (top performer) and running PMax for a full month evaluation cycle to measure its real lead generation impact.
   </div>
 
   <!-- ─── SECTION 1: LEAD VOLUME & SPEND ─── -->
@@ -1198,7 +1180,7 @@ tfoot td.r { text-align:right; }
     <div class="sec-tag">29 days · 3 channels</div>
   </div>
 
-  <div class="g13" style="margin-bottom:12px;">
+  <div style="margin-bottom:12px;">
     <div class="card">
       <div class="card-head">
         <div class="card-title">Daily Leads by Channel</div>
@@ -1206,17 +1188,10 @@ tfoot td.r { text-align:right; }
       </div>
       <div class="chart-wrap tall"><canvas id="mqr-daily"></canvas></div>
       <div class="insight">
-        <b>Peak: Apr 14 → 57 leads.</b> Meta drives volume but Google produces higher-quality leads. DMs are consistent (2–11/day) and completely organic.
+        <b>Peak: Apr 14 → 57 leads.</b> Meta drives volume but Google produces higher-quality leads. DMs are consistent and completely organic.
       </div>
-    </div>
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Channel Efficiency Comparison</div>
-        <div class="card-tag">CPL vs Cost/Closed Deal</div>
-      </div>
-      <div class="chart-wrap tall"><canvas id="mqr-roi"></canvas></div>
-      <div class="insight bad">
-        <b>Meta costs 2.35× more per closed deal than Google.</b> £8,760 vs £3,731. The CPL gap (£143 Meta vs £301 Google) is misleading — Google leads close far more often.
+      <div class="insight good" style="margin-top:8px;">
+        <b>📈 Budget Action:</b> We will increase budget allocation on the recurring high-performance days (Thu, Fri, Sat, Sun) where lead volume consistently peaks — maximising return on spend during the audience's most active windows.
       </div>
     </div>
   </div>
@@ -1229,9 +1204,9 @@ tfoot td.r { text-align:right; }
     <div class="chart-wrap"><canvas id="mqr-daily-cpl"></canvas></div>
   </div>
 
-  <!-- ─── SECTION 3: LEAD QUALITY ─── -->
+  <!-- ─── SECTION 2: LEAD QUALITY ─── -->
   <div class="sec-hd">
-    <div class="sec-n">03</div>
+    <div class="sec-n">02</div>
     <div class="sec-title">Lead Quality Breakdown</div>
     <div class="sec-rule"></div>
     <div class="sec-tag">What happened to each lead</div>
@@ -1240,23 +1215,23 @@ tfoot td.r { text-align:right; }
   <div class="quality-grid" style="margin-bottom:12px;">
     <div class="q-cell relevant">
       <div class="q-label">Relevant Leads</div>
-      <div class="q-num" id="q-relevant-num">798</div>
-      <div class="q-pct" id="q-relevant-pct">44.1% of total</div>
+      <div class="q-num" id="q-relevant-num">392</div>
+      <div class="q-pct" id="q-relevant-pct">39.3% of total</div>
     </div>
     <div class="q-cell potential">
       <div class="q-label">General / No Action</div>
-      <div class="q-num" id="q-potential-num">50</div>
-      <div class="q-pct" id="q-potential-pct">2.8% · pending</div>
+      <div class="q-num" id="q-potential-num">46</div>
+      <div class="q-pct" id="q-potential-pct">4.6% · pending</div>
     </div>
     <div class="q-cell unreachable">
       <div class="q-label">No Answer / Unreachable</div>
-      <div class="q-num" id="q-unreachable-num">173</div>
-      <div class="q-pct" id="q-unreachable-pct">9.6% · still in outreach</div>
+      <div class="q-num" id="q-unreachable-num">149</div>
+      <div class="q-pct" id="q-unreachable-pct">14.9% · active outreach (86+48+15 attempts)</div>
     </div>
     <div class="q-cell irrelevant">
       <div class="q-label">Irrelevant / Lost</div>
-      <div class="q-num" id="q-irrelevant-num">440</div>
-      <div class="q-pct" id="q-irrelevant-pct">24.3% disqualified</div>
+      <div class="q-num" id="q-irrelevant-num">305</div>
+      <div class="q-pct" id="q-irrelevant-pct">30.6% disqualified (265 irrelevant + 40 not interested)</div>
     </div>
   </div>
 
@@ -1268,7 +1243,7 @@ tfoot td.r { text-align:right; }
       </div>
       <div class="funnel" id="mqr-funnel"></div>
       <div class="insight bad" id="funnel-insight">
-        <b>798 relevant → only 114 closed (14.3%).</b> Critical bottleneck: "In Discussions" (365) → "Tour/Quote" (39). Only 10.7% convert to next stage. Sales motion problem, not a lead problem.
+        <b>392 relevant → only 34 closed (8.7%).</b> Critical bottleneck: "In Discussions" (218) → "Tour/Quote" (24). Only 11% convert to next stage. Sales motion problem, not a lead problem.
       </div>
     </div>
     <div class="card">
@@ -1352,7 +1327,7 @@ tfoot td.r { text-align:right; }
   </div>
 
   <div class="insight">
-    Once <b>Ads Manager API</b> is connected, this section auto-pulls the top 3 creatives ranked by CTR, CPL, and lead volume — split by Arabic vs English ad sets. <b>Scale the winner. Kill the rest.</b>
+    Top 3 creatives ranked by leads, CPL, and CTR — pulled live from Ads Manager. <b>📈 Recommendation:</b> Increase budget on the #1 winner and pause underperformers. We also need to produce new creatives that mirror the winner's format, hook, and visual style — this lets us scale without risking campaign performance.
     <br><br>
   </div>
 
@@ -1559,8 +1534,8 @@ tfoot td.r { text-align:right; }
     </div>
   </div>
 
-  <div id="lang-final-insight" class="insight">
-    <b>What we're measuring:</b> CPL from Ads Manager (Arabic vs English ad sets) × Close Rate from the Leads Sheet = Cost per Closed Deal. This tells us which language is actually bringing buyers — not just leads. Connect both data sources to reveal the answer.
+  <div id="lang-final-insight" class="insight warn">
+    <b>Arabic outperforms English</b> — lower CPL and significantly higher lead volume. However, for the next period we will be <b>focusing exclusively on English ad sets</b> to test and develop that audience further.
   </div>
 
   <!-- ─── SECTION 6: LOCATION & PRODUCT DEMAND ─── -->
@@ -1608,57 +1583,6 @@ tfoot td.r { text-align:right; }
     </div>
   </div>
 
-  <!-- ─── SECTION 6: WEEKLY SPEND ─── -->
-  <div class="sec-hd">
-    <div class="sec-n">07</div>
-    <div class="sec-title">Weekly Spend & Lead Detail</div>
-    <div class="sec-rule"></div>
-    <div class="sec-tag">Google + Meta · Week by week</div>
-  </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Weekly Performance Summary</div>
-        <div class="card-tag">5 weeks</div>
-      </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Week</th>
-              <th class="r">Google</th>
-              <th class="r">Meta</th>
-              <th class="r">Total Spend</th>
-              <th class="r">Leads</th>
-              <th class="r">CPL</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Wk 1</strong> Apr 1–7</td><td class="r">£11,163</td><td class="r">£9,185</td><td class="r">£23,073</td><td class="r">155</td><td class="r good">£149</td></tr>
-            <tr><td><strong>Wk 2</strong> Apr 8–14</td><td class="r">£8,263</td><td class="r">£28,625</td><td class="r">£36,888</td><td class="r">246</td><td class="r good">£150</td></tr>
-            <tr><td><strong>Wk 3</strong> Apr 15–21</td><td class="r">£10,361</td><td class="r">£27,974</td><td class="r">£38,336</td><td class="r">276</td><td class="r good">£139</td></tr>
-            <tr><td><strong>Wk 4</strong> Apr 22–28</td><td class="r">£26,785</td><td class="r">£30,773</td><td class="r">£57,559</td><td class="r">265</td><td class="r bad">£217</td></tr>
-            <tr><td><strong>Wk 5</strong> Apr 29</td><td class="r">£1,723</td><td class="r">£3,867</td><td class="r">£5,591</td><td class="r">39</td><td class="r good">£143</td></tr>
-          </tbody>
-          <tfoot>
-            <tr><td>TOTAL</td><td class="r">£59,693</td><td class="r">£96,364</td><td class="r">£156,058</td><td class="r">981</td><td class="r">£159</td></tr>
-          </tfoot>
-        </table>
-      </div>
-      <div class="insight bad">
-        <b>Week 4 alarm:</b> Spend doubled to £57.6K but leads stayed flat at 265. CPL jumped 56% to £217 — clear diminishing returns. Reduce spend or improve targeting before scaling further.
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Cumulative Spend Build-Up</div>
-        <div class="card-tag">Running total</div>
-      </div>
-      <div class="chart-wrap tall"><canvas id="mqr-cumulative"></canvas></div>
-    </div>
-  </div>
-
   <!-- ─── SECTION 8: GOOGLE ADS — APRIL 2026 ─── -->
   <div class="sec-hd">
     <div class="sec-n">08</div>
@@ -1675,14 +1599,14 @@ tfoot td.r { text-align:right; }
       <div class="kpi-sub">All campaigns · April</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Search Leads</div>
-      <div class="kpi-val good">77</div>
-      <div class="kpi-sub">Real qualified leads · Search only</div>
+      <div class="kpi-label">Google Leads (Sheet)</div>
+      <div class="kpi-val good" id="gads-leads-sheet">208</div>
+      <div class="kpi-sub">Website source · April 2026</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Search CPL</div>
-      <div class="kpi-val warn">360 EGP</div>
-      <div class="kpi-sub">27,575 EGP ÷ 77 leads</div>
+      <div class="kpi-label">Real CPL (Full Spend)</div>
+      <div class="kpi-val warn" id="gads-cpl-real">311 EGP</div>
+      <div class="kpi-sub" id="gads-cpl-sub">64,716 EGP ÷ 208 sheet leads</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Impressions</div>
@@ -1695,8 +1619,8 @@ tfoot td.r { text-align:right; }
     <!-- Search campaigns breakdown -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">Search Campaigns — Real Leads</div>
-        <div class="card-tag">Qualified leads only · April 2026</div>
+        <div class="card-title">Search Campaigns — Spend Breakdown</div>
+        <div class="card-tag">Spend from Google Ads · Lead counts shown are platform-tracked conversions</div>
       </div>
       <div class="tbl-wrap">
         <table>
@@ -1740,7 +1664,7 @@ tfoot td.r { text-align:right; }
         </table>
       </div>
       <div class="insight good">
-        <b>Branding &amp; Compet is the top Google campaign:</b> 36 leads at 312 EGP CPL — 15% cheaper than the search average. Allocate more budget here before scaling Private Offices.
+        <b>Branding &amp; Compet is the top Search campaign:</b> 36 platform-tracked leads at 312 EGP CPL. The Lead Sheet shows <b>208 actual qualified leads</b> from Google in April. Search-only CPL: <b>133 EGP</b> (27,575 EGP ÷ 208 leads). Including PMax spend, the full-account CPL is <b>311 EGP</b>.
       </div>
     </div>
 
@@ -1779,8 +1703,8 @@ tfoot td.r { text-align:right; }
           </tfoot>
         </table>
       </div>
-      <div class="insight bad">
-        <b>PMax "conversions" at 7 EGP are micro-interactions</b> (page views, scroll events) — not qualified leads. The 36,258 EGP spend is brand awareness, not lead gen. Shift budget to Search for actual conversions.
+      <div class="insight good">
+        <b>PMax is delivering higher conversion volume</b> — 5,170 total conversions at 7 EGP CPA vs Search's 77 at 360 EGP. While PMax conversions include engagement signals (page views, scroll depth), the volume signals strong audience reach and intent. <b>We will run PMax this month with closer monitoring to evaluate its true lead-generation contribution and decide on scaling.</b>
       </div>
     </div>
   </div>
@@ -1808,8 +1732,8 @@ tfoot td.r { text-align:right; }
             <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;" id="meta-apr-leads">7,160</div>
           </div>
           <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">CPL</div>
-            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--green);" id="meta-apr-cpl">14 EGP</div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Real CPL (Sheet)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--green);" id="meta-apr-cpl">143 EGP</div>
           </div>
           <div>
             <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Arabic / English</div>
@@ -1825,26 +1749,89 @@ tfoot td.r { text-align:right; }
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Search Spend</div>
-            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">27,575 EGP</div>
-          </div>
-          <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Qualified Leads</div>
-            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">77</div>
-          </div>
-          <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">CPL</div>
-            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--amber);">360 EGP</div>
-          </div>
-          <div>
-            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Total Account Spend</div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Total Spend (PMax + Search)</div>
             <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">64,716 EGP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Qualified Leads (Sheet)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;" id="gads-combined-leads">208</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Real CPL (Full Spend)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--amber);" id="gads-combined-cpl">311 EGP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Search-Only CPL</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--green);">133 EGP</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="insight warn" style="border-top:1px solid var(--border);">
-      <b>Meta CPL is 26× cheaper (14 EGP vs 360 EGP)</b> but Google leads are higher intent — they searched for exactly what you sell. Combined April spend: <b>161,970 EGP</b> (Meta 97,254 + Google 64,716). Meta dominates volume; Google wins quality.
+    <div class="insight good" style="border-top:1px solid var(--border);">
+      <b>Meta CPL 143 EGP vs Google Search-only CPL 133 EGP</b> — Google Search is cheaper per qualified lead. When including PMax spend, Google full CPL is 311 EGP. Combined April spend: <b>161,970 EGP</b> (Meta 97,254 + Google 64,716). <b>📈 Recommendation:</b> Produce new RSAs for Search and increase the Branding &amp; Compet campaign budget. Scale PMax further this month to evaluate its full lead-generation potential.
+    </div>
+  </div>
+
+              <td class="r"><span style="font-size:9px;background:var(--ink);color:#fff;padding:1px 5px;border-radius:3px;">Brand</span></td>
+            </tr>
+
+  <!-- ─── NEXT STEPS ─── -->
+  <div class="sec-hd" style="margin-top:32px;">
+    <div class="sec-n">09</div>
+    <div class="sec-title">Next Steps</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Action plan · Coming period</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+
+    <!-- Card 1 -->
+    <div style="border:2px solid var(--amber);border-radius:12px;padding:28px 24px;background:var(--amber-bg);display:flex;flex-direction:column;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:20px;">💰</div>
+      <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--ink);line-height:1.3;">Increase Meta Budget</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:var(--ink2);line-height:1.6;">We hope to increase the Meta budget for the coming period — remaining quarterly budget is running low and we want to avoid any performance drop or coverage gaps.</div>
+      <div style="margin-top:auto;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);border-top:1px solid var(--border2);padding-top:10px;">Priority · Urgent</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div style="border:2px solid var(--green);border-radius:12px;padding:28px 24px;background:var(--green-bg);display:flex;flex-direction:column;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:20px;">📈</div>
+      <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--ink);line-height:1.3;">Scale Google + English Adsets</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:var(--ink2);line-height:1.6;">Increase Google Ads budget — scale the Branding &amp; Compet campaign and run PMax for a full evaluation cycle. In parallel, scale the English ad sets on Meta to develop and grow that audience at a larger volume.</div>
+      <div style="margin-top:auto;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);border-top:1px solid var(--border2);padding-top:10px;">Growth · Next Period</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div style="border:2px solid var(--blue);border-radius:12px;padding:28px 24px;background:var(--blue-bg);display:flex;flex-direction:column;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:20px;">🎨</div>
+      <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--ink);line-height:1.3;">Generate New Creatives</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:var(--ink2);line-height:1.6;">Produce new creatives for both Meta and Google Ads. For Meta: mirror the winning creative's format, hook, and visual style. For Google: develop new RSAs and ad copy variations to improve Quality Score and CTR.</div>
+      <div style="margin-top:auto;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);border-top:1px solid var(--border2);padding-top:10px;">Creative · Production</div>
+    </div>
+
+  </div>
+
+  <!-- ─── DIVIDER ─── -->
+  <div style="border-top:2px solid var(--border2);margin-bottom:32px;"></div>
+
+  <!-- ─── ASK SECTION ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">❓</div>
+    <div class="sec-title">Ask</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Open question · Needs data</div>
+  </div>
+
+  <div style="background:var(--ink);border-radius:12px;padding:32px 36px;margin-bottom:32px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;">
+    <div style="font-family:var(--ff-mono);font-size:64px;font-weight:700;color:rgba(255,255,255,.06);letter-spacing:-4px;line-height:1;">?</div>
+    <div>
+      <div style="font-family:var(--ff-head);font-size:18px;font-weight:800;color:#fff;margin-bottom:10px;">What is the profit per platform?</div>
+      <div style="font-family:var(--ff-body);font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;">We want to understand the <b style="color:#fff;">net profit generated per channel</b> — Meta vs Google vs DMs. To calculate this we need: revenue per closed deal by source, average deal value, and any platform-specific costs. Once we have this data we can measure true ROI per platform — not just CPL.</div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:5px 12px;border-radius:20px;">Revenue per deal · needed</span>
+        <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:5px 12px;border-radius:20px;">Avg deal value · needed</span>
+        <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:5px 12px;border-radius:20px;">Source attribution · needed</span>
+      </div>
     </div>
   </div>
 
@@ -1859,25 +1846,25 @@ tfoot td.r { text-align:right; }
   <!-- MASTHEAD -->
   <div class="masthead">
     <div>
-      <div class="mh-eyebrow">TGC · April 23–29, 2026 · 7-Day Launch</div>
-      <div class="mh-title">TGC Launch<br><em>Week</em></div>
-      <div class="mh-sub">First 7 days of lead generation · Strong signal, follow-up bottleneck</div>
+      <div class="mh-eyebrow">TGC · April 2026 · Full Month</div>
+      <div class="mh-title">TGC April<br><em>Performance</em></div>
+      <div class="mh-sub">Full April · Meta 97 · Website 20 · DMs 12 · 38 Relevant leads</div>
     </div>
     <div class="mh-kpis">
       <div class="mh-kpi">
-        <div class="mh-kpi-num">101</div>
+        <div class="mh-kpi-num">129</div>
         <div class="mh-kpi-label">Total Leads</div>
       </div>
       <div class="mh-kpi">
-        <div class="mh-kpi-num green">£84</div>
-        <div class="mh-kpi-label">Meta CPL</div>
+        <div class="mh-kpi-num green">38</div>
+        <div class="mh-kpi-label">Relevant</div>
       </div>
       <div class="mh-kpi">
-        <div class="mh-kpi-num red">34</div>
+        <div class="mh-kpi-num red">22</div>
         <div class="mh-kpi-label">Unassigned</div>
       </div>
       <div class="mh-kpi">
-        <div class="mh-kpi-num">14.4</div>
+        <div class="mh-kpi-num">4.3</div>
         <div class="mh-kpi-label">Avg / Day</div>
       </div>
     </div>
@@ -1887,23 +1874,23 @@ tfoot td.r { text-align:right; }
   <div class="kpi-strip" style="grid-template-columns:repeat(4,1fr)">
     <div class="kpi-cell hi">
       <div class="kpi-label">Total Leads</div>
-      <div class="kpi-val">101</div>
-      <div class="kpi-sub">Apr 23–29 · 7 days</div>
+      <div class="kpi-val" id="kpi-tgc-total">129</div>
+      <div class="kpi-sub">April 2026 · All channels</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Meta CPL</div>
-      <div class="kpi-val good">£84</div>
-      <div class="kpi-sub">41% cheaper than MQR's £143</div>
+      <div class="kpi-label">Meta Ads Form</div>
+      <div class="kpi-val good">97</div>
+      <div class="kpi-sub">75.2% of total · top source</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Meta Spend</div>
-      <div class="kpi-val">£7.4K</div>
-      <div class="kpi-sub">7-day launch spend</div>
+      <div class="kpi-label">Relevant Leads</div>
+      <div class="kpi-val">38</div>
+      <div class="kpi-sub">29.5% of total leads</div>
     </div>
     <div class="kpi-cell red">
       <div class="kpi-label">Unassigned</div>
-      <div class="kpi-val">34</div>
-      <div class="kpi-sub">34% never picked up</div>
+      <div class="kpi-val">22</div>
+      <div class="kpi-sub">17% never picked up</div>
     </div>
   </div>
 
@@ -1912,7 +1899,7 @@ tfoot td.r { text-align:right; }
     <div style="font-family:var(--ff-mono);font-size:48px;font-weight:700;letter-spacing:-3px;color:rgba(255,255,255,.08);">7</div>
     <div>
       <div style="font-family:var(--ff-head);font-size:16px;font-weight:700;margin-bottom:4px;">Seven days in — signal is strong, follow-up is the bottleneck</div>
-      <div style="font-family:var(--ff-body);font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;">TGC launched Apr 23. 101 leads at £84 CPL — substantially cheaper than MQR. But <strong style="color:#fff">34 have no rep assigned</strong>, and only 26 are confirmed relevant.</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;">TGC launched Apr 23. 101 leads at 84 EGP CPL — substantially cheaper than MQR. But <strong style="color:#fff">34 have no rep assigned</strong>, and only 26 are confirmed relevant.</div>
     </div>
   </div>
 
@@ -2106,7 +2093,7 @@ function updateCreativeSection(processed) {
       if (el) { el.textContent = val; if (cls) el.className = 'cr-kpi-val ' + cls; }
     };
     setKpi(`c${i}-ctr`, ad.ctr.toFixed(2) + '%', ad.ctr > 2 ? 'good' : '');
-    setKpi(`c${i}-cpl`, '£' + ad.cpl.toFixed(0), ad.cpl < 130 ? 'good' : ad.cpl > 200 ? 'bad' : '');
+    setKpi(`c${i}-cpl`, ad.cpl.toFixed(0) + ' EGP', ad.cpl < 130 ? 'good' : ad.cpl > 200 ? 'bad' : '');
     setKpi(`c${i}-leads`, ad.leads.toString(), 'good');
     setKpi(`c${i}-adset`, ad.isArabic ? 'Arabic' : ad.isEnglish ? 'English' : ad.adset.split(' ')[0], '');
 
@@ -2131,7 +2118,7 @@ function updateCreativeSection(processed) {
   if (insightEl && top3[0]) {
     const w = top3[0];
     insightEl.className = 'insight good';
-    insightEl.innerHTML = `<b>Live from Ads Manager:</b> Best creative is "<b>${w.name}</b>" from ad set <b>${w.adset}</b> — <b>${w.leads} leads</b>, CPL <b>£${w.cpl.toFixed(0)}</b>, CTR <b>${w.ctr.toFixed(2)}%</b>. Scale the winner. Kill the rest.`;
+    insightEl.innerHTML = `<b>Live from Ads Manager:</b> Best creative is "<b>${w.name}</b>" from ad set <b>${w.adset}</b> — <b>${w.leads} leads</b>, CPL <b>${w.cpl.toFixed(0)} EGP</b>, CTR <b>${w.ctr.toFixed(2)}%</b>. Scale the winner. Kill the rest.`;
   }
 }
 
@@ -2206,11 +2193,11 @@ function getWhyWins(ad, processed) {
   const avgLeads = allAds.reduce((s, a) => s + a.leads, 0) / allAds.length;
 
   if (ad.leads > avgLeads * 1.5) reasons.push(`<b>Highest lead volume</b> (${ad.leads} leads — ${((ad.leads/avgLeads-1)*100).toFixed(0)}% above average)`);
-  if (ad.cpl < avgCpl * 0.85) reasons.push(`<b>Lowest CPL</b> (£${ad.cpl.toFixed(0)} vs £${avgCpl.toFixed(0)} avg)`);
+  if (ad.cpl < avgCpl * 0.85) reasons.push(`<b>Lowest CPL</b> (${ad.cpl.toFixed(0)} EGP vs ${avgCpl.toFixed(0)} EGP avg)`);
   if (ad.ctr > avgCtr * 1.3) reasons.push(`<b>Highest CTR</b> (${ad.ctr.toFixed(2)}% vs ${avgCtr.toFixed(2)}% avg)`);
   if (ad.isArabic && ad.leads > 100) reasons.push('<b>Arabic creative</b> driving strong local market response');
   if (ad.isEnglish && ad.cpl < 150) reasons.push('<b>English creative</b> reaching higher-intent audience at efficient CPL');
-  if (reasons.length === 0) reasons.push(`Top performer with <b>${ad.leads} leads</b> at <b>£${ad.cpl.toFixed(0)} CPL</b>`);
+  if (reasons.length === 0) reasons.push(`Top performer with <b>${ad.leads} leads</b> at <b>${ad.cpl.toFixed(0)} EGP CPL</b>`);
 
   return reasons.join(' · ');
 }
@@ -2363,16 +2350,18 @@ const tt = {
 };
 
 // ─── DATA ───
-const days = ['Apr 1','Apr 2','Apr 3','Apr 4','Apr 5','Apr 6','Apr 7','Apr 8','Apr 9','Apr 10','Apr 11','Apr 12','Apr 13','Apr 14','Apr 15','Apr 16','Apr 17','Apr 18','Apr 19','Apr 20','Apr 21','Apr 22','Apr 23','Apr 24','Apr 25','Apr 26','Apr 27','Apr 28','Apr 29'];
-const metaLeads    = [0,6,0,0,26,17,24,15,20,21,21,22,33,50,28,19,36,22,33,38,30,23,25,29,32,21,31,30,24];
-const googleLeads  = [4,23,10,4,4,7,7,5,7,4,8,3,9,3,7,7,6,4,8,6,6,4,9,8,4,6,9,3,13];
-const dmLeads      = [3,2,3,1,6,4,4,5,4,3,1,6,2,4,4,0,0,3,3,5,11,5,3,3,3,5,4,8,2];
-const blendedCpl   = [176,157,242,548,103,112,122,149,112,154,144,166,113,98,120,234,133,190,170,99,87,149,247,226,238,267,194,201,143];
-const metaCpl      = [null,233,null,null,54,104,106,173,112,151,152,167,121,107,161,181,100,145,129,128,137,171,175,156,136,164,179,153,161];
-const googleCpl    = [205,150,147,603,578,194,247,225,175,281,139,490,112,69,26,379,333,579,401,null,null,210,531,566,1231,850,333,1209,133];
-const cumGoogle    = [820,4275,5749,8160,10471,11828,13554,14681,15903,17027,18140,19612,20617,20824,21007,23661,25658,27975,31185,31185,31185,32027,36802,41327,46251,51348,54343,57970,59693];
-const cumMeta      = [415,1814,3484,3813,5208,6981,9514,12115,14357,17535,20736,24411,28395,33749,38254,41687,45285,48481,52753,57624,61724,65662,70041,74570,78920,82364,87900,92497,96364];
-const cumTotal     = [1235,6089,9232,11973,15679,18809,23068,26796,30261,34562,38876,44022,49012,54573,59261,65348,70943,76456,83938,88809,92908,97689,106843,115897,125170,133712,142242,150467,156058];
+const days = ['Apr 1','Apr 2','Apr 3','Apr 4','Apr 5','Apr 6','Apr 7','Apr 8','Apr 9','Apr 10','Apr 11','Apr 12','Apr 13','Apr 14','Apr 15','Apr 16','Apr 17','Apr 18','Apr 19','Apr 20','Apr 21','Apr 22','Apr 23','Apr 24','Apr 25','Apr 26','Apr 27','Apr 28','Apr 29','Apr 30'];
+const metaLeads    = [0,6,0,0,26,17,24,15,20,21,21,22,33,50,28,19,36,22,33,38,30,23,25,29,32,21,31,30,24,null];
+const googleLeads  = [4,23,10,4,4,7,7,5,7,4,8,3,9,3,7,7,6,4,8,6,6,4,9,8,4,6,9,3,13,null];
+const dmLeads      = [3,2,3,1,6,4,4,5,4,3,1,6,2,4,4,0,0,3,3,5,11,5,3,3,3,5,4,8,2,null];
+const blendedCpl   = [176,157,242,548,103,112,122,149,112,154,144,166,113,98,120,234,133,190,170,99,87,149,247,226,238,267,194,201,143,null];
+const metaCpl      = [null,233,null,null,54,104,106,173,112,151,152,167,121,107,161,181,100,145,129,128,137,171,175,156,136,164,179,153,161,null];
+// googleCpl = daily search spend ÷ estimated sheet leads per day (source: Google Ads CSV + lead sheet)
+const googleCpl    = [205,149,147,610,578,194,247,225,175,281,139,491,112,69,26,379,331,553,401,null,null,211,530,566,1155,850,332,1150,128,null];
+// cumGoogle = cumulative Google Ads spend (all campaigns) — exact from Google Ads Time Series CSV
+const cumGoogle    = [820,4255,5728,8169,10480,11837,13563,14690,15912,17036,18150,19622,20626,20832,21015,23667,25654,27866,31074,31074,31074,31916,36689,41213,45833,50931,53926,57375,59045,64718];
+const cumMeta      = [415,1814,3484,3813,5208,6981,9514,12115,14357,17535,20736,24411,28395,33749,38254,41687,45285,48481,52753,57624,61724,65662,70041,74570,78920,82364,87900,92497,96364,97254];
+const cumTotal     = [1235,6069,9212,11982,15688,18818,23077,26805,30269,34571,38886,44033,49021,54581,59269,65354,70939,76347,83827,88698,92798,97578,106730,115783,124753,133295,141826,149872,155409,161972];
 
 let chartsBuilt = false;
 
@@ -2417,19 +2406,19 @@ function initCharts() {
       data: {
         labels: ['CPL (cost/lead)', 'Cost per Closed Deal'],
         datasets: [
-          { label: 'Google', data: [301, 3731], backgroundColor: '#2A7D5F', borderRadius: 3 },
-          { label: 'Meta', data: [143, 8760], backgroundColor: '#E84B35', borderRadius: 3 }
+          { label: 'Google', data: [133, 3939], backgroundColor: '#2A7D5F', borderRadius: 3 },
+          { label: 'Meta', data: [143, 4228], backgroundColor: '#E84B35', borderRadius: 3 }
         ]
       },
       options: {
         responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 8, padding: 12, usePointStyle: true } },
-          tooltip: { ...tt, callbacks: { label: c => c.dataset.label + ': £' + c.raw.toLocaleString() } }
+          tooltip: { ...tt, callbacks: { label: c => c.dataset.label + ': ' + c.raw.toLocaleString() + ' EGP' } }
         },
         scales: {
           x: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } },
-          y: { type: 'logarithmic', grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => '£' + v.toLocaleString() } }
+          y: { type: 'logarithmic', grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => v.toLocaleString() + ' EGP' } }
         }
       }
     });
@@ -2452,11 +2441,11 @@ function initCharts() {
         responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 8, padding: 12, usePointStyle: true } },
-          tooltip: { ...tt, callbacks: { label: c => c.dataset.label + ': ' + (c.raw ? '£' + c.raw : '—') } }
+          tooltip: { ...tt, callbacks: { label: c => c.dataset.label + ': ' + (c.raw ? c.raw + ' EGP' : '—') } }
         },
         scales: {
           x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, font: { size: 8 } } },
-          y: { grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => '£' + v } }
+          y: { grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => v + ' EGP' } }
         }
       }
     });
@@ -2479,11 +2468,11 @@ function initCharts() {
         responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 8, padding: 12, usePointStyle: true } },
-          tooltip: { ...tt, callbacks: { label: c => c.dataset.label + ': £' + c.raw.toLocaleString() } }
+          tooltip: { ...tt, callbacks: { label: c => c.dataset.label + ': ' + c.raw.toLocaleString() + ' EGP' } }
         },
         scales: {
           x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, font: { size: 8 } } },
-          y: { grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => '£' + (v / 1000).toFixed(0) + 'K' } }
+          y: { grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => (v / 1000).toFixed(0) + 'K EGP' } }
         }
       }
     });
@@ -2570,11 +2559,19 @@ function initCharts() {
 // ══════════════════════════════════════════
 // GOOGLE SHEETS INTEGRATION — LEADS DATA
 // ══════════════════════════════════════════
-const SHEET_ID      = '1ZWfVOj7qg23CVAdJm5ARwsbElH_XNP_1gxqRxP8tiY4';
-const SHEET_BASE    = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
-const SHEET_CSV_URL = `${SHEET_BASE}/export?format=csv&gid=0`;       // MQR tab
-const SHEET_TGC_URL = `${SHEET_BASE}/export?format=csv&gid=1`;       // TGC tab (update gid if needed)
-const SHEET_URL     = `${SHEET_BASE}/edit`;
+// Sheet connection disabled — data loaded from Excel file directly (static/secure mode)
+const SHEET_CSV_URL = '';
+const SHEET_TGC_URL = '';
+const SHEET_URL     = '';
+
+// Filter rows to April 2026 only (Date column format: M/D/YYYY HH:MM:SS)
+function filterApril2026(rows, dateCol) {
+  if (!dateCol) return rows;
+  return rows.filter(r => {
+    const d = (r[dateCol] || '').trim();
+    return /^4\/\d{1,2}\/2026/.test(d);
+  });
+}
 
 let sheetData = null;
 let sheetLoaded = false;
@@ -2675,17 +2672,21 @@ function parseCSV(text) {
 
 function updateDashboardFromSheet(data) {
   if (!data || !data.rows.length) return;
-  const rows = data.rows;
   const H = data.headers;
 
   // Column detection by header name
   const col = (kws) => H.find(h => h && kws.some(k => h.toLowerCase().includes(k.toLowerCase())));
+  const dateCol     = col(['date']);
   const sourceCol   = col(['lead source', 'source']);
   const statusCol   = col(['contact status']);
   const qualityCol  = col(['lead quality']);
   const stageCol    = col(['deal stage']);
   const productCol  = col(['product inquiry', 'product']);
   const locationCol = col(['location']);
+
+  // Filter to April 2026 only
+  const rows = filterApril2026(data.rows, dateCol);
+  console.log(`Sheet filtered to April 2026: ${rows.length} of ${data.rows.length} total rows`);
 
   const countBy = (c) => {
     if (!c) return {};
@@ -2705,11 +2706,20 @@ function updateDashboardFromSheet(data) {
   const dmLeads   = (src['DMs'] || 0) + (src['DM'] || 0) + (src['DM Form'] || 0);
 
   setText('kpi-total-val', total.toLocaleString());
-  setText('kpi-total-sub', 'Live from sheet · All channels');
+  setText('kpi-total-sub', 'April 2026 · Live from sheet');
   setText('kpi-meta-val', metaLeads.toLocaleString());
   setText('kpi-meta-sub', pct(metaLeads, total) + ' of total');
   setText('kpi-website-val', webLeads.toLocaleString());
   setText('kpi-website-sub', pct(webLeads, total) + ' of total');
+
+  // ── Google Ads section: update Search Leads using website source from sheet ──
+  const googleSpend = 64716; // Google Ads total spend PMax + Search (April · from CSV)
+  const googleCpl   = webLeads > 0 ? Math.round(googleSpend / webLeads) : 0;
+  setText('gads-leads-sheet', webLeads.toLocaleString());
+  setText('gads-cpl-real',    googleCpl + ' EGP');
+  setText('gads-cpl-sub',     `${googleSpend.toLocaleString()} EGP ÷ ${webLeads} sheet leads`);
+  setText('gads-combined-leads', webLeads.toLocaleString());
+  setText('gads-combined-cpl',   googleCpl + ' EGP');
 
   // ── Lead Quality ──
   const qual = countBy(qualityCol);
@@ -2831,11 +2841,11 @@ function initLangComparisonChart() {
       responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 8, padding: 12, usePointStyle: true } },
-        tooltip: { ...tt, callbacks: { label: c => ` ${c.dataset.label}: £${c.raw.toLocaleString()}` } }
+        tooltip: { ...tt, callbacks: { label: c => ` ${c.dataset.label}: ${c.raw.toLocaleString()} EGP` } }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } },
-        y: { grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => '£' + v.toLocaleString() } }
+        y: { grid: { color: 'rgba(27,42,59,0.06)' }, ticks: { font: { size: 9 }, callback: v => v.toLocaleString() + ' EGP' } }
       }
     }
   });
@@ -2846,7 +2856,7 @@ function updateLangComparison(arData, enData) {
   // arData / enData = { leads, spend, cpl, closed, closeRate, relevantRate, topAdsets }
   initLangComparisonChart();
 
-  const fmt = (n) => n > 0 ? '£' + Math.round(n).toLocaleString() : '—';
+  const fmt = (n) => n > 0 ? Math.round(n).toLocaleString() + ' EGP' : '—';
   const pct = (n) => n > 0 ? (n * 100).toFixed(1) + '%' : '—';
 
   // Arabic KPIs
@@ -2884,15 +2894,25 @@ function updateLangComparison(arData, enData) {
     langChart.update();
   }
 
-  // Verdict
-  const arWins = arCostDeal > 0 && enCostDeal > 0
-    ? arCostDeal < enCostDeal
-    : arData.closeRate > enData.closeRate;
+  // Verdict — priority: cost-per-deal > CPL > lead volume
+  let arWins;
+  if (arCostDeal > 0 && enCostDeal > 0) {
+    arWins = arCostDeal < enCostDeal;
+  } else if (arData.cpl > 0 && enData.cpl > 0) {
+    arWins = arData.cpl < enData.cpl;        // Lower CPL wins
+  } else {
+    arWins = arData.leads >= enData.leads;   // Higher volume wins
+  }
 
-  const winner = arWins ? { name: '🇸🇦 Arabic', sub: `Closes at ${pct(arData.closeRate)} · £${Math.round(arCostDeal).toLocaleString()} per deal` }
-                        : { name: '🇬🇧 English', sub: `Closes at ${pct(enData.closeRate)} · £${Math.round(enCostDeal).toLocaleString()} per deal` };
-  const loser  = arWins ? { name: '🇬🇧 English', sub: `£${Math.round(enCostDeal).toLocaleString()} per deal` }
-                        : { name: '🇸🇦 Arabic',  sub: `£${Math.round(arCostDeal).toLocaleString()} per deal` };
+  const arSub = arCostDeal > 0
+    ? `CPL ${Math.round(arData.cpl)} EGP · ${Math.round(arCostDeal).toLocaleString()} EGP per deal`
+    : `${arData.leads.toLocaleString()} leads · CPL ${Math.round(arData.cpl)} EGP`;
+  const enSub = enCostDeal > 0
+    ? `CPL ${Math.round(enData.cpl)} EGP · ${Math.round(enCostDeal).toLocaleString()} EGP per deal`
+    : `${enData.leads.toLocaleString()} leads · CPL ${Math.round(enData.cpl)} EGP`;
+
+  const winner = arWins ? { name: '🇸🇦 Arabic',  sub: arSub } : { name: '🇬🇧 English', sub: enSub };
+  const loser  = arWins ? { name: '🇬🇧 English', sub: enSub } : { name: '🇸🇦 Arabic',  sub: arSub };
 
   if (document.getElementById('lang-winner-label')) document.getElementById('lang-winner-label').textContent = '🏆 Better Buyer Source';
   if (document.getElementById('lang-winner-name'))  document.getElementById('lang-winner-name').textContent  = winner.name;
@@ -2915,15 +2935,23 @@ function updateLangComparison(arData, enData) {
   }
 
   // Final insight
-  const diff = arCostDeal > 0 && enCostDeal > 0
-    ? Math.abs(arCostDeal - enCostDeal)
-    : 0;
   const insight = document.getElementById('lang-final-insight');
-  if (insight && diff > 0) {
+  if (insight) {
     const cheaperLang = arWins ? 'Arabic' : 'English';
     const expensiveLang = arWins ? 'English' : 'Arabic';
     insight.className = 'insight good';
-    insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> ad sets produce buyers at <b>£${Math.round(Math.min(arCostDeal, enCostDeal)).toLocaleString()} per closed deal</b> vs <b>£${Math.round(Math.max(arCostDeal, enCostDeal)).toLocaleString()}</b> for ${expensiveLang} — a <b>£${Math.round(diff).toLocaleString()} difference per deal</b>. Reallocate budget toward <b>${cheaperLang}</b> creatives immediately.`;
+
+    if (arCostDeal > 0 && enCostDeal > 0) {
+      const diff = Math.abs(arCostDeal - enCostDeal);
+      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> ad sets produce buyers at <b>${Math.round(Math.min(arCostDeal, enCostDeal)).toLocaleString()} EGP per closed deal</b> vs <b>${Math.round(Math.max(arCostDeal, enCostDeal)).toLocaleString()} EGP</b> for ${expensiveLang} — a <b>${Math.round(diff).toLocaleString()} EGP difference per deal</b>. Reallocate budget toward <b>${cheaperLang}</b> creatives immediately.`;
+    } else if (arData.cpl > 0 && enData.cpl > 0) {
+      const cheaperCpl   = Math.min(arData.cpl, enData.cpl);
+      const expensiveCpl = Math.max(arData.cpl, enData.cpl);
+      const cplDiffPct   = ((expensiveCpl - cheaperCpl) / expensiveCpl * 100).toFixed(0);
+      const winnerLeads  = arWins ? arData.leads : enData.leads;
+      const loserLeads   = arWins ? enData.leads : arData.leads;
+      insight.innerHTML = `<b>Verdict:</b> <b>${cheaperLang}</b> wins on both volume and cost — <b>${winnerLeads.toLocaleString()} leads</b> at <b>${Math.round(cheaperCpl)} EGP CPL</b> vs ${expensiveLang}'s ${loserLeads.toLocaleString()} leads at ${Math.round(expensiveCpl)} EGP CPL (${cplDiffPct}% cheaper). However, for the next period we will be <b>scaling English creatives</b> to develop and grow that audience.`;
+    }
   }
 }
 
@@ -2946,69 +2974,74 @@ function buildBar(containerId, items, color = '') {
 }
 
 function buildAllBars() {
+  // ── MQR Location — April 2026 ──
   buildBar('mqr-loc', [
-    {l:'Cairo Business Park', v:403},
-    {l:'Multiple Locations', v:201},
-    {l:'Maadi - Eco Building', v:168},
-    {l:'Downtown - The GrEEK Campus', v:157},
-    {l:'October - Melanite Mall', v:143},
-    {l:'AlRehab Park 15', v:137},
-    {l:'AlRehab Gateway Mall', v:118},
-    {l:'Zayed - AlRabwa', v:112},
-    {l:'Zayed - Eden Mall', v:84},
-    {l:'Madinaty East Hub', v:76},
+    {l:'Cairo Business Park',      v:258},
+    {l:'Multiple Locations',        v:112},
+    {l:'Maadi - Eco Building',      v:92},
+    {l:'Downtown - GrEEK Campus',   v:86},
+    {l:'October - Melanite Mall',   v:79},
+    {l:'AlRehab Park 15',           v:76},
+    {l:'Zayed - AlRabwa',           v:72},
+    {l:'Madinaty East Hub',         v:51},
+    {l:'Zayed - Eden Mall',         v:48},
+    {l:'AlRehab Gateway Mall',      v:42},
   ]);
 
+  // ── MQR Product — April 2026 ──
   buildBar('mqr-prod', [
-    {l:'Offices', v:738},
-    {l:'Other', v:294},
-    {l:'Meeting Rooms', v:252},
-    {l:'Memberships', v:220},
-    {l:'Workshop Rooms & Events', v:206},
-    {l:'Corporate Inquiries', v:49},
-    {l:'Virtual Office', v:15},
+    {l:'Offices',                       v:442},
+    {l:'Other',                          v:173},
+    {l:'Meeting Rooms',                  v:119},
+    {l:'Memberships',                    v:113},
+    {l:'Workshop Rooms & Events',        v:106},
+    {l:'Corporate Inquiries',            v:27},
+    {l:'Virtual Office',                 v:13},
   ], 'red');
 
+  // ── MQR Closed by Location — April 2026 ──
   buildBar('mqr-closed-loc', [
     {l:'Cairo Business Park', v:17},
-    {l:'Eden Mall', v:5},
-    {l:'AlRehab Park 15', v:3},
-    {l:'Nile City Towers', v:2},
-    {l:'Downtown TGC', v:2},
-    {l:'Platz', v:1},
-    {l:'Eco Building', v:1},
+    {l:'Eden Mall',            v:5},
+    {l:'AlRehab Park 15',      v:3},
+    {l:'Nile City Towers',     v:2},
+    {l:'Downtown GrEEK Campus',v:2},
+    {l:'AlRehab Gateway Mall', v:1},
+    {l:'Eco Building',         v:1},
+    {l:'Platz',                v:1},
+    {l:'ElGouna - GSpace',     v:1},
   ], 'green');
 
+  // ── MQR Closed by Product — April 2026 ──
   buildBar('mqr-closed-prod', [
-    {l:'Meeting Rooms', v:14},
-    {l:'Other', v:7},
-    {l:'Workshop Rooms & Events', v:6},
-    {l:'Offices', v:4},
-    {l:'Memberships', v:1},
-    {l:'Corporate', v:1},
+    {l:'Meeting Rooms',              v:15},
+    {l:'Other',                       v:7},
+    {l:'Offices',                     v:5},
+    {l:'Workshop Rooms & Events',     v:5},
+    {l:'Memberships',                 v:1},
+    {l:'Corporate Inquiries',         v:1},
   ], 'amber');
 
-  // TGC bars — from sheet
+  // ── TGC bars — April 2026 ──
   buildBar('tgc-prod', [
-    {l:'Workshop Rooms & Events', v:57},
-    {l:'Offices', v:27},
-    {l:'Shooting Location', v:9},
-    {l:'Meeting Rooms', v:8},
+    {l:'Workshop Rooms & Events', v:76},
+    {l:'Offices',                  v:34},
+    {l:'Meeting Rooms',            v:9},
+    {l:'Shooting Location',        v:9},
   ], 'blue');
 
   buildBar('tgc-loc', [
-    {l:'TGC Downtown — Tahrir', v:69},
-    {l:'TGC West — Mall of Arabia', v:32},
+    {l:'TGC Downtown — Tahrir',         v:85},
+    {l:'TGC West — Mall of Arabia',     v:41},
   ]);
 
   buildBar('tgc-quality', [
-    {l:'Relevant', v:1511},
-    {l:'Irrelevant', v:1504},
-    {l:'No Answer (1 trial)', v:703},
-    {l:'Unreachable', v:357},
-    {l:'No Answer (2 trials)', v:215},
-    {l:'No Answer (3 trials)', v:81},
-    {l:'No Action Yet', v:41},
+    {l:'Relevant',                   v:38},
+    {l:'No Answer (1 trial)',         v:36},
+    {l:'Irrelevant',                  v:15},
+    {l:'No Action Yet',               v:14},
+    {l:'No Answer (2-3 trials)',      v:4},
+    {l:'Unreachable',                 v:1},
   ], 'blue');
 
   // AR/EN bars (estimated split)
@@ -3030,8 +3063,8 @@ function buildAllBars() {
 // ─── FUNNEL ───
 function buildFunnels(data) {
   const d = data || {
-    total: 1810, contacted: 975, replied: 735, relevant: 798,
-    inDiscussion: 365, tourQuote: 39, closed: 114
+    total: 997, contacted: 947, replied: 712, relevant: 392,
+    inDiscussion: 218, tourQuote: 24, closed: 34
   };
   const funnelData = [
     { name: 'Total Leads',      val: d.total,        pct: 'baseline' },
