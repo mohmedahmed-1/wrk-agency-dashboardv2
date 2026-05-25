@@ -2,2810 +2,973 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SonicGrowth — Client Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* ========================================================================
-   RESET + TOKENS
-   ====================================================================== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
-input { font: inherit; border: none; background: none; color: inherit; outline: none; width: 100%; }
-a { color: inherit; text-decoration: none; }
-img, svg { display: block; max-width: 100%; }
-::selection { background: var(--sonic-gold); color: var(--sonic-navy); }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WRK+ · April 2026 · Performance Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
-:root {
-  --sonic-blue: #1E90FF;
-  --sonic-blue-2: #0066FF;
-  --sonic-blue-light: #4DA8FF;
-  --sonic-cyan: #00C6FF;
-  --sonic-gold: #FFD60A;
-  --sonic-gold-warm: #FFB300;
-  --sonic-navy: #04102E;
-  --sonic-navy-2: #061844;
-  --sonic-navy-3: #0A2554;
-  --sonic-red: #EF4444;
-  --sonic-green: #22C55E;
-
-  --text-primary: #FFFFFF;
-  --text-secondary: #9BB4E6;
-  --text-tertiary: #6B87BF;
-  --text-dim: #4F6FA5;
-
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
-  --border-blue: rgba(30, 144, 255, 0.4);
-
-  --glass: rgba(255, 255, 255, 0.035);
-  --glass-2: rgba(255, 255, 255, 0.05);
-  --glass-hover: rgba(255, 255, 255, 0.07);
-
-  --shadow-blue: 0 8px 32px rgba(30, 144, 255, 0.35);
-  --shadow-gold: 0 0 24px rgba(255, 214, 10, 0.35);
-  --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.4);
-
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 16px;
-  --r-xl: 22px;
-
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* ========================================================================
-   BACKGROUND + ATMOSPHERE
-   ====================================================================== */
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 400;
-  font-feature-settings: "ss01", "cv11";
-  color: var(--text-primary);
-  background: var(--sonic-navy);
-  overflow-x: hidden;
-  letter-spacing: -0.005em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(900px 500px at 8% -5%, rgba(30, 144, 255, 0.32), transparent 55%),
-    radial-gradient(700px 400px at 95% 8%, rgba(255, 214, 10, 0.12), transparent 60%),
-    radial-gradient(800px 600px at 50% 110%, rgba(0, 198, 255, 0.15), transparent 60%),
-    linear-gradient(180deg, #04102e 0%, #061844 50%, #03081f 100%);
-  z-index: -2;
-  pointer-events: none;
-  animation: drift 18s ease-in-out infinite alternate;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  opacity: 0.5;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  z-index: -1;
-}
-
-@keyframes drift {
-  0%   { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-2%, 1%, 0); }
-}
-
-/* ========================================================================
-   TYPOGRAPHY HELPERS
-   ====================================================================== */
-.font-display { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
-.font-mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
-h1, h2, h3, h4 { font-family: 'Sora', sans-serif; letter-spacing: -0.025em; }
-
-/* ========================================================================
-   SHARED BUTTONS / TAGS
-   ====================================================================== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: var(--r-md);
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.01em;
-  transition: transform 0.2s var(--ease-spring), box-shadow 0.3s, background 0.2s;
-  white-space: nowrap;
-  position: relative;
-  overflow: hidden;
-}
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(0); }
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--sonic-blue) 0%, var(--sonic-cyan) 100%);
-  color: #fff;
-  font-weight: 700;
-  box-shadow: 0 6px 22px rgba(30, 144, 255, 0.45), inset 0 1px 0 rgba(255,255,255,0.2);
-}
-.btn-primary:hover { box-shadow: 0 10px 32px rgba(30, 144, 255, 0.6), inset 0 1px 0 rgba(255,255,255,0.25); }
-.btn-primary::after {
-  content: "";
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  transition: left 0.6s var(--ease-out);
-}
-.btn-primary:hover::after { left: 100%; }
-
-.btn-gold {
-  background: linear-gradient(135deg, var(--sonic-gold) 0%, var(--sonic-gold-warm) 100%);
-  color: var(--sonic-navy);
-  font-weight: 800;
-  box-shadow: 0 6px 20px rgba(255, 214, 10, 0.35), inset 0 1px 0 rgba(255,255,255,0.3);
-}
-.btn-gold:hover { box-shadow: 0 8px 28px rgba(255, 214, 10, 0.55); }
-
-.btn-green {
-  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-  color: #fff;
-  font-weight: 700;
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
-}
-
-.btn-ghost {
-  background: var(--glass);
-  border: 1px solid var(--border-strong);
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-.btn-ghost:hover { background: var(--glass-hover); color: var(--text-primary); border-color: rgba(255,255,255,0.2); }
-
-.btn-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-size: 16px;
-  position: relative;
-  transition: all 0.2s var(--ease-out);
-}
-.btn-icon:hover { background: var(--glass-hover); color: #fff; border-color: var(--border-strong); }
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-family: 'Sora', sans-serif;
-}
-.tag-new { background: var(--sonic-red); color: #fff; }
-.tag-gold { background: rgba(255,214,10,0.15); color: var(--sonic-gold); border: 1px solid rgba(255,214,10,0.3); }
-.tag-blue { background: rgba(30,144,255,0.15); color: var(--sonic-blue-light); border: 1px solid rgba(30,144,255,0.3); }
-.tag-green { background: rgba(34,197,94,0.15); color: var(--sonic-green); border: 1px solid rgba(34,197,94,0.3); }
-
-/* ========================================================================
-   LOGO
-   ====================================================================== */
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  font-family: 'Sora', sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  user-select: none;
-}
-.logo-mark {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  background:
-    radial-gradient(ellipse at 30% 25%, rgba(255,255,255,0.4) 0%, transparent 50%),
-    linear-gradient(135deg, var(--sonic-blue) 0%, #0066FF 60%, var(--sonic-cyan) 100%);
-  box-shadow:
-    0 6px 22px rgba(30, 144, 255, 0.5),
-    inset 0 1px 0 rgba(255,255,255,0.3),
-    inset 0 -2px 4px rgba(0,0,0,0.2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.logo-mark svg {
-  width: 22px;
-  height: 22px;
-  filter: drop-shadow(0 0 6px rgba(255, 214, 10, 0.8));
-}
-.logo-text { font-size: 18px; color: #fff; }
-.logo-text .accent { color: var(--sonic-gold); }
-.logo-big .logo-mark { width: 76px; height: 76px; border-radius: 20px; }
-.logo-big .logo-mark svg { width: 40px; height: 40px; }
-.logo-big .logo-text { font-size: 34px; }
-
-/* ========================================================================
-   SCREENS
-   ====================================================================== */
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; animation: screenIn 0.5s var(--ease-out); }
-@keyframes screenIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
-/* ========================================================================
-   LOGIN SCREEN
-   ====================================================================== */
-#login-screen.active { display: flex; }
-.login-wrap {
-  min-height: 100vh;
-  width: 100%;
-  display: grid;
-  place-items: center;
-  padding: 40px 24px;
-  position: relative;
-}
-
-.login-orbital {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.login-orbital::before, .login-orbital::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 214, 10, 0.12);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-.login-orbital::before { width: 580px; height: 580px; animation: spin 60s linear infinite; }
-.login-orbital::after { width: 880px; height: 880px; border-color: rgba(30, 144, 255, 0.08); animation: spin 90s linear infinite reverse; }
-@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-.login-card {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  background: rgba(11, 24, 56, 0.55);
-  border: 1px solid var(--border-strong);
-  border-radius: 24px;
-  padding: 48px 40px 40px;
-  backdrop-filter: blur(32px) saturate(140%);
-  -webkit-backdrop-filter: blur(32px) saturate(140%);
-  box-shadow: var(--shadow-deep), inset 0 1px 0 rgba(255,255,255,0.06);
-  text-align: center;
-  animation: floatIn 0.8s var(--ease-out);
-}
-
-@keyframes floatIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.96); }
-  to   { opacity: 1; transform: none; }
-}
-
-.login-card .logo { margin-bottom: 24px; }
-.login-card h1 {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  background: linear-gradient(180deg, #fff 0%, #c9dcff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.login-card .sub {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin-bottom: 32px;
-  line-height: 1.5;
-}
-
-.field {
-  position: relative;
-  margin-bottom: 14px;
-  text-align: left;
-}
-.field-label {
-  position: absolute;
-  left: 16px; top: 50%;
-  transform: translateY(-50%);
-  font-size: 13px;
-  color: var(--text-tertiary);
-  pointer-events: none;
-  transition: all 0.2s var(--ease-out);
-}
-.field input {
-  width: 100%;
-  padding: 18px 16px 8px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  font-size: 14px;
-  color: #fff;
-  transition: all 0.2s var(--ease-out);
-}
-.field input:focus {
-  border-color: var(--sonic-blue);
-  background: rgba(30, 144, 255, 0.05);
-  box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.12);
-}
-.field input:focus + .field-label,
-.field input:not(:placeholder-shown) + .field-label {
-  top: 14px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--sonic-blue-light);
-}
-
-.login-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin: 16px 0 22px;
-}
-.login-row a { color: var(--sonic-blue-light); }
-.login-row a:hover { color: var(--sonic-gold); }
-
-.login-card .btn-primary {
-  width: 100%;
-  padding: 14px;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.login-footer {
-  margin-top: 30px;
-  color: var(--text-tertiary);
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* ========================================================================
-   APP SHELL
-   ====================================================================== */
-#app-screen.active { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
-
-.sidebar {
-  background: linear-gradient(180deg, rgba(6, 24, 68, 0.85) 0%, rgba(4, 16, 46, 0.85) 100%);
-  border-right: 1px solid var(--border);
-  padding: 22px 14px 22px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
-
-.sidebar .logo { margin: 4px 6px 24px; }
-.sidebar .logo-text { font-size: 15px; }
-.sidebar .logo-mark { width: 34px; height: 34px; border-radius: 9px; }
-.sidebar .logo-mark svg { width: 18px; height: 18px; }
-
-.nav-section-label {
-  font-family: 'Sora', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--text-dim);
-  padding: 14px 12px 6px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 9px 12px;
-  margin: 2px 0;
-  border-radius: var(--r-sm);
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.18s var(--ease-out);
-  position: relative;
-}
-.nav-item .ico { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-tertiary); transition: color 0.18s; }
-.nav-item:hover { background: var(--glass-2); color: #fff; }
-.nav-item:hover .ico { color: var(--sonic-blue-light); }
-
-.nav-item.active {
-  background: linear-gradient(90deg, rgba(30, 144, 255, 0.18) 0%, rgba(30, 144, 255, 0.04) 100%);
-  color: #fff;
-  font-weight: 600;
-}
-.nav-item.active::before {
-  content: "";
-  position: absolute;
-  left: -14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 18px;
-  border-radius: 0 3px 3px 0;
-  background: linear-gradient(180deg, var(--sonic-gold), var(--sonic-gold-warm));
-  box-shadow: 0 0 10px rgba(255, 214, 10, 0.6);
-}
-.nav-item.active .ico { color: var(--sonic-cyan); }
-
-.nav-badge {
-  margin-left: auto;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-family: 'Sora', sans-serif;
-}
-.nav-badge.red { background: var(--sonic-red); color: #fff; }
-.nav-badge.gold { background: var(--sonic-gold); color: var(--sonic-navy); }
-
-.sidebar-footer {
-  margin-top: auto;
-  padding: 12px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.sidebar-footer .avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--sonic-gold), var(--sonic-gold-warm));
-  color: var(--sonic-navy);
-  font-family: 'Sora', sans-serif;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  flex-shrink: 0;
-}
-.sidebar-footer .who { font-size: 12px; line-height: 1.3; }
-.sidebar-footer .who .name { font-weight: 600; color: #fff; }
-.sidebar-footer .who .role { color: var(--text-tertiary); font-size: 11px; }
-
-/* ========================================================================
-   MAIN AREA
-   ====================================================================== */
-.main {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 32px;
-  background: rgba(4, 16, 46, 0.7);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-  border-bottom: 1px solid var(--border);
-}
-
-.topbar .crumb { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.12em; font-family: 'Sora', sans-serif; margin-bottom: 2px; }
-.topbar h2 { font-size: 22px; font-weight: 700; }
-.topbar-right { display: flex; align-items: center; gap: 12px; }
-
-.search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  min-width: 240px;
-  font-size: 13px;
-  color: var(--text-tertiary);
-  transition: all 0.2s;
-}
-.search:hover { background: var(--glass-hover); border-color: var(--border-strong); }
-.search kbd {
-  margin-left: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  border: 1px solid var(--border-strong);
-  color: var(--text-tertiary);
-  background: rgba(255,255,255,0.03);
-}
-
-.bell-wrap { position: relative; }
-.bell-dot {
-  position: absolute;
-  top: 6px; right: 6px;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--sonic-red);
-  box-shadow: 0 0 0 2px var(--sonic-navy), 0 0 10px var(--sonic-red);
-  animation: pulse 1.8s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 2px var(--sonic-navy), 0 0 10px var(--sonic-red); }
-  50% { box-shadow: 0 0 0 2px var(--sonic-navy), 0 0 18px rgba(239, 68, 68, 0.8); }
-}
-
-.user-chip {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px 14px 5px 5px;
-  border-radius: 30px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.user-chip:hover { background: var(--glass-hover); }
-.user-chip .avatar {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--sonic-gold), var(--sonic-gold-warm));
-  color: var(--sonic-navy);
-  font-family: 'Sora', sans-serif;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-
-/* Notifications dropdown */
-.notif-panel {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 360px;
-  background: rgba(11, 24, 56, 0.95);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--r-lg);
-  padding: 14px;
-  backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-deep);
-  display: none;
-  z-index: 100;
-}
-.notif-panel.open { display: block; animation: dropIn 0.25s var(--ease-out); }
-@keyframes dropIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
-.notif-panel h4 {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-tertiary);
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.notif-panel h4 span { color: var(--sonic-gold); }
-.notif-item {
-  display: flex;
-  gap: 11px;
-  padding: 10px 8px;
-  border-radius: var(--r-sm);
-  font-size: 13px;
-  transition: background 0.18s;
-  cursor: pointer;
-}
-.notif-item:hover { background: var(--glass-2); }
-.notif-item .ico {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-}
-.notif-item .ico.blue { background: rgba(30, 144, 255, 0.18); color: var(--sonic-cyan); }
-.notif-item .ico.gold { background: rgba(255, 214, 10, 0.18); color: var(--sonic-gold); }
-.notif-item .ico.green { background: rgba(34, 197, 94, 0.18); color: var(--sonic-green); }
-.notif-item .body { flex: 1; line-height: 1.45; }
-.notif-item .meta { color: var(--text-tertiary); font-size: 11px; margin-top: 3px; }
-.notif-item .unread {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--sonic-blue);
-  margin-top: 12px;
-  box-shadow: 0 0 6px var(--sonic-blue);
-}
-
-/* ========================================================================
-   VIEW CONTAINER
-   ====================================================================== */
-.view { display: none; padding: 32px; max-width: 1400px; }
-.view.active { display: block; animation: viewIn 0.45s var(--ease-out); }
-@keyframes viewIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
-}
-
-.view-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 26px;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.view-head .left h1 {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 6px;
-  line-height: 1.1;
-}
-.view-head .left h1 .accent { color: var(--sonic-gold); }
-.view-head .lead { color: var(--text-secondary); font-size: 14px; max-width: 540px; line-height: 1.5; }
-.view-head .actions { display: flex; gap: 10px; }
-.view-head .crumb { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.12em; font-family: 'Sora', sans-serif; margin-bottom: 6px; }
-
-/* ========================================================================
-   CARDS
-   ====================================================================== */
-.card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 22px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: border-color 0.25s;
-}
-.card:hover { border-color: var(--border-strong); }
-
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-.card-head h3 {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-.card-head .meta { font-size: 12px; color: var(--text-tertiary); }
-
-.link-small {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--sonic-cyan);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: color 0.15s;
-}
-.link-small:hover { color: var(--sonic-gold); }
-
-/* ========================================================================
-   KPI CARDS
-   ====================================================================== */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 22px;
-}
-
-.kpi {
-  position: relative;
-  padding: 22px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  transition: all 0.3s var(--ease-out);
-}
-.kpi::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--sonic-blue-light), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.kpi:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
-.kpi:hover::before { opacity: 0.6; }
-
-.kpi-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--text-tertiary);
-  font-weight: 700;
-  font-family: 'Sora', sans-serif;
-  margin-bottom: 12px;
-}
-.kpi-value {
-  font-family: 'Sora', sans-serif;
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.kpi-value.gold { background: linear-gradient(180deg, var(--sonic-gold) 0%, var(--sonic-gold-warm) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.kpi-value.cyan { background: linear-gradient(180deg, var(--sonic-cyan) 0%, var(--sonic-blue) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-.kpi-delta {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--sonic-green);
-  font-family: 'JetBrains Mono', monospace;
-}
-.kpi-delta.down { color: var(--sonic-red); }
-.kpi-delta::before {
-  content: "";
-  width: 0; height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 5px solid currentColor;
-}
-.kpi-delta.down::before {
-  border-bottom: none;
-  border-top: 5px solid currentColor;
-}
-
-.kpi-live {
-  position: absolute;
-  top: 18px; right: 18px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--sonic-green);
-  font-family: 'Sora', sans-serif;
-}
-.kpi-live .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--sonic-green);
-  box-shadow: 0 0 6px var(--sonic-green);
-  animation: pulseDot 1.6s ease-in-out infinite;
-}
-@keyframes pulseDot {
-  0%, 100% { box-shadow: 0 0 6px var(--sonic-green); opacity: 1; }
-  50% { box-shadow: 0 0 14px var(--sonic-green); opacity: 0.7; }
-}
-
-.kpi-spark {
-  position: absolute;
-  bottom: 14px; right: 18px;
-  width: 80px; height: 28px;
-  opacity: 0.5;
-}
-
-/* ========================================================================
-   OVERVIEW LAYOUT
-   ====================================================================== */
-.row-2 {
-  display: grid;
-  grid-template-columns: 1.55fr 1fr;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-.chart-card { height: 360px; display: flex; flex-direction: column; }
-.chart-canvas {
-  flex: 1;
-  position: relative;
-  min-height: 0;
-}
-.chart-canvas svg { width: 100%; height: 100%; }
-.chart-legend {
-  display: flex;
-  gap: 18px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 14px;
-}
-.chart-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-
-.toggle-group {
-  display: inline-flex;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 3px;
-  font-size: 11px;
-}
-.toggle-group button {
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--text-tertiary);
-  font-weight: 600;
-  font-family: 'Sora', sans-serif;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  transition: all 0.18s;
-}
-.toggle-group button.active { background: rgba(30, 144, 255, 0.2); color: #fff; }
-.toggle-group button:hover:not(.active) { color: #fff; }
-
-/* Pending approvals list inside overview */
-.pending-list { display: flex; flex-direction: column; gap: 10px; }
-.pending-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.pending-item:hover { background: var(--glass-hover); border-color: var(--border-strong); transform: translateX(2px); }
-.pending-ico {
-  width: 38px; height: 38px;
-  border-radius: 10px;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.pending-ico.gold { background: linear-gradient(135deg, rgba(255,214,10,0.2), rgba(255,179,0,0.12)); color: var(--sonic-gold); border: 1px solid rgba(255,214,10,0.3); }
-.pending-ico.blue { background: linear-gradient(135deg, rgba(30,144,255,0.2), rgba(0,198,255,0.12)); color: var(--sonic-cyan); border: 1px solid rgba(30,144,255,0.3); }
-.pending-ico.purple { background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(139,92,246,0.12)); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
-.pending-body { flex: 1; min-width: 0; }
-.pending-body .ttl { font-size: 13.5px; font-weight: 600; }
-.pending-body .meta { font-size: 11.5px; color: var(--text-tertiary); margin-top: 2px; }
-
-/* Activity feed */
-.activity-list { display: flex; flex-direction: column; }
-.activity-item {
-  display: flex;
-  gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-.activity-item:last-child { border-bottom: none; padding-bottom: 0; }
-.activity-item .ico {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-}
-.activity-item .ico.green { background: rgba(34, 197, 94, 0.15); color: var(--sonic-green); border: 1px solid rgba(34,197,94,0.3); }
-.activity-item .ico.blue  { background: rgba(30, 144, 255, 0.15); color: var(--sonic-cyan); border: 1px solid rgba(30,144,255,0.3); }
-.activity-item .ico.gold  { background: rgba(255, 214, 10, 0.15); color: var(--sonic-gold); border: 1px solid rgba(255,214,10,0.3); }
-.activity-item b { font-weight: 600; color: #fff; }
-.activity-item .meta { color: var(--text-tertiary); font-size: 11.5px; margin-top: 3px; }
-.activity-item .time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-tertiary);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-/* ========================================================================
-   DOCUMENT PAGES
-   ====================================================================== */
-.doc-grid {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 32px;
-}
-.doc-toc {
-  position: sticky;
-  top: 100px;
-  align-self: start;
-}
-.doc-toc-title {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-family: 'Sora', sans-serif;
-  color: var(--text-dim);
-  margin-bottom: 14px;
-  font-weight: 700;
-}
-.toc-link {
-  display: block;
-  padding: 7px 12px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  border-left: 2px solid transparent;
-  margin: 2px 0;
-  transition: all 0.15s;
-}
-.toc-link:hover { color: #fff; border-color: var(--border-strong); }
-.toc-link.active { color: var(--sonic-gold); border-color: var(--sonic-gold); font-weight: 600; }
-
-.doc-content { max-width: 760px; }
-.doc-section { margin-bottom: 56px; }
-.doc-section h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  letter-spacing: -0.025em;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.doc-section h2::before {
-  content: "";
-  width: 4px;
-  height: 22px;
-  background: linear-gradient(180deg, var(--sonic-gold), var(--sonic-gold-warm));
-  border-radius: 2px;
-  box-shadow: 0 0 12px rgba(255,214,10,0.4);
-}
-.doc-section p {
-  color: var(--text-secondary);
-  line-height: 1.7;
-  font-size: 14.5px;
-  margin-bottom: 14px;
-}
-.doc-section strong { color: #fff; font-weight: 600; }
-.doc-section ul { margin: 14px 0 14px 20px; }
-.doc-section li { color: var(--text-secondary); font-size: 14.5px; line-height: 1.8; padding-left: 8px; }
-.doc-section li::marker { color: var(--sonic-gold); }
-
-.doc-callout {
-  padding: 18px 22px;
-  border-radius: var(--r-md);
-  border-left: 3px solid var(--sonic-blue);
-  background: linear-gradient(90deg, rgba(30,144,255,0.08), transparent);
-  margin: 18px 0;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* Pillars/audience card grids */
-.pill-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
-  margin: 16px 0;
-}
-.pill-card {
-  padding: 20px;
-  border-radius: var(--r-md);
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  transition: all 0.25s var(--ease-out);
-}
-.pill-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-.pill-card .num {
-  font-family: 'Sora', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--sonic-gold);
-  letter-spacing: 0.1em;
-}
-.pill-card h4 { font-size: 16px; font-weight: 700; margin: 6px 0 8px; }
-.pill-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
-
-.color-swatches { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
-.swatch {
-  width: 100px;
-  border-radius: var(--r-md);
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-.swatch .chip { height: 80px; }
-.swatch .info { padding: 8px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; background: var(--glass-2); color: var(--text-secondary); }
-
-/* ========================================================================
-   CONTENT PLAN / APPROVAL GRID
-   ====================================================================== */
-.approval-filter {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.filter-btn {
-  padding: 8px 14px;
-  border-radius: 30px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  transition: all 0.18s;
-}
-.filter-btn:hover { background: var(--glass-hover); color: #fff; }
-.filter-btn.active { background: rgba(255, 214, 10, 0.15); border-color: rgba(255, 214, 10, 0.4); color: var(--sonic-gold); }
-
-.post-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-.post {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  overflow: hidden;
-  transition: all 0.25s var(--ease-out);
-  cursor: pointer;
-  position: relative;
-}
-.post:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
-.post-preview {
-  aspect-ratio: 4/5;
-  position: relative;
-  display: grid;
-  place-items: center;
-  font-family: 'Sora', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.85);
-  overflow: hidden;
-  padding: 0 12px;
-  text-align: center;
-}
-.post-preview .ph-label { z-index: 1; text-shadow: 0 1px 12px rgba(0,0,0,0.4); }
-.post.t1 .post-preview { background: linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%); }
-.post.t2 .post-preview { background: linear-gradient(135deg, #4ECDC4 0%, #1A535C 100%); }
-.post.t3 .post-preview { background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%); }
-.post.t4 .post-preview { background: linear-gradient(135deg, #F77B72 0%, #FFC700 100%); }
-.post.t5 .post-preview { background: linear-gradient(135deg, #00C6FF 0%, #0072FF 100%); }
-.post.t6 .post-preview { background: linear-gradient(135deg, #FFB347 0%, #FFCC33 100%); }
-.post.t7 .post-preview { background: linear-gradient(135deg, #16A085 0%, #F4D03F 100%); }
-.post.t8 .post-preview { background: linear-gradient(135deg, #ED4264 0%, #FFEDBC 100%); }
-
-.post-type {
-  position: absolute;
-  top: 10px; left: 10px;
-  padding: 4px 9px;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(6px);
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #fff;
-  z-index: 2;
-}
-.post-status {
-  position: absolute;
-  bottom: 10px; right: 10px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  backdrop-filter: blur(6px);
-  z-index: 2;
-}
-.post-status.pending { background: rgba(255, 214, 10, 0.9); color: var(--sonic-navy); }
-.post-status.approved { background: rgba(34, 197, 94, 0.9); color: #fff; }
-.post-status.changes { background: rgba(239, 68, 68, 0.9); color: #fff; }
-.post-info {
-  padding: 12px;
-  border-top: 1px solid var(--border);
-}
-.post-info .ttl { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
-.post-info .date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-tertiary); }
-
-/* ========================================================================
-   MEDIA PLAN
-   ====================================================================== */
-.platform-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-.platform-table th, .platform-table td {
-  text-align: left;
-  padding: 14px 16px;
-}
-.platform-table th {
-  font-family: 'Sora', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--text-tertiary);
-  border-bottom: 1px solid var(--border);
-}
-.platform-table td { border-bottom: 1px solid var(--border); }
-.platform-table tr:last-child td { border-bottom: none; }
-.platform-table tr:hover td { background: var(--glass-2); }
-.platform-table .platform-name {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-}
-.platform-icon {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: #fff;
-  font-weight: 700;
-}
-.icon-meta { background: linear-gradient(135deg, #1877F2, #42A5F5); }
-.icon-ig { background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF); }
-.icon-tt { background: #000; border: 1px solid var(--border); }
-.icon-yt { background: #FF0000; }
-.icon-g { background: #4285F4; }
-.platform-table .num { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
-.bar-cell { width: 200px; }
-.bar {
-  height: 6px;
-  width: 100%;
-  background: var(--glass-2);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 4px;
-}
-.bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--sonic-blue), var(--sonic-cyan)); }
-.bar-fill.gold { background: linear-gradient(90deg, var(--sonic-gold-warm), var(--sonic-gold)); }
-
-/* ========================================================================
-   VIDEO REVIEW
-   ====================================================================== */
-.video-layout {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 22px;
-}
-
-.video-stage { display: flex; flex-direction: column; gap: 16px; }
-.video-frame {
-  aspect-ratio: 16/9;
-  border-radius: var(--r-md);
-  border: 1px solid var(--border-strong);
-  background: #000;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-.video-frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(30, 144, 255, 0.25), transparent 55%),
-    radial-gradient(circle at 70% 60%, rgba(255, 214, 10, 0.15), transparent 55%),
-    linear-gradient(135deg, #0a1a3d 0%, #061844 50%, #04102e 100%);
-}
-.video-play {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 72px; height: 72px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.1), 0 12px 40px rgba(0,0,0,0.5);
-  transition: transform 0.2s;
-}
-.video-frame:hover .video-play { transform: translate(-50%, -50%) scale(1.06); }
-.video-play::before {
-  content: "";
-  border-left: 22px solid var(--sonic-navy);
-  border-top: 14px solid transparent;
-  border-bottom: 14px solid transparent;
-  margin-left: 6px;
-}
-.video-timecode {
-  position: absolute;
-  bottom: 14px; left: 14px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-}
-.video-quality {
-  position: absolute;
-  top: 14px; right: 14px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(6px);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--sonic-gold);
-}
-
-.timeline-wrap { padding: 14px 4px; }
-.timeline {
-  position: relative;
-  height: 40px;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: visible;
-}
-.timeline-progress {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 40%;
-  background: linear-gradient(90deg, var(--sonic-blue), var(--sonic-cyan));
-  border-radius: 8px 0 0 8px;
-}
-.timeline-progress::after {
-  content: "";
-  position: absolute;
-  right: 0; top: -2px;
-  width: 4px;
-  height: 44px;
-  background: var(--sonic-cyan);
-  box-shadow: 0 0 12px var(--sonic-cyan);
-}
-.tl-marker {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 12px;
-  background: var(--sonic-gold);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: transform 0.15s;
-  box-shadow: 0 0 10px rgba(255, 214, 10, 0.7);
-}
-.tl-marker:hover { transform: scaleY(1.1); }
-.tl-marker::before {
-  content: attr(data-tc);
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--sonic-gold);
-  color: var(--sonic-navy);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.15s;
-  pointer-events: none;
-}
-.tl-marker:hover::before { opacity: 1; }
-.timeline-times {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-tertiary);
-  margin-top: 8px;
-  font-variant-numeric: tabular-nums;
-}
-
-.video-comments h3 { margin-bottom: 14px; }
-.comment {
-  display: flex;
-  gap: 12px;
-  padding: 14px;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  margin-bottom: 10px;
-  transition: all 0.2s;
-}
-.comment:hover { border-color: var(--border-strong); background: var(--glass-hover); }
-.comment.resolved { opacity: 0.55; }
-.tc-badge {
-  background: var(--sonic-gold);
-  color: var(--sonic-navy);
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  font-size: 11px;
-  padding: 4px 8px;
-  border-radius: 5px;
-  height: fit-content;
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
-}
-.comment.resolved .tc-badge { background: var(--sonic-green); color: #fff; }
-.comment-body { flex: 1; font-size: 13.5px; line-height: 1.5; }
-.comment-meta { color: var(--text-tertiary); font-size: 11.5px; margin-top: 4px; display: flex; gap: 8px; align-items: center; }
-.comment-meta .dot-sep { color: var(--text-dim); }
-
-.comment-input {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-.comment-input input {
-  flex: 1;
-  padding: 12px 14px;
-  background: var(--glass-2);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  font-size: 13px;
-}
-.comment-input input:focus { border-color: var(--sonic-blue); }
-
-/* ========================================================================
-   AI MONTHLY REPORT
-   ====================================================================== */
-.report-hero {
-  position: relative;
-  padding: 44px 40px;
-  border-radius: var(--r-xl);
-  background:
-    radial-gradient(ellipse at 0% 0%, rgba(30, 144, 255, 0.18), transparent 55%),
-    radial-gradient(ellipse at 100% 100%, rgba(255, 214, 10, 0.12), transparent 55%),
-    linear-gradient(135deg, rgba(30, 144, 255, 0.08), rgba(255, 214, 10, 0.04));
-  border: 1px solid var(--border-strong);
-  overflow: hidden;
-  margin-bottom: 22px;
-}
-.report-hero::before {
-  content: "";
-  position: absolute;
-  top: -50%; right: -10%;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(255, 214, 10, 0.15) 0%, transparent 60%);
-  pointer-events: none;
-}
-.ai-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  background: rgba(255, 214, 10, 0.15);
-  border: 1px solid rgba(255, 214, 10, 0.4);
-  color: var(--sonic-gold);
-  border-radius: 30px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-family: 'Sora', sans-serif;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
-}
-.ai-badge .ai-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--sonic-gold);
-  box-shadow: 0 0 8px var(--sonic-gold);
-  animation: pulseDot 1.5s infinite;
-}
-.report-hero h1 {
-  font-size: 40px;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  margin-bottom: 8px;
-  position: relative;
-  z-index: 1;
-}
-.report-hero .lead {
-  color: var(--text-secondary);
-  font-size: 15px;
-  position: relative;
-  z-index: 1;
-}
-
-.insight-stack { display: flex; flex-direction: column; gap: 12px; margin: 22px 0; }
-.insight {
-  padding: 20px 24px;
-  border-radius: var(--r-md);
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-left: 3px solid;
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-  transition: all 0.25s var(--ease-out);
-}
-.insight:hover { transform: translateX(3px); border-color: var(--border-strong); }
-.insight.gold { border-left-color: var(--sonic-gold); }
-.insight.blue { border-left-color: var(--sonic-blue); }
-.insight.green { border-left-color: var(--sonic-green); }
-.insight-icon {
-  width: 44px; height: 44px;
-  border-radius: var(--r-sm);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-.insight.gold .insight-icon { background: rgba(255,214,10,0.12); }
-.insight.blue .insight-icon { background: rgba(30,144,255,0.12); }
-.insight.green .insight-icon { background: rgba(34,197,94,0.12); }
-.insight-body { flex: 1; }
-.insight-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-weight: 700;
-  font-family: 'Sora', sans-serif;
-  margin-bottom: 6px;
-}
-.insight.gold .insight-label { color: var(--sonic-gold); }
-.insight.blue .insight-label { color: var(--sonic-blue-light); }
-.insight.green .insight-label { color: var(--sonic-green); }
-.insight-text { font-size: 14.5px; line-height: 1.55; color: #fff; }
-.insight-text b { color: var(--sonic-gold); font-weight: 700; }
-
-.report-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 30px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-}
-
-/* ========================================================================
-   MOBILE
-   ====================================================================== */
-@media (max-width: 1100px) {
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .row-2 { grid-template-columns: 1fr; }
-  .post-grid { grid-template-columns: repeat(2, 1fr); }
-  .video-layout { grid-template-columns: 1fr; }
-  .doc-grid { grid-template-columns: 1fr; }
-  .doc-toc { position: static; }
-}
-@media (max-width: 720px) {
-  #app-screen.active { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-  .view { padding: 20px; }
-  .topbar { padding: 14px 20px; }
-  .search { display: none; }
-  .kpi-grid { grid-template-columns: 1fr 1fr; }
-  .post-grid { grid-template-columns: 1fr 1fr; }
-}
-
-/* ========================================================================
-   STAGGER ANIMATIONS
-   ====================================================================== */
-.stagger > * {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: stag 0.5s var(--ease-out) forwards;
-}
-.stagger > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger > *:nth-child(2) { animation-delay: 0.12s; }
-.stagger > *:nth-child(3) { animation-delay: 0.19s; }
-.stagger > *:nth-child(4) { animation-delay: 0.26s; }
-.stagger > *:nth-child(5) { animation-delay: 0.33s; }
-.stagger > *:nth-child(6) { animation-delay: 0.40s; }
-.stagger > *:nth-child(7) { animation-delay: 0.47s; }
-.stagger > *:nth-child(8) { animation-delay: 0.54s; }
-@keyframes stag {
-  to { opacity: 1; transform: none; }
-}
-
-/* Chart draw-on */
-.chart-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: drawIn 1.8s var(--ease-out) 0.3s forwards; }
-@keyframes drawIn { to { stroke-dashoffset: 0; } }
-
-</style>
 </head>
 <body>
 
-<!-- =====================================================================
-     LOGIN SCREEN
-     ================================================================== -->
-<div id="login-screen" class="screen active">
-  <div class="login-wrap">
-    <div class="login-orbital"></div>
-    <div class="login-card">
-      <div class="logo logo-big">
-        <span class="logo-mark">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M13.5 2 5 13h6l-1.5 9L18 11h-6l1.5-9Z" fill="#FFD60A" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <span class="logo-text">Sonic<span class="accent">Growth</span></span>
-      </div>
-      <h1>Welcome back</h1>
-      <p class="sub">Sign in to access your client portal — performance, content, and reports in one place.</p>
-
-      <form onsubmit="enterApp(event)">
-        <div class="field">
-          <input type="text" id="username" placeholder=" " required value="client@brand.com">
-          <label for="username" class="field-label">Email or Username</label>
-        </div>
-        <div class="field">
-          <input type="password" id="password" placeholder=" " required value="password123">
-          <label for="password" class="field-label">Password</label>
-        </div>
-        <div class="login-row">
-          <label style="display:inline-flex; gap:6px; align-items:center; cursor:pointer;">
-            <span style="width:14px; height:14px; border:1.5px solid var(--border-strong); border-radius:3px; display:inline-block;"></span>
-            Remember me
-          </label>
-          <a href="#">Forgot password?</a>
-        </div>
-        <button type="submit" class="btn btn-primary">
-          Log In
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </form>
-
-      <div class="login-footer">⚡ Powered by SonicGrowth</div>
-    </div>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sp-inner">
+    <svg class="sp-logo" width="60" height="54" viewBox="0 0 100 90">
+      <defs>
+        <filter id="bg"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <polygon points="50,5 95,85 5,85" fill="#0000ee" filter="url(#bg)"/>
+    </svg>
+    <div class="sp-agency">The Blues Agency</div>
+    <div class="sp-title">WRK+ <em>Intelligence</em></div>
+    <div class="sp-sub">April 2026 · Performance Report · Confidential</div>
+    <div class="sp-bar-wrap"><div class="sp-bar"></div></div>
+    <div class="sp-status">Loading report data_</div>
   </div>
 </div>
 
-<!-- =====================================================================
-     APP SHELL
-     ================================================================== -->
-<div id="app-screen" class="screen">
+<!-- APP -->
+<div id="app">
 
-  <!-- ============ SIDEBAR ============ -->
-  <aside class="sidebar">
-    <div class="logo">
-      <span class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M13.5 2 5 13h6l-1.5 9L18 11h-6l1.5-9Z" fill="#FFD60A" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"/>
-        </svg>
-      </span>
-      <span class="logo-text">Sonic<span class="accent">Growth</span></span>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-logo">
+      <svg class="tb-logo-tri" width="20" height="18" viewBox="0 0 100 90">
+        <polygon points="50,5 95,85 5,85" fill="#0000ee"/>
+      </svg>
+      <div class="tb-brand">The Blues Agency</div>
     </div>
+    <div class="tb-divider"></div>
+    <div class="tb-title">WRK+ Performance · April 2026</div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-live"><div class="tb-dot"></div>Live</div>
+    <div class="tb-date">Apr 1 – 30, 2026</div>
+  </div>
+</div>
 
-    <div class="nav-section-label">Workspace</div>
-    <div class="nav-item active" data-view="overview">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
-      Overview
-    </div>
-    <div class="nav-item" data-view="activity">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      Activity
-      <span class="nav-badge red">5</span>
-    </div>
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn on" onclick="switchTab('mqr',this)">MQR<span class="count">981</span></button>
+  <button class="tab-btn" onclick="switchTab('tgc',this)">TGC<span class="count">101</span></button>
+</div>
 
-    <div class="nav-section-label">Documents</div>
-    <div class="nav-item" data-view="brand-brief">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
-      Brand Brief
-    </div>
-    <div class="nav-item" data-view="marketing-plan">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-      Marketing Plan
-    </div>
-    <div class="nav-item" data-view="strategy">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-      Strategy
-    </div>
-    <div class="nav-item" data-view="content-plan">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-      Content Plan
-      <span class="nav-badge gold">8</span>
-    </div>
-    <div class="nav-item" data-view="media-plan">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="9" width="3" height="9"/><rect x="17" y="5" width="3" height="13"/></svg>
-      Media Plan
-    </div>
-    <div class="nav-item" data-view="monthly-report">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 17v-2M12 17v-4M15 17v-6"/></svg>
-      Monthly Report
-    </div>
+<!-- ===================================
+     MQR TAB
+==================================== -->
+<div class="tab-panel on" id="panel-mqr">
+<div class="page">
 
-    <div class="nav-section-label">Tools</div>
-    <div class="nav-item" data-view="video-review">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg>
-      Video Review
-      <span class="nav-badge red">NEW</span>
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div>
+      <div class="mh-eyebrow">MQR · April 1–30, 2026 · 30 Days</div>
+      <div class="mh-title">MQR April<br><em>Performance</em></div>
+      <div class="mh-sub">Full month · Google + Meta + DMs · Lead intelligence & sales analysis</div>
     </div>
+  </div>
 
-    <div class="nav-section-label">Account</div>
-    <div class="nav-item" data-view="settings">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m11-11h-6M7 12H1m17.36-5.36-4.24 4.24M9.88 14.12l-4.24 4.24m12.72 0-4.24-4.24M9.88 9.88 5.64 5.64"/></svg>
-      Settings
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-cell hi">
+      <div class="kpi-label">Total MQR Leads</div>
+      <div class="kpi-val" id="kpi-total-val">997</div>
+      <div class="kpi-sub" id="kpi-total-sub">April 2026 · All channels</div>
     </div>
-    <div class="nav-item" onclick="logout()">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
-      Log Out
+    <div class="kpi-cell">
+      <div class="kpi-label">Meta Leads</div>
+      <div class="kpi-val" id="kpi-meta-val">680</div>
+      <div class="kpi-sub" id="kpi-meta-sub">68.2% of total</div>
     </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Website Leads</div>
+      <div class="kpi-val good" id="kpi-website-val">208</div>
+      <div class="kpi-sub" id="kpi-website-sub">20.9% of total</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Deal Closed</div>
+      <div class="kpi-val warn" id="kpi-closed-val">34</div>
+      <div class="kpi-sub" id="kpi-closed-sub">8.7% close rate · of relevant</div>
+    </div>
+  </div>
 
-    <div class="sidebar-footer">
-      <div class="avatar">CL</div>
-      <div class="who">
-        <div class="name">Client Name</div>
-        <div class="role">Brand Owner</div>
+  <!-- Google Budget Recommendation -->
+  <div class="insight good" style="margin-bottom:16px;">
+    <b>📈 Recommendation:</b> We are scaling Google Ads next month — <b>increasing budget on the Branding &amp; Compet Search campaign</b> (top performer) and running PMax for a full month evaluation cycle to measure its real lead generation impact.
+  </div>
+
+  <!-- ─── SECTION 1: LEAD VOLUME & SPEND ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">01</div>
+    <div class="sec-title">Daily Lead Volume & Spend</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">30 days · 3 channels</div>
+  </div>
+
+  <div style="margin-bottom:12px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Daily Leads by Channel</div>
+        <div class="card-tag">Meta · Google · DMs</div>
+      </div>
+      <div class="chart-wrap tall"><canvas id="mqr-daily"></canvas></div>
+      <div class="insight">
+        <b>Peak: Apr 14 → 57 leads.</b> Meta drives volume but Google produces higher-quality leads. DMs are consistent and completely organic.
+      </div>
+      <div class="insight good" style="margin-top:8px;">
+        <b>📈 Budget Action:</b> We will increase budget allocation on the recurring high-performance days (Thu, Fri, Sat, Sun) where lead volume consistently peaks — maximising return on spend during the audience's most active windows.
       </div>
     </div>
-  </aside>
+  </div>
 
-  <!-- ============ MAIN ============ -->
-  <div class="main">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Daily Blended CPL Trend</div>
+      <div class="card-tag">Cost per lead · day by day</div>
+    </div>
+    <div class="chart-wrap"><canvas id="mqr-daily-cpl"></canvas></div>
+  </div>
 
-    <!-- ===== TOPBAR ===== -->
-    <header class="topbar">
+  <!-- ─── SECTION 2: LEAD QUALITY ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">02</div>
+    <div class="sec-title">Lead Quality Breakdown</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">What happened to each lead</div>
+  </div>
+
+  <div class="quality-grid" style="margin-bottom:12px;">
+    <div class="q-cell relevant">
+      <div class="q-label">Relevant Leads</div>
+      <div class="q-num" id="q-relevant-num">392</div>
+      <div class="q-pct" id="q-relevant-pct">39.3% of total</div>
+    </div>
+    <div class="q-cell potential">
+      <div class="q-label">General / No Action</div>
+      <div class="q-num" id="q-potential-num">46</div>
+      <div class="q-pct" id="q-potential-pct">4.6% · pending</div>
+    </div>
+    <div class="q-cell unreachable">
+      <div class="q-label">No Answer / Unreachable</div>
+      <div class="q-num" id="q-unreachable-num">149</div>
+      <div class="q-pct" id="q-unreachable-pct">14.9% · active outreach (86+48+15 attempts)</div>
+    </div>
+    <div class="q-cell irrelevant">
+      <div class="q-label">Irrelevant / Lost</div>
+      <div class="q-num" id="q-irrelevant-num">305</div>
+      <div class="q-pct" id="q-irrelevant-pct">30.6% disqualified (265 irrelevant + 40 not interested)</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Lead → Deal Funnel</div>
+        <div class="card-tag">Drop-off at each stage</div>
+      </div>
+      <div class="funnel" id="mqr-funnel"></div>
+      <div class="insight bad" id="funnel-insight">
+        <b>392 relevant → only 34 closed (8.7%).</b> Critical bottleneck: "In Discussions" (218) → "Tour/Quote" (24). Only 11% convert to next stage. Sales motion problem, not a lead problem.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Contact Status Distribution</div>
+        <div class="card-tag">Outreach discipline</div>
+      </div>
+      <div class="chart-wrap"><canvas id="mqr-contact"></canvas></div>
+      <div class="insight good">
+        <b>94.2% contacted, 73% replied.</b> 148 leads in active outreach limbo — tightening the SLA here could surface 20–30 more relevant prospects.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SECTION 3: LEAD QUALITY BY PLATFORM ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">03</div>
+    <div class="sec-title">Lead Quality by Platform</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Where each quality tier came from · April 2026</div>
+  </div>
+
+  <div class="g3" style="margin-bottom:12px;">
+    <!-- CLOSED -->
+    <div class="card" style="text-align:center;">
+      <div class="card-head" style="margin-bottom:6px;">
+        <div class="card-title">✅ Deal Closed</div>
+        <div class="card-tag">33 total closed deals</div>
+      </div>
+      <div class="chart-wrap" style="height:180px;"><canvas id="plat-closed-chart"></canvas></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:11px;">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#4f86f7;display:inline-block;"></span>Meta <b>10</b></span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#34c38f;display:inline-block;"></span>Website <b>16</b></span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#f7b731;display:inline-block;"></span>DMs <b>7</b></span>
+      </div>
+      <div class="insight good" style="margin-top:10px;text-align:left;">
+        <b>Website leads convert best</b> — 48.5% of all closed deals came from Website/Google despite being only 20% of total volume. Highest quality source.
+      </div>
+    </div>
+
+    <!-- RELEVANT -->
+    <div class="card" style="text-align:center;">
+      <div class="card-head" style="margin-bottom:6px;">
+        <div class="card-title">🔵 Relevant Leads</div>
+        <div class="card-tag">387 qualified leads in pipeline</div>
+      </div>
+      <div class="chart-wrap" style="height:180px;"><canvas id="plat-relevant-chart"></canvas></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:11px;">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#4f86f7;display:inline-block;"></span>Meta <b>181</b></span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#34c38f;display:inline-block;"></span>Website <b>103</b></span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#f7b731;display:inline-block;"></span>DMs <b>103</b></span>
+      </div>
+      <div class="insight good" style="margin-top:10px;text-align:left;">
+        <b>Meta drives volume</b> — 46.8% of all relevant leads. Website and DMs each contribute ~26.6%, showing DMs is a meaningful but under-tracked source.
+      </div>
+    </div>
+
+    <!-- GENERAL INQUIRY / POTENTIAL -->
+    <div class="card" style="text-align:center;">
+      <div class="card-head" style="margin-bottom:6px;">
+        <div class="card-title">🟡 General Inquiry</div>
+        <div class="card-tag">46 potential leads — not yet qualified</div>
+      </div>
+      <div class="chart-wrap" style="height:180px;"><canvas id="plat-general-chart"></canvas></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:11px;">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#4f86f7;display:inline-block;"></span>Meta <b>24</b></span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#34c38f;display:inline-block;"></span>Website <b>8</b></span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:50%;background:#f7b731;display:inline-block;"></span>DMs <b>14</b></span>
+      </div>
+      <div class="insight neutral" style="margin-top:10px;text-align:left;">
+        <b>52% from Meta</b> — these are warm leads that haven't been fully qualified yet. Prioritising follow-up on these 46 could surface 10–15 more relevant prospects.
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-head" style="margin-bottom:10px;">
+      <div class="card-title">Platform Volume Overview — April 2026</div>
+      <div class="card-tag">All 984 CRM leads by source</div>
+    </div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="plat-overview-chart"></canvas></div>
+    <div class="insight good" style="margin-top:10px;">
+      <b>Meta Form dominates volume (545 leads, 55%)</b> but Website/Google leads convert to closed at nearly 3× the rate — 8% close rate vs 1.8% for Meta. DMs (239 leads, 24%) remain under-tracked with 7 closed deals, suggesting a dedicated DM nurturing flow could unlock more revenue.
+    </div>
+  </div>
+
+  <!-- ─── SECTION 4: BEST CREATIVE ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">04</div>
+    <div class="sec-title">Best Creative Performance</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Top performing ad creatives · This month</div>
+  </div>
+
+  <div class="creative-grid" style="margin-bottom:12px;" id="creative-grid-container">
+    <div class="creative-card winner" id="creative-card-0">
+      <div class="api-pending" id="creative-thumb-0">
+        <div class="api-pending-icon">📡</div>
+        <div class="api-pending-text">Loading from Ads Manager</div>
+      </div>
+      <div class="creative-body">
+        <div class="creative-rank" id="creative-rank-0">🏆 #01 · Best Performer</div>
+        <div class="creative-name" id="creative-name-0">Loading...</div>
+        <div class="creative-kpis" id="creative-kpis-0">
+          <div class="cr-kpi-row"><span class="cr-kpi-label">CTR</span><span class="cr-kpi-val good" id="c0-ctr">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">CPL</span><span class="cr-kpi-val good" id="c0-cpl">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">Leads</span><span class="cr-kpi-val" id="c0-leads">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">Ad Set</span><span class="cr-kpi-val" id="c0-adset">—</span></div>
+        </div>
+        <div class="creative-why" id="creative-why-0" style="display:none">
+          <b>Why it wins:</b> <span id="creative-why-text-0"></span>
+        </div>
+      </div>
+    </div>
+    <div class="creative-card" id="creative-card-1">
+      <div class="api-pending" id="creative-thumb-1">
+        <div class="api-pending-icon">📡</div>
+        <div class="api-pending-text">Loading from Ads Manager</div>
+      </div>
+      <div class="creative-body">
+        <div class="creative-rank" id="creative-rank-1">#02</div>
+        <div class="creative-name" id="creative-name-1">Loading...</div>
+        <div class="creative-kpis" id="creative-kpis-1">
+          <div class="cr-kpi-row"><span class="cr-kpi-label">CTR</span><span class="cr-kpi-val" id="c1-ctr">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">CPL</span><span class="cr-kpi-val" id="c1-cpl">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">Leads</span><span class="cr-kpi-val" id="c1-leads">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">Ad Set</span><span class="cr-kpi-val" id="c1-adset">—</span></div>
+        </div>
+        <div class="creative-why" id="creative-why-1" style="display:none">
+          <b>Why it wins:</b> <span id="creative-why-text-1"></span>
+        </div>
+      </div>
+    </div>
+    <div class="creative-card" id="creative-card-2">
+      <div class="api-pending" id="creative-thumb-2">
+        <div class="api-pending-icon">📡</div>
+        <div class="api-pending-text">Loading from Ads Manager</div>
+      </div>
+      <div class="creative-body">
+        <div class="creative-rank" id="creative-rank-2">#03</div>
+        <div class="creative-name" id="creative-name-2">Loading...</div>
+        <div class="creative-kpis" id="creative-kpis-2">
+          <div class="cr-kpi-row"><span class="cr-kpi-label">CTR</span><span class="cr-kpi-val" id="c2-ctr">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">CPL</span><span class="cr-kpi-val" id="c2-cpl">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">Leads</span><span class="cr-kpi-val" id="c2-leads">—</span></div>
+          <div class="cr-kpi-row"><span class="cr-kpi-label">Ad Set</span><span class="cr-kpi-val" id="c2-adset">—</span></div>
+        </div>
+        <div class="creative-why" id="creative-why-2" style="display:none">
+          <b>Why it wins:</b> <span id="creative-why-text-2"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    Top 3 creatives ranked by leads, CPL, and CTR — pulled live from Ads Manager. <b>📈 Recommendation:</b> Increase budget on the #1 winner and pause underperformers. We also need to produce new creatives that mirror the winner's format, hook, and visual style — this lets us scale without risking campaign performance.
+    <br><br>
+  </div>
+
+  <!-- ─── SECTION 5: ARABIC vs ENGLISH — WHICH LANGUAGE CLOSES? ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">05</div>
+    <div class="sec-title">Arabic vs English — Which Language Closes?</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Ad Set Language · Lead Volume · Close Rate · Revenue</div>
+  </div>
+
+  <!-- HERO VERDICT -->
+  <div id="lang-verdict-bar" style="
+    background:var(--ink); color:#fff;
+    padding:20px 28px;
+    display:grid; grid-template-columns:1fr auto 1fr;
+    align-items:center; gap:24px;
+    margin-bottom:16px;
+  ">
+    <div style="text-align:center;">
+      <div id="lang-winner-label" style="font-family:var(--ff-mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px;">Loading...</div>
+      <div id="lang-winner-name" style="font-family:var(--ff-head);font-size:28px;font-weight:800;letter-spacing:-1px;color:#fff;">—</div>
+      <div id="lang-winner-sub" style="font-family:var(--ff-mono);font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;">Connecting to Ads Manager + Leads Sheet</div>
+    </div>
+    <div style="font-family:var(--ff-head);font-size:48px;font-weight:900;color:rgba(255,255,255,.08);letter-spacing:-3px;">VS</div>
+    <div style="text-align:center;">
+      <div style="font-family:var(--ff-mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px;">Competitor</div>
+      <div id="lang-loser-name" style="font-family:var(--ff-head);font-size:28px;font-weight:800;letter-spacing:-1px;color:rgba(255,255,255,.35);">—</div>
+      <div id="lang-loser-sub" style="font-family:var(--ff-mono);font-size:10px;color:rgba(255,255,255,.3);margin-top:4px;">—</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON GRID -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border2);overflow:hidden;margin-bottom:12px;">
+
+    <!-- ARABIC HALF -->
+    <div id="lang-arabic-half" style="background:#fff;padding:24px 28px;border-right:1px solid var(--border2);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--red);"></div>
+        <div style="font-family:var(--ff-head);font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink);">🇸🇦 Arabic Ad Sets</div>
+        <div id="lang-ar-tag" style="margin-left:auto;font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border:1px solid var(--border);padding:2px 8px;">Pending</div>
+      </div>
+
+      <!-- KPI Row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+        <div style="padding:14px 12px;border-right:1px solid var(--border);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Leads</div>
+          <div id="ar-leads" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--ink);">—</div>
+        </div>
+        <div style="padding:14px 12px;border-right:1px solid var(--border);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">CPL</div>
+          <div id="ar-cpl" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--ink);">—</div>
+        </div>
+        <div style="padding:14px 12px;border-right:1px solid var(--border);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Closed</div>
+          <div id="ar-closed" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--green);">—</div>
+        </div>
+        <div style="padding:14px 12px;">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Close Rate</div>
+          <div id="ar-rate" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--ink);">—</div>
+        </div>
+      </div>
+
+      <!-- Bar: Relevant Rate -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+          <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Relevant Rate</span>
+          <span id="ar-relevant-pct" style="font-family:var(--ff-mono);font-size:11px;font-weight:700;color:var(--ink);">—</span>
+        </div>
+        <div style="height:8px;background:var(--bg3);overflow:hidden;">
+          <div id="ar-relevant-bar" style="height:100%;background:var(--amber);width:0%;transition:width 1.2s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Bar: Close Rate -->
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+          <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Close Rate</span>
+          <span id="ar-close-pct" style="font-family:var(--ff-mono);font-size:11px;font-weight:700;color:var(--green);">—</span>
+        </div>
+        <div style="height:8px;background:var(--bg3);overflow:hidden;">
+          <div id="ar-close-bar" style="height:100%;background:var(--green);width:0%;transition:width 1.2s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Top performing Arabic ad sets -->
+      <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Top Arabic Ad Sets</div>
+      <div id="ar-top-adsets" class="bar-list">
+        <div class="bar-row" style="opacity:.3;">
+          <div class="bar-lbl">Waiting for API</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+          <div class="bar-val">—</div>
+        </div>
+      </div>
+
+      <div id="ar-insight" class="insight" style="margin-top:14px;">
+        Connecting to Ads Manager to pull Arabic ad set performance data...
+      </div>
+    </div>
+
+    <!-- ENGLISH HALF -->
+    <div id="lang-english-half" style="background:var(--bg2);padding:24px 28px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--blue);"></div>
+        <div style="font-family:var(--ff-head);font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink);">🇬🇧 English Ad Sets</div>
+        <div id="lang-en-tag" style="margin-left:auto;font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;border:1px solid var(--border);padding:2px 8px;">Pending</div>
+      </div>
+
+      <!-- KPI Row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);overflow:hidden;margin-bottom:16px;background:#fff;">
+        <div style="padding:14px 12px;border-right:1px solid var(--border);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Leads</div>
+          <div id="en-leads" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--ink);">—</div>
+        </div>
+        <div style="padding:14px 12px;border-right:1px solid var(--border);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">CPL</div>
+          <div id="en-cpl" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--ink);">—</div>
+        </div>
+        <div style="padding:14px 12px;border-right:1px solid var(--border);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Closed</div>
+          <div id="en-closed" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--green);">—</div>
+        </div>
+        <div style="padding:14px 12px;">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Close Rate</div>
+          <div id="en-rate" style="font-family:var(--ff-mono);font-size:22px;font-weight:700;letter-spacing:-1px;color:var(--ink);">—</div>
+        </div>
+      </div>
+
+      <!-- Bar: Relevant Rate -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+          <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Relevant Rate</span>
+          <span id="en-relevant-pct" style="font-family:var(--ff-mono);font-size:11px;font-weight:700;color:var(--ink);">—</span>
+        </div>
+        <div style="height:8px;background:var(--bg3);overflow:hidden;">
+          <div id="en-relevant-bar" style="height:100%;background:var(--amber);width:0%;transition:width 1.2s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Bar: Close Rate -->
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+          <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);">Close Rate</span>
+          <span id="en-close-pct" style="font-family:var(--ff-mono);font-size:11px;font-weight:700;color:var(--green);">—</span>
+        </div>
+        <div style="height:8px;background:var(--bg3);overflow:hidden;">
+          <div id="en-close-bar" style="height:100%;background:var(--blue);width:0%;transition:width 1.2s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Top performing English ad sets -->
+      <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Top English Ad Sets</div>
+      <div id="en-top-adsets" class="bar-list">
+        <div class="bar-row" style="opacity:.3;">
+          <div class="bar-lbl">Waiting for API</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+          <div class="bar-val">—</div>
+        </div>
+      </div>
+
+      <div id="en-insight" class="insight" style="margin-top:14px;">
+        Connecting to Ads Manager to pull English ad set performance data...
+      </div>
+    </div>
+  </div>
+
+  <!-- COST PER CLOSED DEAL CHART -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-head">
+      <div class="card-title">Cost per Closed Deal — Arabic vs English</div>
+      <div class="card-tag">The real efficiency metric · Ads Manager + Leads Sheet</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;">
       <div>
-        <div class="crumb" id="crumb">Workspace</div>
-        <h2 id="pageTitle">Overview</h2>
+        <div class="chart-wrap short"><canvas id="lang-comparison-chart"></canvas></div>
       </div>
-      <div class="topbar-right">
-        <div class="search">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <span>Search documents, posts, reports…</span>
-          <kbd>⌘K</kbd>
-        </div>
-        <div class="bell-wrap">
-          <button class="btn-icon" onclick="toggleNotif()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-            <span class="bell-dot"></span>
-          </button>
-          <div class="notif-panel" id="notifPanel">
-            <h4>Notifications <span>3 new</span></h4>
-            <div class="notif-item">
-              <div class="ico green">✓</div>
-              <div class="body">
-                <div>Designer uploaded <b>3 new banners</b> for April campaign</div>
-                <div class="meta">2 hours ago · Ahmed (Designer)</div>
-              </div>
-              <div class="unread"></div>
-            </div>
-            <div class="notif-item">
-              <div class="ico gold">🎬</div>
-              <div class="body">
-                <div><b>Reel #3 — Final Cut</b> is ready for your review</div>
-                <div class="meta">Yesterday · Karim (Editor)</div>
-              </div>
-              <div class="unread"></div>
-            </div>
-            <div class="notif-item">
-              <div class="ico blue">📑</div>
-              <div class="body">
-                <div>April Monthly Report has been generated</div>
-                <div class="meta">2 days ago · AI Engine</div>
-              </div>
-              <div class="unread"></div>
-            </div>
-            <div class="notif-item">
-              <div class="ico gold">📝</div>
-              <div class="body">
-                <div>8 new posts added to May Content Plan</div>
-                <div class="meta">3 days ago · Mohamed (AM)</div>
-              </div>
-            </div>
-            <div class="notif-item">
-              <div class="ico green">✓</div>
-              <div class="body">
-                <div>Media Plan budget approved by finance</div>
-                <div class="meta">4 days ago · System</div>
-              </div>
-            </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="padding:16px;border:1px solid var(--border);background:var(--bg2);">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Cost / Lead (CPL)</div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;">🇸🇦 Arabic</span>
+            <span id="ar-cpl-compare" style="font-family:var(--ff-mono);font-size:20px;font-weight:700;color:var(--red);">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;">
+            <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;">🇬🇧 English</span>
+            <span id="en-cpl-compare" style="font-family:var(--ff-mono);font-size:20px;font-weight:700;color:var(--blue);">—</span>
           </div>
         </div>
-        <div class="user-chip">
-          <div class="avatar">CL</div>
-          <span>Client Name</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- =================================================================
-         VIEW: OVERVIEW
-         ============================================================= -->
-    <section class="view active" id="view-overview">
-      <div class="view-head">
-        <div class="left">
-          <h1>Welcome back, <span class="accent">Client</span> 👋</h1>
-          <p class="lead">Here's what's happening with your account today — last synced just now.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            Refresh
-          </button>
-          <button class="btn btn-gold">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Export
-          </button>
-        </div>
-      </div>
-
-      <!-- KPI cards -->
-      <div class="kpi-grid stagger">
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Total Spend</div>
-          <div class="kpi-value" data-count="15200" data-prefix="$">$0</div>
-          <div class="kpi-delta">12.4% vs last 30d</div>
-          <svg class="kpi-spark" viewBox="0 0 80 28" preserveAspectRatio="none">
-            <path d="M0 22 L10 18 L20 20 L30 14 L40 16 L50 10 L60 8 L70 6 L80 4" stroke="#1E90FF" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Leads Generated</div>
-          <div class="kpi-value gold" data-count="847">0</div>
-          <div class="kpi-delta">23.1% vs last 30d</div>
-          <svg class="kpi-spark" viewBox="0 0 80 28" preserveAspectRatio="none">
-            <path d="M0 24 L10 20 L20 22 L30 16 L40 18 L50 8 L60 12 L70 4 L80 2" stroke="#FFD60A" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Cost / Lead</div>
-          <div class="kpi-value" data-count="17.9" data-prefix="$" data-decimals="1">$0</div>
-          <div class="kpi-delta down">8.2% vs last 30d</div>
-          <svg class="kpi-spark" viewBox="0 0 80 28" preserveAspectRatio="none">
-            <path d="M0 6 L10 10 L20 8 L30 14 L40 12 L50 18 L60 20 L70 22 L80 24" stroke="#22C55E" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Return on Ad Spend</div>
-          <div class="kpi-value cyan" data-count="3.4" data-suffix="×" data-decimals="1">0×</div>
-          <div class="kpi-delta">0.5× vs last 30d</div>
-          <svg class="kpi-spark" viewBox="0 0 80 28" preserveAspectRatio="none">
-            <path d="M0 22 L10 18 L20 14 L30 16 L40 10 L50 12 L60 6 L70 8 L80 2" stroke="#00C6FF" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="row-2">
-        <!-- Performance Chart -->
-        <div class="card chart-card">
-          <div class="card-head">
-            <div>
-              <h3>Performance Overview</h3>
-              <div class="meta" style="margin-top:4px;">Spend vs Leads · Apr 1 – 30, 2026</div>
-            </div>
-            <div class="toggle-group">
-              <button>7D</button>
-              <button class="active">30D</button>
-              <button>90D</button>
-            </div>
+        <div style="padding:16px;border:2px solid var(--ink);background:var(--ink);color:#fff;">
+          <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px;">Cost / Closed Deal</div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;color:#fff;">🇸🇦 Arabic</span>
+            <span id="ar-cost-deal" style="font-family:var(--ff-mono);font-size:20px;font-weight:700;color:var(--red);">—</span>
           </div>
-          <div class="chart-canvas">
-            <svg viewBox="0 0 700 240" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="areaBlue" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#1E90FF" stop-opacity="0.45"/>
-                  <stop offset="100%" stop-color="#1E90FF" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="lineGold" x1="0" x2="1" y1="0" y2="0">
-                  <stop offset="0%" stop-color="#FFB300"/>
-                  <stop offset="100%" stop-color="#FFD60A"/>
-                </linearGradient>
-              </defs>
-              <line x1="0" y1="60" x2="700" y2="60" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,5"/>
-              <line x1="0" y1="120" x2="700" y2="120" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,5"/>
-              <line x1="0" y1="180" x2="700" y2="180" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,5"/>
-              <path d="M0,180 C50,160 90,140 140,150 C190,160 220,90 270,100 C320,110 360,60 410,70 C460,80 500,40 550,50 C600,60 650,25 700,35 L700,240 L0,240 Z" fill="url(#areaBlue)"/>
-              <path class="chart-line" d="M0,180 C50,160 90,140 140,150 C190,160 220,90 270,100 C320,110 360,60 410,70 C460,80 500,40 550,50 C600,60 650,25 700,35" stroke="url(#lineGold)" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <circle cx="270" cy="100" r="5" fill="#FFD60A" stroke="#04102e" stroke-width="2"/>
-              <circle cx="410" cy="70" r="5" fill="#FFD60A" stroke="#04102e" stroke-width="2"/>
-              <circle cx="700" cy="35" r="6" fill="#FFD60A" stroke="#04102e" stroke-width="2">
-                <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite"/>
-              </circle>
-            </svg>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;">
+            <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;color:#fff;">🇬🇧 English</span>
+            <span id="en-cost-deal" style="font-family:var(--ff-mono);font-size:20px;font-weight:700;color:#64b5f6;">—</span>
           </div>
-          <div class="chart-legend">
-            <span><span class="dot" style="background:#FFD60A"></span> Leads</span>
-            <span><span class="dot" style="background:#1E90FF"></span> Spend</span>
-          </div>
-        </div>
-
-        <!-- Pending approvals -->
-        <div class="card">
-          <div class="card-head">
-            <h3>Pending Your Approval</h3>
-            <a class="link-small" href="#" onclick="switchView('content-plan'); return false;">View all →</a>
-          </div>
-          <div class="pending-list">
-            <div class="pending-item" onclick="switchView('content-plan')">
-              <div class="pending-ico gold">📝</div>
-              <div class="pending-body">
-                <div class="ttl">May Content Plan</div>
-                <div class="meta">8 posts ready · deadline May 28</div>
-              </div>
-              <button class="btn btn-gold" style="padding:7px 12px; font-size:11px;">Review</button>
-            </div>
-            <div class="pending-item" onclick="switchView('video-review')">
-              <div class="pending-ico blue">🎬</div>
-              <div class="pending-body">
-                <div class="ttl">Reel #3 — Final Cut</div>
-                <div class="meta">Karim (editor) · 0:45 duration</div>
-              </div>
-              <button class="btn btn-gold" style="padding:7px 12px; font-size:11px;">Review</button>
-            </div>
-            <div class="pending-item" onclick="switchView('monthly-report')">
-              <div class="pending-ico purple">📑</div>
-              <div class="pending-body">
-                <div class="ttl">April Monthly Report</div>
-                <div class="meta">Auto-generated · ready to view</div>
-              </div>
-              <button class="btn btn-ghost" style="padding:7px 12px; font-size:11px;">Open</button>
-            </div>
+          <div id="cost-deal-insight" style="font-family:var(--ff-body);font-size:11px;color:rgba(255,255,255,.5);margin-top:10px;font-style:italic;border-top:1px solid rgba(255,255,255,.1);padding-top:10px;">
+            Will update once Ads Manager + Sheet are connected.
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Activity feed -->
-      <div class="card">
-        <div class="card-head">
-          <h3>Recent Activity</h3>
-          <a class="link-small" href="#" onclick="switchView('activity'); return false;">See all →</a>
-        </div>
-        <div class="activity-list">
-          <div class="activity-item">
-            <div class="ico green">✓</div>
-            <div style="flex:1;">
-              <div>Designer uploaded <b>3 new banners</b> for the April campaign</div>
-              <div class="meta">Ahmed Hassan · Designer</div>
-            </div>
-            <div class="time">2h ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico blue">📊</div>
-            <div style="flex:1;">
-              <div>Media Plan was <b>updated</b> with new budget allocation across platforms</div>
-              <div class="meta">Mohamed Salah · Account Manager</div>
-            </div>
-            <div class="time">Yesterday</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico gold">🎬</div>
-            <div style="flex:1;">
-              <div>Reel #3 final edit is <b>ready for your review</b> — 3 timecodes flagged for feedback</div>
-              <div class="meta">Karim Adel · Video Editor</div>
-            </div>
-            <div class="time">Yesterday</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico blue">💬</div>
-            <div style="flex:1;">
-              <div>New comment from team on <b>Strategy document</b> — section 2.3</div>
-              <div class="meta">Mohamed Salah · Account Manager</div>
-            </div>
-            <div class="time">2d ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico green">✓</div>
-            <div style="flex:1;">
-              <div>April Monthly Report <b>auto-generated</b> with AI insights</div>
-              <div class="meta">SonicGrowth AI Engine</div>
-            </div>
-            <div class="time">2d ago</div>
-          </div>
-        </div>
+  <div id="lang-final-insight" class="insight warn">
+    <b>Arabic outperforms English</b> — lower CPL and significantly higher lead volume. However, for the next period we will be <b>focusing exclusively on English ad sets</b> to test and develop that audience further.
+  </div>
+
+  <!-- ─── SECTION 6: LOCATION & PRODUCT DEMAND ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">06</div>
+    <div class="sec-title">Demand by Location & Product</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Where leads come from · What they want</div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Top Locations by Lead Volume</div>
+        <div class="card-tag">Demand signal</div>
       </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: BRAND BRIEF
-         ============================================================= -->
-    <section class="view" id="view-brand-brief">
-      <div class="view-head">
-        <div class="left">
-          <h1>Brand <span class="accent">Brief</span></h1>
-          <p class="lead">The foundation document defining who your brand is, who it speaks to, and how it shows up.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">📥 Download PDF</button>
-          <button class="btn btn-primary">✓ Approve Document</button>
-        </div>
+      <div class="bar-list" id="mqr-loc"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Product Inquiry Mix</div>
+        <div class="card-tag">What leads ask for</div>
       </div>
+      <div class="bar-list" id="mqr-prod"></div>
+    </div>
+  </div>
 
-      <div class="doc-grid">
-        <aside class="doc-toc">
-          <div class="doc-toc-title">On this page</div>
-          <a class="toc-link active" href="#story">Brand Story</a>
-          <a class="toc-link" href="#audience">Target Audience</a>
-          <a class="toc-link" href="#tone">Tone of Voice</a>
-          <a class="toc-link" href="#visual">Visual Identity</a>
-          <a class="toc-link" href="#mission">Mission & Values</a>
-        </aside>
-
-        <div class="doc-content">
-          <div class="doc-section" id="story">
-            <h2>Brand Story</h2>
-            <p>Born from a passion for clean, results-driven skincare, the brand exists to deliver <strong>dermatologist-grade formulations</strong> without the inflated pricing of legacy beauty houses. Every product is built around proven actives — niacinamide, retinol, hyaluronic acid — and tested against real skin concerns, not marketing trends.</p>
-            <p>Founded in 2024 by a small team of formulators and clinicians, the brand has grown from a single hero serum into a curated line of 12 SKUs trusted by over 50,000 customers across the region.</p>
-            <div class="doc-callout">
-              <strong>Brand Promise:</strong> Honest formulas. Visible results. No nonsense.
-            </div>
-          </div>
-
-          <div class="doc-section" id="audience">
-            <h2>Target Audience</h2>
-            <p>Three core personas drive 80% of revenue:</p>
-            <div class="pill-grid">
-              <div class="pill-card">
-                <div class="num">01 · PRIMARY</div>
-                <h4>The Routine Builder</h4>
-                <p>Women 25–34, urban, beauty-literate. Researches ingredients before buying. Active on TikTok and Instagram.</p>
-              </div>
-              <div class="pill-card">
-                <div class="num">02 · GROWTH</div>
-                <h4>The First-Time Investor</h4>
-                <p>Women 20–25 graduating from drugstore products. Price-sensitive but quality-curious.</p>
-              </div>
-              <div class="pill-card">
-                <div class="num">03 · LOYALTY</div>
-                <h4>The Sensitive Skin Veteran</h4>
-                <p>Women 30–45 with specific concerns (rosacea, melasma). High AOV, repeat purchasers.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="doc-section" id="tone">
-            <h2>Tone of Voice</h2>
-            <p>We speak like a <strong>knowledgeable best friend</strong> — confident, clear, never condescending. We explain the science but skip the jargon. We use humor sparingly and never at the customer's expense.</p>
-            <ul>
-              <li>Confident, not arrogant</li>
-              <li>Honest, even when it's uncomfortable</li>
-              <li>Specific over vague — actual percentages, real timelines</li>
-              <li>Inclusive — every skin type, every shade, every story</li>
-            </ul>
-          </div>
-
-          <div class="doc-section" id="visual">
-            <h2>Visual Identity</h2>
-            <p>Clean editorial layouts. Generous white space. Photography that's clinical-meets-warm — real skin, real textures, no over-retouching.</p>
-            <div class="color-swatches">
-              <div class="swatch"><div class="chip" style="background:#0F2A44"></div><div class="info">#0F2A44</div></div>
-              <div class="swatch"><div class="chip" style="background:#F4EEE4"></div><div class="info">#F4EEE4</div></div>
-              <div class="swatch"><div class="chip" style="background:#C97B5C"></div><div class="info">#C97B5C</div></div>
-              <div class="swatch"><div class="chip" style="background:#7A9E7E"></div><div class="info">#7A9E7E</div></div>
-              <div class="swatch"><div class="chip" style="background:#FFFFFF"></div><div class="info">#FFFFFF</div></div>
-            </div>
-          </div>
-
-          <div class="doc-section" id="mission">
-            <h2>Mission & Values</h2>
-            <p>To put clinical-grade skincare in every bathroom — accessible, honest, and built around what your skin actually needs.</p>
-            <div class="pill-grid">
-              <div class="pill-card">
-                <div class="num">VALUE 01</div>
-                <h4>Transparency</h4>
-                <p>Full ingredient lists. No buzzwords. No hidden costs.</p>
-              </div>
-              <div class="pill-card">
-                <div class="num">VALUE 02</div>
-                <h4>Results</h4>
-                <p>If it doesn't perform after 8 weeks, it doesn't ship.</p>
-              </div>
-              <div class="pill-card">
-                <div class="num">VALUE 03</div>
-                <h4>Inclusivity</h4>
-                <p>Built for every skin tone, type, and budget tier.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="g2">
+    <div class="card dark">
+      <div class="card-head">
+        <div class="card-title">Closed Deals by Location</div>
+        <div class="card-tag">Where revenue lives</div>
       </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: MARKETING PLAN
-         ============================================================= -->
-    <section class="view" id="view-marketing-plan">
-      <div class="view-head">
-        <div class="left">
-          <h1>Marketing <span class="accent">Plan</span></h1>
-          <p class="lead">The 90-day roadmap covering goals, channels, budget, and measurable outcomes.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">📥 Download PDF</button>
-          <button class="btn btn-primary">✓ Approve Plan</button>
-        </div>
+      <div class="bar-list" id="mqr-closed-loc"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Closed Deals by Product</div>
+        <div class="card-tag">The surprise winners</div>
       </div>
-
-      <div class="row-2">
-        <div class="card">
-          <div class="card-head"><h3>Quarterly Goals</h3></div>
-          <div style="display:flex; flex-direction:column; gap:12px;">
-            <div class="pending-item">
-              <div class="pending-ico gold">🎯</div>
-              <div class="pending-body">
-                <div class="ttl">Generate 2,500 qualified leads</div>
-                <div class="meta">at CPL under $20 across all platforms</div>
-              </div>
-              <span class="tag tag-gold">Primary</span>
-            </div>
-            <div class="pending-item">
-              <div class="pending-ico blue">📈</div>
-              <div class="pending-body">
-                <div class="ttl">Grow Instagram by 15K followers</div>
-                <div class="meta">organic + paid promotion</div>
-              </div>
-              <span class="tag tag-blue">Growth</span>
-            </div>
-            <div class="pending-item">
-              <div class="pending-ico purple">🏆</div>
-              <div class="pending-body">
-                <div class="ttl">Achieve 3.5× ROAS sustained</div>
-                <div class="meta">across paid social channels</div>
-              </div>
-              <span class="tag tag-green">Performance</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-head"><h3>Budget Allocation</h3></div>
-          <div style="text-align:center; padding: 10px 0;">
-            <svg viewBox="0 0 200 200" width="180" height="180" style="margin: 0 auto;">
-              <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="30"/>
-              <circle cx="100" cy="100" r="70" fill="none" stroke="#1E90FF" stroke-width="30" stroke-dasharray="220 440" transform="rotate(-90 100 100)"/>
-              <circle cx="100" cy="100" r="70" fill="none" stroke="#FFD60A" stroke-width="30" stroke-dasharray="120 440" stroke-dashoffset="-220" transform="rotate(-90 100 100)"/>
-              <circle cx="100" cy="100" r="70" fill="none" stroke="#00C6FF" stroke-width="30" stroke-dasharray="60 440" stroke-dashoffset="-340" transform="rotate(-90 100 100)"/>
-              <text x="100" y="98" text-anchor="middle" font-family="Sora" font-size="22" font-weight="800" fill="#fff">$45K</text>
-              <text x="100" y="115" text-anchor="middle" font-family="Sora" font-size="10" font-weight="600" fill="#9bb4e6" letter-spacing="2">QUARTERLY</text>
-            </svg>
-          </div>
-          <div style="display:flex; justify-content:space-around; font-size:12px; flex-wrap:wrap; gap:8px;">
-            <div><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#1E90FF; margin-right:6px;"></span>Meta 50%</div>
-            <div><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#FFD60A; margin-right:6px;"></span>TikTok 27%</div>
-            <div><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00C6FF; margin-right:6px;"></span>Google 13%</div>
-          </div>
-        </div>
+      <div class="bar-list" id="mqr-closed-prod"></div>
+      <div class="insight warn">
+        <b>Counter-intuitive:</b> Offices = 44% of inquiries but only 12% of closes. Meeting Rooms = 11% of inquiries but <b>42% of closed deals</b> — the highest-converting product we have.
       </div>
+    </div>
+  </div>
 
-      <div class="card">
-        <div class="card-head"><h3>Phase Timeline</h3></div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
-          <div class="pill-card">
-            <div class="num">PHASE 01 · MONTH 1</div>
-            <h4>Awareness Build</h4>
-            <p>Brand video campaigns, influencer seeding, social proof content. KPI: 500K impressions, 8K profile visits.</p>
-          </div>
-          <div class="pill-card">
-            <div class="num">PHASE 02 · MONTH 2</div>
-            <h4>Consideration</h4>
-            <p>Educational content, ingredient deep-dives, comparison content. KPI: 1,200 leads, 12% engagement rate.</p>
-          </div>
-          <div class="pill-card">
-            <div class="num">PHASE 03 · MONTH 3</div>
-            <h4>Conversion</h4>
-            <p>Retargeting, promo campaigns, abandoned cart recovery. KPI: 800 sales, ROAS 3.5×.</p>
-          </div>
-        </div>
+  <!-- ─── SECTION 8: GOOGLE ADS — APRIL 2026 ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">08</div>
+    <div class="sec-title">Google Ads — April 2026</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Search · Performance Max · 1–30 April 2026</div>
+  </div>
+
+  <!-- Google Ads KPI strip -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;">
+    <div class="kpi-cell hi">
+      <div class="kpi-label">Total Account Spend</div>
+      <div class="kpi-val">64,716 EGP</div>
+      <div class="kpi-sub">All campaigns · April</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Google Leads (Sheet)</div>
+      <div class="kpi-val good" id="gads-leads-sheet">208</div>
+      <div class="kpi-sub">Website source · April 2026</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Real CPL (Full Spend)</div>
+      <div class="kpi-val warn" id="gads-cpl-real">311 EGP</div>
+      <div class="kpi-sub" id="gads-cpl-sub">64,716 EGP ÷ 208 sheet leads</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Impressions</div>
+      <div class="kpi-val">881K</div>
+      <div class="kpi-sub">73.41 EGP avg CPM</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <!-- Search campaigns breakdown -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Search Campaigns — Spend Breakdown</div>
+        <div class="card-tag">Spend from Google Ads · Lead counts shown are platform-tracked conversions</div>
       </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: STRATEGY
-         ============================================================= -->
-    <section class="view" id="view-strategy">
-      <div class="view-head">
-        <div class="left">
-          <h1>Brand <span class="accent">Strategy</span></h1>
-          <p class="lead">Strategic pillars and positioning that drive every decision we make for your brand.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">📥 Download PDF</button>
-        </div>
-      </div>
-
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 22px;">
-        <div class="card">
-          <div class="tag tag-gold" style="margin-bottom:14px;">PILLAR 01</div>
-          <h3 style="font-size:20px; margin-bottom:10px;">Trust Through Science</h3>
-          <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Lead every claim with research, percentages, and clinical evidence. Show, don't tell.</p>
-        </div>
-        <div class="card">
-          <div class="tag tag-blue" style="margin-bottom:14px;">PILLAR 02</div>
-          <h3 style="font-size:20px; margin-bottom:10px;">Customer as Hero</h3>
-          <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">UGC and real testimonials over polished brand assets. Real skin journeys win.</p>
-        </div>
-        <div class="card">
-          <div class="tag tag-green" style="margin-bottom:14px;">PILLAR 03</div>
-          <h3 style="font-size:20px; margin-bottom:10px;">Disciplined Distribution</h3>
-          <p style="color:var(--text-secondary); font-size:14px; line-height:1.6;">Right content, right platform. Reels for awareness, carousels for consideration.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h3>Competitive Positioning</h3></div>
-        <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">In a category dominated by either ultra-premium dermatology brands or budget mass-market lines, we occupy the <strong style="color:#fff;">"clinical quality at accessible pricing"</strong> sweet spot — backed by transparent formulations and a customer-first guarantee.</p>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 20px;">
-          <div style="text-align:center; padding: 18px; background: var(--glass-2); border-radius: var(--r-md);">
-            <div style="font-family: Sora; font-size: 32px; font-weight: 800; color: var(--sonic-gold);">3.5×</div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Better value than premium</div>
-          </div>
-          <div style="text-align:center; padding: 18px; background: var(--glass-2); border-radius: var(--r-md);">
-            <div style="font-family: Sora; font-size: 32px; font-weight: 800; color: var(--sonic-cyan);">2×</div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Higher quality than mass</div>
-          </div>
-          <div style="text-align:center; padding: 18px; background: var(--glass-2); border-radius: var(--r-md);">
-            <div style="font-family: Sora; font-size: 32px; font-weight: 800; color: var(--sonic-green);">92%</div>
-            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Customer satisfaction</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: CONTENT PLAN (APPROVAL WORKFLOW)
-         ============================================================= -->
-    <section class="view" id="view-content-plan">
-      <div class="view-head">
-        <div class="left">
-          <h1>May <span class="accent">Content Plan</span></h1>
-          <p class="lead">8 posts ready for your review. Approve them individually or all at once to unblock the team.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">💬 Add Note</button>
-          <button class="btn btn-green">✓ Approve All</button>
-        </div>
-      </div>
-
-      <div class="approval-filter">
-        <button class="filter-btn active">All <span style="opacity:0.6">· 8</span></button>
-        <button class="filter-btn">Pending <span style="opacity:0.6">· 6</span></button>
-        <button class="filter-btn">Approved <span style="opacity:0.6">· 2</span></button>
-        <button class="filter-btn">Changes Requested <span style="opacity:0.6">· 0</span></button>
-      </div>
-
-      <div class="post-grid stagger">
-        <div class="post t1">
-          <div class="post-preview">
-            <span class="post-type">Reel</span>
-            <span class="ph-label">Hero Product Reveal</span>
-            <span class="post-status approved">✓ Approved</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Niacinamide 10% Launch</div>
-            <div class="date">MAY 03 · 7:00 PM</div>
-          </div>
-        </div>
-        <div class="post t2">
-          <div class="post-preview">
-            <span class="post-type">Carousel</span>
-            <span class="ph-label">Ingredient Education</span>
-            <span class="post-status approved">✓ Approved</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Why Hyaluronic Acid?</div>
-            <div class="date">MAY 05 · 6:30 PM</div>
-          </div>
-        </div>
-        <div class="post t3">
-          <div class="post-preview">
-            <span class="post-type">Story</span>
-            <span class="ph-label">Behind The Lab</span>
-            <span class="post-status pending">⏳ Pending</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Formulation Process</div>
-            <div class="date">MAY 08 · 8:00 PM</div>
-          </div>
-        </div>
-        <div class="post t4">
-          <div class="post-preview">
-            <span class="post-type">Post</span>
-            <span class="ph-label">Customer Story</span>
-            <span class="post-status pending">⏳ Pending</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Sarah's 8-Week Journey</div>
-            <div class="date">MAY 10 · 7:00 PM</div>
-          </div>
-        </div>
-        <div class="post t5">
-          <div class="post-preview">
-            <span class="post-type">Reel</span>
-            <span class="ph-label">Routine Tutorial</span>
-            <span class="post-status pending">⏳ Pending</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Morning Routine in 60s</div>
-            <div class="date">MAY 14 · 8:30 PM</div>
-          </div>
-        </div>
-        <div class="post t6">
-          <div class="post-preview">
-            <span class="post-type">Carousel</span>
-            <span class="ph-label">Before / After</span>
-            <span class="post-status pending">⏳ Pending</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Real Results · 6 Stories</div>
-            <div class="date">MAY 17 · 7:30 PM</div>
-          </div>
-        </div>
-        <div class="post t7">
-          <div class="post-preview">
-            <span class="post-type">Story</span>
-            <span class="ph-label">Q&amp;A Session</span>
-            <span class="post-status pending">⏳ Pending</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Ask the Formulator</div>
-            <div class="date">MAY 22 · 6:00 PM</div>
-          </div>
-        </div>
-        <div class="post t8">
-          <div class="post-preview">
-            <span class="post-type">Post</span>
-            <span class="ph-label">Brand Manifesto</span>
-            <span class="post-status pending">⏳ Pending</span>
-          </div>
-          <div class="post-info">
-            <div class="ttl">Our Honest Promise</div>
-            <div class="date">MAY 28 · 7:00 PM</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: MEDIA PLAN
-         ============================================================= -->
-    <section class="view" id="view-media-plan">
-      <div class="view-head">
-        <div class="left">
-          <h1>Media <span class="accent">Plan</span></h1>
-          <p class="lead">Live performance breakdown across every platform — April 1–30, 2026.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">📥 Download PDF</button>
-          <button class="btn btn-gold">📊 Export Data</button>
-        </div>
-      </div>
-
-      <div class="kpi-grid stagger">
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Campaigns</div>
-          <div class="kpi-value">12</div>
-          <div class="kpi-delta">3 launched this week</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Impressions</div>
-          <div class="kpi-value gold">1.2M</div>
-          <div class="kpi-delta">18.3% vs last 30d</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Clicks</div>
-          <div class="kpi-value">48.2K</div>
-          <div class="kpi-delta">11.7% vs last 30d</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-live"><span class="dot"></span>LIVE</div>
-          <div class="kpi-label">Avg CTR</div>
-          <div class="kpi-value cyan">4.02%</div>
-          <div class="kpi-delta">0.4pt vs last 30d</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <h3>Performance by Platform</h3>
-            <div class="meta" style="margin-top:4px;">Sorted by ROAS · Last 30 days</div>
-          </div>
-          <div class="toggle-group">
-            <button>Spend</button>
-            <button class="active">Performance</button>
-            <button>Audience</button>
-          </div>
-        </div>
-        <div style="overflow-x:auto;">
-        <table class="platform-table">
+      <div class="tbl-wrap">
+        <table>
           <thead>
             <tr>
-              <th>Platform</th>
-              <th>Budget</th>
-              <th>Spent</th>
-              <th>Leads</th>
-              <th>CPL</th>
-              <th>ROAS</th>
-              <th class="bar-cell">Pacing</th>
+              <th>Campaign</th>
+              <th class="r">Spend</th>
+              <th class="r">Leads</th>
+              <th class="r">CPL</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><div class="platform-name"><div class="platform-icon icon-meta">f</div>Meta Ads</div></td>
-              <td class="num">$8,000</td>
-              <td class="num">$7,420</td>
-              <td class="num">412</td>
-              <td class="num">$18.0</td>
-              <td><span class="tag tag-green">4.2×</span></td>
-              <td><div class="bar"><div class="bar-fill" style="width:92%"></div></div></td>
+              <td>Branding &amp; Compet Search</td>
+              <td class="r">11,242 EGP</td>
+              <td class="r good">36</td>
+              <td class="r good">312 EGP</td>
             </tr>
             <tr>
-              <td><div class="platform-name"><div class="platform-icon icon-ig">◎</div>Instagram</div></td>
-              <td class="num">$6,500</td>
-              <td class="num">$6,100</td>
-              <td class="num">298</td>
-              <td class="num">$20.4</td>
-              <td><span class="tag tag-green">3.8×</span></td>
-              <td><div class="bar"><div class="bar-fill" style="width:94%"></div></div></td>
+              <td>Private Offices Search</td>
+              <td class="r">10,801 EGP</td>
+              <td class="r">25</td>
+              <td class="r warn">426 EGP</td>
             </tr>
             <tr>
-              <td><div class="platform-name"><div class="platform-icon icon-tt">♬</div>TikTok</div></td>
-              <td class="num">$1,800</td>
-              <td class="num">$1,580</td>
-              <td class="num">112</td>
-              <td class="num">$14.1</td>
-              <td><span class="tag tag-gold">2.9×</span></td>
-              <td><div class="bar"><div class="bar-fill gold" style="width:88%"></div></div></td>
+              <td>Search — Winners + Private</td>
+              <td class="r">5,502 EGP</td>
+              <td class="r">15</td>
+              <td class="r warn">363 EGP</td>
             </tr>
             <tr>
-              <td><div class="platform-name"><div class="platform-icon icon-g">G</div>Google Ads</div></td>
-              <td class="num">$900</td>
-              <td class="num">$100</td>
-              <td class="num">25</td>
-              <td class="num">$4.0</td>
-              <td><span class="tag tag-blue">1.2×</span></td>
-              <td><div class="bar"><div class="bar-fill" style="width:11%"></div></div></td>
+              <td>Shared Spaces Search</td>
+              <td class="r">19 EGP</td>
+              <td class="r muted">0</td>
+              <td class="r muted">—</td>
             </tr>
           </tbody>
+          <tfoot>
+            <tr><td>TOTAL SEARCH</td><td class="r">27,575 EGP</td><td class="r">77</td><td class="r">360 EGP</td></tr>
+          </tfoot>
         </table>
-        </div>
       </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: MONTHLY REPORT (AI)
-         ============================================================= -->
-    <section class="view" id="view-monthly-report">
-      <div class="report-hero">
-        <div class="ai-badge"><span class="ai-dot"></span> AI-Generated Insights</div>
-        <h1>April <span style="color:var(--sonic-gold)">Performance</span> Report</h1>
-        <p class="lead">Your campaigns generated <strong style="color:#fff">847 leads</strong> at $17.9 average CPL with a <strong style="color:#fff">3.4× ROAS</strong> — the strongest month on record.</p>
+      <div class="insight good">
+        <b>Branding &amp; Compet is the top Search campaign:</b> 36 platform-tracked leads at 312 EGP CPL. The Lead Sheet shows <b>208 actual qualified leads</b> from Google in April. Search-only CPL: <b>133 EGP</b> (27,575 EGP ÷ 208 leads). Including PMax spend, the full-account CPL is <b>311 EGP</b>.
       </div>
+    </div>
 
-      <div class="kpi-grid">
-        <div class="kpi">
-          <div class="kpi-label">Total Spend</div>
-          <div class="kpi-value">$15,200</div>
-          <div class="kpi-delta">12.4% vs March</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Total Leads</div>
-          <div class="kpi-value gold">847</div>
-          <div class="kpi-delta">23.1% vs March</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Avg CPL</div>
-          <div class="kpi-value">$17.9</div>
-          <div class="kpi-delta down">8.2% vs March</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">ROAS</div>
-          <div class="kpi-value cyan">3.4×</div>
-          <div class="kpi-delta">0.5× vs March</div>
-        </div>
+    <!-- PMax breakdown -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Performance Max — Spend Breakdown</div>
+        <div class="card-tag">⚠️ PMax conversions = micro-interactions, not real leads</div>
       </div>
-
-      <div class="insight-stack stagger">
-        <div class="insight gold">
-          <div class="insight-icon">🏆</div>
-          <div class="insight-body">
-            <div class="insight-label">Top Performer</div>
-            <div class="insight-text"><b>Reel #3</b> generated <b>312 leads</b> at <b>$11.2 CPL</b> — your best performing creative this month and 38% below average CPL.</div>
-          </div>
-        </div>
-        <div class="insight blue">
-          <div class="insight-icon">💡</div>
-          <div class="insight-body">
-            <div class="insight-label">AI Recommendation</div>
-            <div class="insight-text">Scale <b>Reel #3</b> budget by <b>+30%</b> next month while it's hot. Pause <b>Banner Set B</b> — CPL is 42% above target. Reallocate spend toward Instagram Reels where engagement is climbing.</div>
-          </div>
-        </div>
-        <div class="insight green">
-          <div class="insight-icon">📈</div>
-          <div class="insight-body">
-            <div class="insight-label">Trend</div>
-            <div class="insight-text">Lead quality improved <b>23% vs last month</b> — Instagram audience is converting <b>1.8× better</b> than Facebook. Worth shifting more of the awareness budget to IG Reels for May.</div>
-          </div>
-        </div>
-        <div class="insight gold">
-          <div class="insight-icon">⚠️</div>
-          <div class="insight-body">
-            <div class="insight-label">Watch-out</div>
-            <div class="insight-text">Google Ads underspent by <b>89%</b> — only $100 of $900 budget deployed. Investigate keyword bid caps before May to avoid leaving demand on the table.</div>
-          </div>
-        </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th class="r">Spend</th>
+              <th class="r">Conversions</th>
+              <th class="r">CPA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PMax — Private Offices</td>
+              <td class="r">36,258 EGP</td>
+              <td class="r muted">5,140</td>
+              <td class="r muted">7 EGP</td>
+            </tr>
+            <tr>
+              <td>PMax — Private Offices #2</td>
+              <td class="r">883 EGP</td>
+              <td class="r">30</td>
+              <td class="r">29 EGP</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td>TOTAL PMAX</td><td class="r">37,142 EGP</td><td class="r">5,170</td><td class="r">7 EGP</td></tr>
+          </tfoot>
+        </table>
       </div>
-
-      <div class="report-actions">
-        <button class="btn btn-ghost">📤 Share Link</button>
-        <button class="btn btn-ghost">💬 Add Comment</button>
-        <button class="btn btn-gold">📄 Download Branded PDF</button>
+      <div class="insight good">
+        <b>PMax is delivering higher conversion volume</b> — 5,170 total conversions at 7 EGP CPA vs Search's 77 at 360 EGP. While PMax conversions include engagement signals (page views, scroll depth), the volume signals strong audience reach and intent. <b>We will run PMax this month with closer monitoring to evaluate its true lead-generation contribution and decide on scaling.</b>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <!-- =================================================================
-         VIEW: VIDEO REVIEW
-         ============================================================= -->
-    <section class="view" id="view-video-review">
-      <div class="view-head">
-        <div class="left">
-          <div class="crumb">Tools · Video Review</div>
-          <h1>Reel #3 — <span class="accent">Final Cut</span></h1>
-          <p class="lead">Click any timeline marker to jump to the timecode. Leave comments at any moment — your editor sees them framed exactly where you left them.</p>
+  <!-- Combined Meta + Google summary -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-head">
+      <div class="card-title">Meta vs Google — April 2026 Combined View</div>
+      <div class="card-tag">Both channels · Real lead cost comparison</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border2);overflow:hidden;">
+      <!-- Meta column -->
+      <div style="padding:24px 28px;border-right:1px solid var(--border2);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--red);"></div>
+          <div style="font-family:var(--ff-head);font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Meta Ads — April</div>
         </div>
-        <div class="actions">
-          <button class="btn btn-ghost">↻ Request New Cut</button>
-          <button class="btn btn-green">✓ Approve Final</button>
-        </div>
-      </div>
-
-      <div class="video-layout">
-        <div class="video-stage">
-          <div class="video-frame">
-            <div class="video-quality">4K · 60FPS</div>
-            <div class="video-play"></div>
-            <div class="video-timecode">0:18 / 0:45</div>
-          </div>
-
-          <div class="timeline-wrap">
-            <div class="timeline">
-              <div class="timeline-progress"></div>
-              <div class="tl-marker" style="left:22%" data-tc="0:10 · Logo size"></div>
-              <div class="tl-marker" style="left:54%" data-tc="0:24 · Music change"></div>
-              <div class="tl-marker" style="left:78%" data-tc="0:34 · Product shot"></div>
-            </div>
-            <div class="timeline-times">
-              <span>0:00</span>
-              <span>0:18 / 0:45</span>
-              <span>0:45</span>
-            </div>
-          </div>
-
-          <div class="card" style="padding:18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-              <div style="font-size:13px; color:var(--text-secondary);">Uploaded by <b style="color:#fff">Karim Adel</b> · 2h ago</div>
-              <div style="display:flex; gap:14px; font-size:11px; color:var(--text-tertiary);">
-                <span>👁 Viewed 3×</span>
-                <span>💬 4 comments</span>
-              </div>
-            </div>
-            <div class="comment-input">
-              <input type="text" placeholder="Add comment at 0:18..." />
-              <button class="btn btn-primary" style="padding:8px 14px;">Send</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="video-comments">
-          <div class="card-head" style="padding: 0 2px 4px;">
-            <h3>Comments by timecode</h3>
-            <span class="link-small">3 open</span>
-          </div>
-          <div class="comment">
-            <div class="tc-badge">0:10</div>
-            <div class="comment-body">
-              <div>Make the logo bigger here — it's getting lost against the background.</div>
-              <div class="comment-meta"><b style="color:#fff;">You</b><span class="dot-sep">·</span>1h ago<span class="dot-sep">·</span>Reply</div>
-            </div>
-          </div>
-          <div class="comment">
-            <div class="tc-badge">0:24</div>
-            <div class="comment-body">
-              <div>Change the music to something more upbeat — the current track feels too slow for this transition.</div>
-              <div class="comment-meta"><b style="color:#fff;">You</b><span class="dot-sep">·</span>1h ago<span class="dot-sep">·</span>Reply</div>
-            </div>
-          </div>
-          <div class="comment">
-            <div class="tc-badge">0:34</div>
-            <div class="comment-body">
-              <div>Add a product close-up here, ideally lingering for ~2 seconds before cutting.</div>
-              <div class="comment-meta"><b style="color:#fff;">You</b><span class="dot-sep">·</span>1h ago<span class="dot-sep">·</span>Reply</div>
-            </div>
-          </div>
-          <div class="comment resolved">
-            <div class="tc-badge">0:05</div>
-            <div class="comment-body">
-              <div>The intro animation is perfect — keep it as is.</div>
-              <div class="comment-meta"><b style="color:#fff;">You</b><span class="dot-sep">·</span>2h ago<span class="dot-sep">·</span><span style="color:var(--sonic-green);">✓ Resolved</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: ACTIVITY
-         ============================================================= -->
-    <section class="view" id="view-activity">
-      <div class="view-head">
-        <div class="left">
-          <h1>Activity <span class="accent">Feed</span></h1>
-          <p class="lead">Every action across your account — full transparency, audit-ready.</p>
-        </div>
-        <div class="actions">
-          <button class="btn btn-ghost">📥 Export Log</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="activity-list">
-          <div class="activity-item">
-            <div class="ico green">✓</div>
-            <div style="flex:1;">
-              <div>Designer uploaded <b>3 new banners</b> for the April campaign</div>
-              <div class="meta">Ahmed Hassan · Designer</div>
-            </div>
-            <div class="time">2h ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico blue">📊</div>
-            <div style="flex:1;">
-              <div>Media Plan was <b>updated</b> with new budget allocation across platforms</div>
-              <div class="meta">Mohamed Salah · Account Manager</div>
-            </div>
-            <div class="time">Yesterday</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico gold">🎬</div>
-            <div style="flex:1;">
-              <div>Reel #3 final edit is <b>ready for your review</b> — 3 timecodes flagged</div>
-              <div class="meta">Karim Adel · Video Editor</div>
-            </div>
-            <div class="time">Yesterday</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico blue">💬</div>
-            <div style="flex:1;">
-              <div>New comment from team on <b>Strategy document</b> — section 2.3</div>
-              <div class="meta">Mohamed Salah · Account Manager</div>
-            </div>
-            <div class="time">2d ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico green">✓</div>
-            <div style="flex:1;">
-              <div>April Monthly Report <b>auto-generated</b> with AI insights</div>
-              <div class="meta">SonicGrowth AI Engine</div>
-            </div>
-            <div class="time">2d ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico gold">📝</div>
-            <div style="flex:1;">
-              <div><b>8 new posts</b> added to May Content Plan for review</div>
-              <div class="meta">Content Team · SonicGrowth</div>
-            </div>
-            <div class="time">3d ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico blue">📈</div>
-            <div style="flex:1;">
-              <div>Campaign <b>"Niacinamide Launch"</b> reached $1,000 spend milestone</div>
-              <div class="meta">Meta Ads Integration</div>
-            </div>
-            <div class="time">3d ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="ico green">✓</div>
-            <div style="flex:1;">
-              <div>Media Plan budget <b>approved</b> by finance team</div>
-              <div class="meta">System</div>
-            </div>
-            <div class="time">4d ago</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =================================================================
-         VIEW: SETTINGS
-         ============================================================= -->
-    <section class="view" id="view-settings">
-      <div class="view-head">
-        <div class="left">
-          <h1>Account <span class="accent">Settings</span></h1>
-          <p class="lead">Manage your profile, integrations, and notification preferences.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h3>Profile</h3></div>
-        <div style="display:flex; gap:24px; align-items:center; margin-bottom:24px; flex-wrap:wrap;">
-          <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, var(--sonic-gold), var(--sonic-gold-warm)); color:var(--sonic-navy); font-family:Sora; font-weight:800; font-size:30px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">CL</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
-            <div style="font-size:20px; font-weight:700; margin-bottom:4px;">Client Name</div>
-            <div style="color:var(--text-secondary); font-size:13px;">Brand Owner · Member since April 2026</div>
-            <button class="btn btn-ghost" style="margin-top:10px; font-size:12px; padding:7px 14px;">Change avatar</button>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Spend</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;" id="meta-apr-spend">97,254 EGP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Leads (form fills)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;" id="meta-apr-leads">7,160</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Real CPL (Sheet)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--green);" id="meta-apr-cpl">143 EGP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Arabic / English</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;" id="meta-apr-split">6,570 / 590</div>
           </div>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">
-          <div class="field"><input type="text" value="Client Name" placeholder=" "/><label class="field-label">Full Name</label></div>
-          <div class="field"><input type="email" value="client@brand.com" placeholder=" "/><label class="field-label">Email</label></div>
+      </div>
+      <!-- Google column -->
+      <div style="padding:24px 28px;background:var(--bg2);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--green);"></div>
+          <div style="font-family:var(--ff-head);font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Google Search — April</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Total Spend (PMax + Search)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;">64,716 EGP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Qualified Leads (Sheet)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;" id="gads-combined-leads">208</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Real CPL (Full Spend)</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--amber);" id="gads-combined-cpl">311 EGP</div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;">Search-Only CPL</div>
+            <div style="font-family:var(--ff-head);font-size:22px;font-weight:700;color:var(--green);">133 EGP</div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+    <div class="insight good" style="border-top:1px solid var(--border);">
+      <b>Meta CPL 143 EGP vs Google Search-only CPL 133 EGP</b> — Google Search is cheaper per qualified lead. When including PMax spend, Google full CPL is 311 EGP. Combined April spend: <b>161,970 EGP</b> (Meta 97,254 + Google 64,716). <b>📈 Recommendation:</b> Produce new RSAs for Search and increase the Branding &amp; Compet campaign budget. Scale PMax further this month to evaluate its full lead-generation potential.
+    </div>
+  </div>
+
+  <!-- ─── NEXT STEPS ─── -->
+  <div class="sec-hd" style="margin-top:32px;">
+    <div class="sec-n">09</div>
+    <div class="sec-title">Next Steps</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Action plan · Coming period</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+
+    <!-- Card 1 -->
+    <div style="border:2px solid var(--amber);border-radius:12px;padding:28px 24px;background:var(--amber-bg);display:flex;flex-direction:column;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:20px;">💰</div>
+      <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--ink);line-height:1.3;">Increase Meta Budget</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:var(--ink2);line-height:1.6;">We hope to increase the Meta budget for the coming period — remaining quarterly budget is running low and we want to avoid any performance drop or coverage gaps.</div>
+      <div style="margin-top:auto;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);border-top:1px solid var(--border2);padding-top:10px;">Priority · Urgent</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div style="border:2px solid var(--green);border-radius:12px;padding:28px 24px;background:var(--green-bg);display:flex;flex-direction:column;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:20px;">📈</div>
+      <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--ink);line-height:1.3;">Scale Google + English Adsets</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:var(--ink2);line-height:1.6;">Increase Google Ads budget — scale the Branding &amp; Compet campaign and run PMax for a full evaluation cycle. In parallel, scale the English ad sets on Meta to develop and grow that audience at a larger volume.</div>
+      <div style="margin-top:auto;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);border-top:1px solid var(--border2);padding-top:10px;">Growth · Next Period</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div style="border:2px solid var(--blue);border-radius:12px;padding:28px 24px;background:var(--blue-bg);display:flex;flex-direction:column;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:20px;">🎨</div>
+      <div style="font-family:var(--ff-head);font-size:15px;font-weight:800;color:var(--ink);line-height:1.3;">Generate New Creatives</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:var(--ink2);line-height:1.6;">Produce new creatives for both Meta and Google Ads. For Meta: mirror the winning creative's format, hook, and visual style — and produce <b>Reels</b> to capture higher organic and paid reach. For Google: develop new RSAs and ad copy variations to improve Quality Score and CTR.</div>
+      <div style="margin-top:auto;font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);border-top:1px solid var(--border2);padding-top:10px;">Creative · Production</div>
+    </div>
 
   </div>
-</div>
 
-<script>
-// ========================================================================
-// AUTH
-// ========================================================================
-function enterApp(e){
-  if (e) e.preventDefault();
-  document.getElementById('login-screen').classList.remove('active');
-  document.getElementById('app-screen').classList.add('active');
-  requestAnimationFrame(runCountUps);
-}
-function logout(){
-  document.getElementById('app-screen').classList.remove('active');
-  document.getElementById('login-screen').classList.add('active');
-}
+  <!-- ─── DIVIDER ─── -->
+  <div style="border-top:2px solid var(--border2);margin-bottom:32px;"></div>
 
-// ========================================================================
-// NAVIGATION
-// ========================================================================
-const VIEW_LABELS = {
-  'overview': { crumb: 'Workspace', title: 'Overview' },
-  'activity': { crumb: 'Workspace', title: 'Activity Feed' },
-  'brand-brief': { crumb: 'Documents', title: 'Brand Brief' },
-  'marketing-plan': { crumb: 'Documents', title: 'Marketing Plan' },
-  'strategy': { crumb: 'Documents', title: 'Strategy' },
-  'content-plan': { crumb: 'Documents', title: 'Content Plan' },
-  'media-plan': { crumb: 'Documents', title: 'Media Plan' },
-  'monthly-report': { crumb: 'Documents', title: 'Monthly Report' },
-  'video-review': { crumb: 'Tools', title: 'Video Review' },
-  'settings': { crumb: 'Account', title: 'Settings' },
-};
+  <!-- ─── ASK SECTION ─── -->
+  <div class="sec-hd">
+    <div class="sec-n">❓</div>
+    <div class="sec-title">Ask</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Open question · Needs data</div>
+  </div>
 
-function switchView(view){
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
-  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
-  const label = VIEW_LABELS[view];
-  if (label) {
-    document.getElementById('crumb').textContent = label.crumb;
-    document.getElementById('pageTitle').textContent = label.title;
-  }
-  if (view === 'overview' || view === 'media-plan' || view === 'monthly-report') {
-    requestAnimationFrame(() => {
-      document.querySelectorAll('.view.active [data-count]').forEach(el => { el.dataset.done = ''; });
-      runCountUps();
-    });
-  }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+  <div style="background:var(--ink);border-radius:12px;padding:32px 36px;margin-bottom:32px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;">
+    <div style="font-family:var(--ff-mono);font-size:64px;font-weight:700;color:rgba(255,255,255,.06);letter-spacing:-4px;line-height:1;">?</div>
+    <div>
+      <div style="font-family:var(--ff-head);font-size:18px;font-weight:800;color:#fff;margin-bottom:10px;">What is the profit per platform?</div>
+      <div style="font-family:var(--ff-body);font-size:13px;color:rgba(255,255,255,.55);line-height:1.7;">We want to understand the <b style="color:#fff;">net profit generated per channel</b> — Meta vs Google vs DMs. To calculate this we need: revenue per closed deal by source, average deal value, and any platform-specific costs. Once we have this data we can measure true ROI per platform — not just CPL.</div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:5px 12px;border-radius:20px;">Revenue per deal · needed</span>
+        <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:5px 12px;border-radius:20px;">Avg deal value · needed</span>
+        <span style="font-family:var(--ff-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:5px 12px;border-radius:20px;">Source attribution · needed</span>
+      </div>
+    </div>
+  </div>
 
-document.querySelectorAll('.nav-item[data-view]').forEach(n => {
-  n.addEventListener('click', () => switchView(n.dataset.view));
-});
+</div><!-- /mqr panel -->
 
-// ========================================================================
-// NOTIFICATIONS DROPDOWN
-// ========================================================================
-function toggleNotif(){
-  document.getElementById('notifPanel').classList.toggle('open');
-}
-document.addEventListener('click', (e) => {
-  const panel = document.getElementById('notifPanel');
-  const wrap = document.querySelector('.bell-wrap');
-  if (panel && wrap && !wrap.contains(e.target)) panel.classList.remove('open');
-});
+<!-- ===================================
+     TGC TAB
+==================================== -->
+<div class="tab-panel" id="panel-tgc">
+<div class="page">
 
-// ========================================================================
-// COUNT-UP ANIMATIONS
-// ========================================================================
-function runCountUps(){
-  const active = document.querySelector('.view.active');
-  if (!active) return;
-  active.querySelectorAll('[data-count]').forEach(el => {
-    if (el.dataset.done === '1') return;
-    const target = parseFloat(el.dataset.count);
-    const prefix = el.dataset.prefix || '';
-    const suffix = el.dataset.suffix || '';
-    const decimals = parseInt(el.dataset.decimals || '0', 10);
-    const duration = 1500;
-    const start = performance.now();
-    function frame(now){
-      const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      const val = target * eased;
-      const formatted = decimals > 0
-        ? val.toFixed(decimals)
-        : Math.floor(val).toLocaleString('en-US');
-      el.textContent = prefix + formatted + suffix;
-      if (t < 1) requestAnimationFrame(frame);
-      else el.dataset.done = '1';
-    }
-    requestAnimationFrame(frame);
-  });
-}
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div>
+      <div class="mh-eyebrow">TGC · April 2026 · Full Month</div>
+      <div class="mh-title">TGC April<br><em>Performance</em></div>
+      <div class="mh-sub">Full April · Meta 97 · Website 20 · DMs 12 · 38 Relevant leads</div>
+    </div>
+    <div class="mh-kpis">
+      <div class="mh-kpi">
+        <div class="mh-kpi-num">129</div>
+        <div class="mh-kpi-label">Total Leads</div>
+      </div>
+      <div class="mh-kpi">
+        <div class="mh-kpi-num green">38</div>
+        <div class="mh-kpi-label">Relevant</div>
+      </div>
+      <div class="mh-kpi">
+        <div class="mh-kpi-num red">22</div>
+        <div class="mh-kpi-label">Unassigned</div>
+      </div>
+      <div class="mh-kpi">
+        <div class="mh-kpi-num">4.3</div>
+        <div class="mh-kpi-label">Avg / Day</div>
+      </div>
+    </div>
+  </div>
 
-// ========================================================================
-// TOGGLE GROUPS (time range pickers, filter groups)
-// ========================================================================
-document.querySelectorAll('.toggle-group').forEach(group => {
-  group.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-});
+  <!-- KPI STRIP -->
+  <div class="kpi-strip" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kpi-cell hi">
+      <div class="kpi-label">Total Leads</div>
+      <div class="kpi-val" id="kpi-tgc-total">129</div>
+      <div class="kpi-sub">April 2026 · All channels</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Meta Ads Form</div>
+      <div class="kpi-val good">97</div>
+      <div class="kpi-sub">75.2% of total · top source</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Relevant Leads</div>
+      <div class="kpi-val">38</div>
+      <div class="kpi-sub">29.5% of total leads</div>
+    </div>
+    <div class="kpi-cell red">
+      <div class="kpi-label">Unassigned</div>
+      <div class="kpi-val">22</div>
+      <div class="kpi-sub">17% never picked up</div>
+    </div>
+  </div>
 
-document.querySelectorAll('.approval-filter').forEach(group => {
-  group.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-});
+  <!-- TGC BANNER -->
+  <div style="background:var(--ink);color:#fff;padding:20px 28px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;margin-bottom:24px;">
+    <div style="font-family:var(--ff-mono);font-size:48px;font-weight:700;letter-spacing:-3px;color:rgba(255,255,255,.08);">7</div>
+    <div>
+      <div style="font-family:var(--ff-head);font-size:16px;font-weight:700;margin-bottom:4px;">Seven days in — signal is strong, follow-up is the bottleneck</div>
+      <div style="font-family:var(--ff-body);font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;">TGC launched Apr 23. 101 leads at 84 EGP CPL — substantially cheaper than MQR. But <strong style="color:#fff">34 have no rep assigned</strong>, and only 26 are confirmed relevant.</div>
+    </div>
+  </div>
 
-// ========================================================================
-// TOC ACTIVE STATE
-// ========================================================================
-document.querySelectorAll('.doc-toc .toc-link').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.querySelectorAll('.doc-toc .toc-link').forEach(l => l.classList.remove('active'));
-    link.classList.add('active');
-    const id = link.getAttribute('href').slice(1);
-    const target = document.getElementById(id);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
+  <!-- SECTION 1 -->
+  <div class="sec-hd">
+    <div class="sec-n">01</div>
+    <div class="sec-title">Launch Week Snapshot</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">Apr 23–29</div>
+  </div>
 
-// Keyboard shortcut hint (⌘K — purely cosmetic)
-document.addEventListener('keydown', (e) => {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-    e.preventDefault();
-    const search = document.querySelector('.search');
-    if (search) search.style.borderColor = 'var(--sonic-blue)';
-    setTimeout(() => { if (search) search.style.borderColor = ''; }, 800);
-  }
-});
-</script>
+  <div class="g2" style="margin-bottom:12px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Daily Lead Volume</div>
+        <div class="card-tag">Apr 23–29</div>
+      </div>
+      <div class="chart-wrap"><canvas id="tgc-daily"></canvas></div>
+      <div class="insight">
+        <b>Peaked Apr 26 (24 leads)</b> then softened. Verify whether spend pacing or creative fatigue. Need full-month view to set baseline.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Lead Source Split</div>
+        <div class="card-tag">Where they come from</div>
+      </div>
+      <div class="chart-wrap short"><canvas id="tgc-source"></canvas></div>
+      <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;">
+        <div style="text-align:center;"><div id="tgc-stat-meta" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--red)">2,692</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">META FORM</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-website" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--green)">1,535</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">WEBSITE</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-dm" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--blue)">381</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">DMS</div></div>
+        <div style="text-align:center;"><div id="tgc-stat-li" style="font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--amber)">68</div><div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:var(--muted)">LINKEDIN</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="sec-hd">
+    <div class="sec-n">03</div>
+    <div class="sec-title">Product & Location Demand</div>
+    <div class="sec-rule"></div>
+    <div class="sec-tag">What TGC leads want</div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Product Inquiry Mix</div>
+        <div class="card-tag">TGC-specific</div>
+      </div>
+      <div class="bar-list" id="tgc-prod"></div>
+      <div class="insight warn">
+        <b>Workshops dominate at 57%</b> — very different from MQR's office-first demand. TGC has a clear event-space identity. Lean into it in creative.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Location Split</div>
+        <div class="card-tag">Downtown vs West</div>
+      </div>
+      <div class="bar-list" id="tgc-loc"></div>
+      <div style="margin-top:16px;">
+        <div class="card-head" style="margin-bottom:10px;"><div class="card-title" style="font-size:13px;">Lead Quality Status</div></div>
+        <div class="bar-list" id="tgc-quality"></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /tgc panel -->
+
+</div><!-- /app -->
+
+<script   src="script.js"></script>
 </body>
 </html>
